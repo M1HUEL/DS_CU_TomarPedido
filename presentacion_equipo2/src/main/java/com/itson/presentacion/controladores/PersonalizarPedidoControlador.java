@@ -1,6 +1,6 @@
 package com.itson.presentacion.controladores;
 
-import com.itson.presentacion.pantallas.SeleccionarMetodoPagoPantalla;
+import com.itson.presentacion.gui.SeleccionarMetodoPagoPantalla;
 import com.itson.presentacion.pantallas.componentes.Texto;
 import java.awt.BorderLayout;
 import java.awt.Color;

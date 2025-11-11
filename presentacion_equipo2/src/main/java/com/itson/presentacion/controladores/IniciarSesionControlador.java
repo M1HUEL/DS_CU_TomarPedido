@@ -1,13 +1,11 @@
 package com.itson.presentacion.controladores;
 
-import com.itson.presentacion.interfaces.IIniciarSesion;
-import com.itson.presentacion.pantallas.InicioPantalla;
+import com.itson.presentacion.gui.InicioPantalla;
 import javax.swing.JFrame;
 import javax.swing.JOptionPane;
 
-public class IniciarSesionControlador implements IIniciarSesion {
+public class IniciarSesionControlador {
 
-    @Override
     public void iniciarSesion(String nombre, String contraseña, JFrame ventanaActual) {
         if (nombre.isEmpty() || contraseña.isEmpty()) {
             mostrarError("Por favor completa todos los campos.");
@@ -23,17 +21,14 @@ public class IniciarSesionControlador implements IIniciarSesion {
         }
     }
 
-    @Override
     public boolean validarUsuario(String nombre, String contraseña) {
         return nombre.equals("Miguel") && contraseña.equals("123");
     }
 
-    @Override
     public void mostrarMensaje(String mensaje) {
         JOptionPane.showMessageDialog(null, mensaje, "Éxito", JOptionPane.INFORMATION_MESSAGE);
     }
 
-    @Override
     public void mostrarError(String mensaje) {
         JOptionPane.showMessageDialog(null, mensaje, "Error", JOptionPane.ERROR_MESSAGE);
     }

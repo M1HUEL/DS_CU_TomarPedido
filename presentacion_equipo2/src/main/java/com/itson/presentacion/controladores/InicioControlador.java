@@ -1,13 +1,11 @@
 package com.itson.presentacion.controladores;
 
-import com.itson.presentacion.interfaces.IInicio;
-import com.itson.presentacion.pantallas.IniciarSesionPantalla;
+import com.itson.presentacion.gui.IniciarSesionPantalla;
 import javax.swing.JFrame;
 import javax.swing.JOptionPane;
 
-public class InicioControlador implements IInicio {
+public class InicioControlador {
 
-    @Override
     public void abrirSeleccionarPedido(JFrame ventanaActual) {
         JOptionPane.showMessageDialog(ventanaActual,
                 "Abriendo pantalla de selección de pedido...",
@@ -15,7 +13,6 @@ public class InicioControlador implements IInicio {
                 JOptionPane.INFORMATION_MESSAGE);
     }
 
-    @Override
     public void abrirDashboard(JFrame ventanaActual) {
         JOptionPane.showMessageDialog(ventanaActual,
                 "Abriendo Dashboard...",
@@ -23,7 +20,6 @@ public class InicioControlador implements IInicio {
                 JOptionPane.INFORMATION_MESSAGE);
     }
 
-    @Override
     public void cerrarSesion(JFrame ventanaActual) {
         int confirmacion = JOptionPane.showConfirmDialog(
                 ventanaActual,

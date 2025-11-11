@@ -1,6 +1,6 @@
 package com.itson.presentacion.pantallas.componentes;
 
-import com.itson.presentacion.interfaces.ISeleccionarPedido;
+import com.itson.presentacion.controladores.SeleccionarPedidoControlador;
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Dimension;
@@ -15,9 +15,9 @@ import javax.swing.SwingConstants;
 public class PedidoTarjeta extends JPanel {
 
     private final int numeroPedido;
-    private final ISeleccionarPedido controlador;
+    private final SeleccionarPedidoControlador controlador;
 
-    public PedidoTarjeta(int numeroPedido, ImageIcon icono, ISeleccionarPedido controlador) {
+    public PedidoTarjeta(int numeroPedido, ImageIcon icono, SeleccionarPedidoControlador controlador) {
         this.numeroPedido = numeroPedido;
         this.controlador = controlador;
 

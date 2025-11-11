@@ -1,14 +1,13 @@
 package com.itson.presentacion.controladores;
 
-import com.itson.presentacion.interfaces.ISeleccionarMetodoPago;
-import com.itson.presentacion.pantallas.SeleccionarMetodoPagoPantalla;
+import com.itson.presentacion.gui.SeleccionarMetodoPagoPantalla;
 import com.itson.presentacion.pantallas.componentes.Boton;
 import java.awt.event.ActionEvent;
 import java.util.ArrayList;
 import java.util.List;
 import javax.swing.JOptionPane;
 
-public class SeleccionarMetodoPagoControlador implements ISeleccionarMetodoPago {
+public class SeleccionarMetodoPagoControlador {
 
     private final SeleccionarMetodoPagoPantalla vista;
     private final String[] metodos = {
@@ -22,7 +21,6 @@ public class SeleccionarMetodoPagoControlador implements ISeleccionarMetodoPago 
         this.vista = vista;
     }
 
-    @Override
     public List<Boton> generarBotonesMetodoPago() {
         List<Boton> botones = new ArrayList<>();
 
@@ -37,7 +35,6 @@ public class SeleccionarMetodoPagoControlador implements ISeleccionarMetodoPago 
         return botones;
     }
 
-    @Override
     public void seleccionarMetodoPago(String metodo) {
         switch (metodo) {
             case "Efectivo 💵" -> {
@@ -72,7 +69,6 @@ public class SeleccionarMetodoPagoControlador implements ISeleccionarMetodoPago 
         }
     }
 
-    @Override
     public void mostrarPantalla() {
         vista.setVisible(true);
     }

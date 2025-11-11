@@ -1,6 +1,6 @@
 package com.itson.presentacion;
 
-import com.itson.presentacion.pantallas.IniciarSesionPantalla;
+import com.itson.presentacion.gui.IniciarSesionPantalla;
 
 public class Presentacion {
 
