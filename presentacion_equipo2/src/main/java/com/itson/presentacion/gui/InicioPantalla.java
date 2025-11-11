@@ -24,7 +24,6 @@ public class InicioPantalla extends JFrame {
     private Font poppinsBold;
 
     private final Color NARANJA = new Color(255, 140, 0);
-    private final Color NARANJA_CLARO = new Color(255, 183, 77);
     private final Color CREMA = new Color(254, 249, 239);
     private final Color BLANCO = Color.WHITE;
     private final Color GRIS_BORDE = new Color(230, 230, 230);
