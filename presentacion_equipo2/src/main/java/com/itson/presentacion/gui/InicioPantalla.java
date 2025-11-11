@@ -1,8 +1,5 @@
 package com.itson.presentacion.gui;
 
-import com.itson.presentacion.controladores.InicioControlador;
-import com.itson.presentacion.pantallas.componentes.Boton;
-import com.itson.presentacion.pantallas.componentes.Encabezado;
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Cursor;
@@ -10,7 +7,6 @@ import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.FontFormatException;
 import java.awt.GraphicsEnvironment;
-import java.awt.GridBagLayout;
 import java.awt.GridLayout;
 import java.io.IOException;
 import java.io.InputStream;
