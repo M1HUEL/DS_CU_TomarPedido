@@ -1,9 +1,9 @@
-package com.itson.controlPedido;
+package com.itson.controlPedido.controlador;
 
 import com.itson.controlPedido.objetosNegocio.Pedido;
 import java.util.List;
 
-public class PedidoService {
+public class PedidoControlador {
 
     public List<Pedido> obtenerTodosLosPedidos() {
         throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
