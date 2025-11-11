@@ -1,3 +1,47 @@
-/dto_negocios/target/
-/negocios_controlPedido/target/
-/negocios_persistencia/target/
+# 🔹 Directorios de compilación (en cualquier subcarpeta)
+**/target/
+**/bin/
+**/build/
+**/out/
+**/dist/
+
+# 🔹 Archivos de clases y empaquetados
+*.class
+*.jar
+*.war
+*.ear
+
+# 🔹 Archivos de logs y temporales
+*.log
+*.tmp
+*.bak
+*.swp
+
+# 🔹 Configuraciones de IDEs
+/.idea/
+**/.idea/
+*.iml
+*.ipr
+*.iws
+/.vscode/
+**/.vscode/
+/nbproject/private/
+**/nbproject/private/
+
+# 🔹 Archivos de sistema operativo
+.DS_Store
+Thumbs.db
+
+# 🔹 Maven Wrapper
+.mvn/wrapper/maven-wrapper.jar
+!/.mvn/wrapper/maven-wrapper.properties
+
+# 🔹 Archivos de entorno y credenciales
+.env
+*.env
+
+# 🔹 Otros posibles temporales de compilación
+*.class
+*.project
+*.classpath
+*.factorypath
