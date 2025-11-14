@@ -1,5 +1,6 @@
 package com.itson.presentacion.gui;
 
+import com.itson.presentacion.util.Colores;
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Cursor;
@@ -20,14 +21,23 @@ import javax.swing.SwingUtilities;
 
 public class SeleccionarMetodoPagoPantalla extends JFrame {
 
-    private Font poppinsRegular;
-    private Font poppinsBold;
+    private Font fuentePoppinsRegular;
+    private Font fuentePoppinsBold;
 
-    private final Color NARANJA = new Color(255, 140, 0);
-    private final Color NARANJA_CLARO = new Color(255, 183, 77);
-    private final Color CREMA = new Color(254, 249, 239);
-    private final Color BLANCO = Color.WHITE;
-    private final Color GRIS_BORDE = new Color(230, 230, 230);
+    private final Color COLOR_PRIMARIO = Colores.NARANJA;
+    private final Color COLOR_PRIMARIO_CLARO = Colores.NARANJA_CLARO;
+    private final Color COLOR_FONDO = Colores.CREMA;
+    private final Color COLOR_BLANCO = Colores.BLANCO;
+    private final Color COLOR_BORDE = Colores.GRIS_BORDE;
+
+    private JPanel panelHeader;
+    private JPanel panelHeaderContenido;
+    private JLabel lblTitulo;
+    private JLabel lblSubtitulo;
+
+    private JPanel panelPrincipal;
+    private JPanel panelOpcionesPago;
+    private JPanel panelCentro;
 
     public SeleccionarMetodoPagoPantalla() {
         cargarFuentePoppins();
@@ -38,78 +48,87 @@ public class SeleccionarMetodoPagoPantalla extends JFrame {
         setLocationRelativeTo(null);
         setResizable(false);
 
-        JPanel header = new JPanel(new BorderLayout());
-        header.setBackground(NARANJA);
-        header.setPreferredSize(new Dimension(1440, 160));
+        panelHeader = new JPanel(new BorderLayout());
+        panelHeader.setBackground(COLOR_PRIMARIO);
+        panelHeader.setPreferredSize(new Dimension(1440, 160));
 
-        JPanel headerContenido = new JPanel(new GridLayout(2, 1));
-        headerContenido.setBackground(NARANJA);
-        headerContenido.setBorder(BorderFactory.createEmptyBorder(40, 100, 40, 100));
+        panelHeaderContenido = new JPanel(new GridLayout(2, 1));
+        panelHeaderContenido.setBackground(COLOR_PRIMARIO);
+        panelHeaderContenido.setBorder(BorderFactory.createEmptyBorder(40, 100, 40, 100));
 
-        JLabel lblTitulo = new JLabel("Seleccionar Método de Pago", SwingConstants.LEFT);
-        lblTitulo.setFont(poppinsBold.deriveFont(Font.BOLD, 28f));
-        lblTitulo.setForeground(BLANCO);
+        lblTitulo = new JLabel("Seleccionar Método de Pago", SwingConstants.LEFT);
+        lblTitulo.setFont(fuentePoppinsBold.deriveFont(28f));
+        lblTitulo.setForeground(COLOR_BLANCO);
 
-        JLabel lblSubtitulo = new JLabel("Elige las opciones disponibles y personaliza la orden", SwingConstants.LEFT);
-        lblSubtitulo.setFont(poppinsRegular.deriveFont(Font.PLAIN, 16f));
-        lblSubtitulo.setForeground(BLANCO);
+        lblSubtitulo = new JLabel("Elige una opción para continuar", SwingConstants.LEFT);
+        lblSubtitulo.setFont(fuentePoppinsRegular.deriveFont(16f));
+        lblSubtitulo.setForeground(COLOR_BLANCO);
 
-        headerContenido.add(lblTitulo);
-        headerContenido.add(lblSubtitulo);
-        header.add(headerContenido, BorderLayout.CENTER);
+        panelHeaderContenido.add(lblTitulo);
+        panelHeaderContenido.add(lblSubtitulo);
+        panelHeader.add(panelHeaderContenido, BorderLayout.CENTER);
 
-        JPanel panelPrincipal = new JPanel(new BorderLayout());
-        panelPrincipal.setBackground(CREMA);
+        panelPrincipal = new JPanel(new BorderLayout());
+        panelPrincipal.setBackground(COLOR_FONDO);
 
-        JPanel panelBlanco = new JPanel(new GridLayout(4, 1, 0, 20));
-        panelBlanco.setBackground(BLANCO);
-        panelBlanco.setBorder(BorderFactory.createCompoundBorder(
-                BorderFactory.createLineBorder(GRIS_BORDE, 1),
-                BorderFactory.createEmptyBorder(60, 120, 60, 120)
-        ));
+        panelOpcionesPago = new JPanel(new GridLayout(4, 1, 0, 20));
+        panelOpcionesPago.setBackground(COLOR_BLANCO);
+        panelOpcionesPago.setBorder(
+                BorderFactory.createCompoundBorder(
+                        BorderFactory.createLineBorder(COLOR_BORDE, 1),
+                        BorderFactory.createEmptyBorder(60, 120, 60, 120)
+                )
+        );
 
-        String[] metodos = {"Efectivo", "Tarjeta de Crédito", "Tarjeta de Débito", "Transferencia"};
-        for (String metodo : metodos) {
-            JButton btn = new JButton(metodo);
-            btn.setBackground(NARANJA);
-            btn.setForeground(Color.WHITE);
-            btn.setFont(poppinsRegular.deriveFont(15f));
-            btn.setFocusPainted(false);
-            btn.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
-            btn.setBorder(BorderFactory.createEmptyBorder(20, 0, 20, 0));
+        String[] metodosPago = {
+            "Efectivo",
+            "Tarjeta de Crédito",
+            "Tarjeta de Débito",
+            "Transferencia"
+        };
 
-            btn.addMouseListener(new java.awt.event.MouseAdapter() {
+        for (String metodo : metodosPago) {
+
+            JButton btnMetodoPago = new JButton(metodo);
+            btnMetodoPago.setBackground(COLOR_PRIMARIO);
+            btnMetodoPago.setForeground(COLOR_BLANCO);
+            btnMetodoPago.setFont(fuentePoppinsRegular.deriveFont(15f));
+            btnMetodoPago.setFocusPainted(false);
+            btnMetodoPago.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
+            btnMetodoPago.setBorder(BorderFactory.createEmptyBorder(20, 0, 20, 0));
+
+            btnMetodoPago.addMouseListener(new java.awt.event.MouseAdapter() {
                 @Override
                 public void mouseEntered(java.awt.event.MouseEvent e) {
-                    btn.setBackground(NARANJA_CLARO);
+                    btnMetodoPago.setBackground(COLOR_PRIMARIO_CLARO);
                 }
 
                 @Override
                 public void mouseExited(java.awt.event.MouseEvent e) {
-                    btn.setBackground(NARANJA);
+                    btnMetodoPago.setBackground(COLOR_PRIMARIO);
                 }
 
                 @Override
                 public void mousePressed(java.awt.event.MouseEvent e) {
-                    btn.setBackground(NARANJA_CLARO.darker());
+                    btnMetodoPago.setBackground(COLOR_PRIMARIO_CLARO.darker());
                 }
 
                 @Override
                 public void mouseReleased(java.awt.event.MouseEvent e) {
-                    btn.setBackground(NARANJA_CLARO);
+                    btnMetodoPago.setBackground(COLOR_PRIMARIO_CLARO);
                 }
             });
 
-            panelBlanco.add(btn);
+            panelOpcionesPago.add(btnMetodoPago);
         }
 
-        JPanel contenedorCentral = new JPanel(new BorderLayout());
-        contenedorCentral.setBackground(CREMA);
-        contenedorCentral.setBorder(BorderFactory.createEmptyBorder(60, 100, 100, 100));
-        contenedorCentral.add(panelBlanco, BorderLayout.CENTER);
+        panelCentro = new JPanel(new BorderLayout());
+        panelCentro.setBackground(COLOR_FONDO);
+        panelCentro.setBorder(BorderFactory.createEmptyBorder(60, 100, 100, 100));
+        panelCentro.add(panelOpcionesPago, BorderLayout.CENTER);
 
-        panelPrincipal.add(header, BorderLayout.NORTH);
-        panelPrincipal.add(contenedorCentral, BorderLayout.CENTER);
+        panelPrincipal.add(panelHeader, BorderLayout.NORTH);
+        panelPrincipal.add(panelCentro, BorderLayout.CENTER);
 
         add(panelPrincipal);
     }
@@ -120,30 +139,28 @@ public class SeleccionarMetodoPagoPantalla extends JFrame {
             InputStream boldStream = getClass().getResourceAsStream("/fonts/Poppins-Bold.ttf");
 
             if (regularStream != null) {
-                poppinsRegular = Font.createFont(Font.TRUETYPE_FONT, regularStream);
+                fuentePoppinsRegular = Font.createFont(Font.TRUETYPE_FONT, regularStream);
             } else {
-                poppinsRegular = new Font("SansSerif", Font.PLAIN, 14);
+                fuentePoppinsRegular = new Font("SansSerif", Font.PLAIN, 14);
             }
 
             if (boldStream != null) {
-                poppinsBold = Font.createFont(Font.TRUETYPE_FONT, boldStream);
+                fuentePoppinsBold = Font.createFont(Font.TRUETYPE_FONT, boldStream);
             } else {
-                poppinsBold = new Font("SansSerif", Font.BOLD, 14);
+                fuentePoppinsBold = new Font("SansSerif", Font.BOLD, 14);
             }
 
             GraphicsEnvironment ge = GraphicsEnvironment.getLocalGraphicsEnvironment();
-            ge.registerFont(poppinsRegular);
-            ge.registerFont(poppinsBold);
+            ge.registerFont(fuentePoppinsRegular);
+            ge.registerFont(fuentePoppinsBold);
 
         } catch (FontFormatException | IOException e) {
-            poppinsRegular = new Font("SansSerif", Font.PLAIN, 14);
-            poppinsBold = new Font("SansSerif", Font.BOLD, 14);
+            fuentePoppinsRegular = new Font("SansSerif", Font.PLAIN, 14);
+            fuentePoppinsBold = new Font("SansSerif", Font.BOLD, 14);
         }
     }
 
     public static void main(String[] args) {
-        SwingUtilities.invokeLater(() -> {
-            new SeleccionarMetodoPagoPantalla().setVisible(true);
-        });
+        SwingUtilities.invokeLater(() -> new SeleccionarMetodoPagoPantalla().setVisible(true));
     }
 }

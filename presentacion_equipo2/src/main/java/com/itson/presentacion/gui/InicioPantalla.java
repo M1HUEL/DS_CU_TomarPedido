@@ -1,5 +1,6 @@
 package com.itson.presentacion.gui;
 
+import com.itson.presentacion.util.Colores;
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Cursor;
@@ -20,15 +21,31 @@ import javax.swing.SwingUtilities;
 
 public class InicioPantalla extends JFrame {
 
-    private Font poppinsRegular;
-    private Font poppinsBold;
+    private Font fuentePoppinsRegular;
+    private Font fuentePoppinsBold;
 
     private final Color NARANJA = new Color(255, 140, 0);
-    private final Color CREMA = new Color(254, 249, 239);
-    private final Color BLANCO = Color.WHITE;
-    private final Color GRIS_BORDE = new Color(230, 230, 230);
+    private final Color CREMA = new Color(255, 245, 230);
+    private final Color BLANCO = new Color(255, 255, 255);
+    private final Color GRIS_BORDE = new Color(200, 200, 200);
+
+    private JPanel header;
+    private JPanel headerContenido;
+
+    private JLabel lblTitulo;
+    private JLabel lblSubtitulo;
+
+    private JPanel panelPrincipal;
+    private JPanel panelBlanco;
+    private JPanel contenedorCentral;
+
+    private JButton btnCrearPedido;
+    private JButton btnVerPedidos;
+    private JButton btnDashboard;
+    private JButton btnCerrarSesion;
 
     public InicioPantalla() {
+
         cargarFuentePoppins();
 
         setTitle("Inicio");
@@ -37,49 +54,74 @@ public class InicioPantalla extends JFrame {
         setLocationRelativeTo(null);
         setResizable(false);
 
-        JPanel header = new JPanel(new BorderLayout());
+        header = new JPanel(new BorderLayout());
         header.setBackground(NARANJA);
         header.setPreferredSize(new Dimension(1440, 160));
 
-        JPanel headerContenido = new JPanel(new GridLayout(2, 1));
+        headerContenido = new JPanel(new GridLayout(2, 1));
         headerContenido.setBackground(NARANJA);
         headerContenido.setBorder(BorderFactory.createEmptyBorder(40, 100, 40, 100));
 
-        JLabel lblTitulo = new JLabel("Inicio", SwingConstants.LEFT);
-        lblTitulo.setFont(poppinsBold.deriveFont(Font.BOLD, 28f));
+        lblTitulo = new JLabel("Inicio", SwingConstants.LEFT);
+        lblTitulo.setFont(fuentePoppinsBold.deriveFont(28f));
         lblTitulo.setForeground(BLANCO);
 
-        JLabel lblSubtitulo = new JLabel("Selecciona una opción para continuar", SwingConstants.LEFT);
-        lblSubtitulo.setFont(poppinsRegular.deriveFont(Font.PLAIN, 16f));
+        lblSubtitulo = new JLabel("Selecciona una opción para continuar", SwingConstants.LEFT);
+        lblSubtitulo.setFont(fuentePoppinsRegular.deriveFont(16f));
         lblSubtitulo.setForeground(BLANCO);
 
         headerContenido.add(lblTitulo);
         headerContenido.add(lblSubtitulo);
         header.add(headerContenido, BorderLayout.CENTER);
 
-        JPanel panelPrincipal = new JPanel(new BorderLayout());
+        panelPrincipal = new JPanel(new BorderLayout());
         panelPrincipal.setBackground(CREMA);
 
-        JPanel panelBlanco = new JPanel(new GridLayout(4, 1, 0, 20));
+        panelBlanco = new JPanel(new GridLayout(4, 1, 0, 20));
         panelBlanco.setBackground(BLANCO);
         panelBlanco.setBorder(BorderFactory.createCompoundBorder(
                 BorderFactory.createLineBorder(GRIS_BORDE, 1),
                 BorderFactory.createEmptyBorder(60, 120, 60, 120)
         ));
 
-        String[] opciones = {"Crear Pedido", "Ver Pedidos", "Dashboard", "Cerrar Sesión"};
-        for (String opcion : opciones) {
-            JButton btn = new JButton(opcion);
-            btn.setBackground(NARANJA);
-            btn.setForeground(BLANCO);
-            btn.setFont(poppinsRegular.deriveFont(16f));
-            btn.setFocusPainted(false);
-            btn.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
-            btn.setBorder(BorderFactory.createEmptyBorder(20, 0, 20, 0));
-            panelBlanco.add(btn);
-        }
+        btnCrearPedido = new JButton("Crear Pedido");
+        btnCrearPedido.setBackground(NARANJA);
+        btnCrearPedido.setForeground(BLANCO);
+        btnCrearPedido.setFont(fuentePoppinsRegular.deriveFont(16f));
+        btnCrearPedido.setFocusPainted(false);
+        btnCrearPedido.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
+        btnCrearPedido.setBorder(BorderFactory.createEmptyBorder(20, 0, 20, 0));
 
-        JPanel contenedorCentral = new JPanel(new BorderLayout());
+        btnVerPedidos = new JButton("Ver Pedidos");
+        btnVerPedidos.setBackground(NARANJA);
+        btnVerPedidos.setForeground(BLANCO);
+        btnVerPedidos.setFont(fuentePoppinsRegular.deriveFont(16f));
+        btnVerPedidos.setFocusPainted(false);
+        btnVerPedidos.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
+        btnVerPedidos.setBorder(BorderFactory.createEmptyBorder(20, 0, 20, 0));
+
+        btnDashboard = new JButton("Dashboard");
+        btnDashboard.setBackground(NARANJA);
+        btnDashboard.setForeground(BLANCO);
+        btnDashboard.setFont(fuentePoppinsRegular.deriveFont(16f));
+        btnDashboard.setFocusPainted(false);
+        btnDashboard.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
+        btnDashboard.setBorder(BorderFactory.createEmptyBorder(20, 0, 20, 0));
+
+        btnCerrarSesion = new JButton("Cerrar Sesión");
+        btnCerrarSesion.setBackground(NARANJA);
+        btnCerrarSesion.setForeground(BLANCO);
+        btnCerrarSesion.setFont(fuentePoppinsRegular.deriveFont(16f));
+        btnCerrarSesion.setFocusPainted(false);
+        btnCerrarSesion.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
+        btnCerrarSesion.setBorder(BorderFactory.createEmptyBorder(20, 0, 20, 0));
+
+        panelBlanco.add(btnCrearPedido);
+        panelBlanco.add(btnVerPedidos);
+        panelBlanco.add(btnDashboard);
+        panelBlanco.add(btnCerrarSesion);
+
+        contenedorCentral = new JPanel(new BorderLayout());
         contenedorCentral.setBackground(CREMA);
         contenedorCentral.setBorder(BorderFactory.createEmptyBorder(60, 100, 100, 100));
         contenedorCentral.add(panelBlanco, BorderLayout.CENTER);
@@ -95,25 +137,21 @@ public class InicioPantalla extends JFrame {
             InputStream regularStream = getClass().getResourceAsStream("/fonts/Poppins-Regular.ttf");
             InputStream boldStream = getClass().getResourceAsStream("/fonts/Poppins-Bold.ttf");
 
-            if (regularStream != null) {
-                poppinsRegular = Font.createFont(Font.TRUETYPE_FONT, regularStream);
-            } else {
-                poppinsRegular = new Font("SansSerif", Font.PLAIN, 14);
-            }
+            fuentePoppinsRegular = (regularStream != null)
+                    ? Font.createFont(Font.TRUETYPE_FONT, regularStream)
+                    : new Font("SansSerif", Font.PLAIN, 14);
 
-            if (boldStream != null) {
-                poppinsBold = Font.createFont(Font.TRUETYPE_FONT, boldStream);
-            } else {
-                poppinsBold = new Font("SansSerif", Font.BOLD, 14);
-            }
+            fuentePoppinsBold = (boldStream != null)
+                    ? Font.createFont(Font.TRUETYPE_FONT, boldStream)
+                    : new Font("SansSerif", Font.BOLD, 14);
 
             GraphicsEnvironment ge = GraphicsEnvironment.getLocalGraphicsEnvironment();
-            ge.registerFont(poppinsRegular);
-            ge.registerFont(poppinsBold);
+            ge.registerFont(fuentePoppinsRegular);
+            ge.registerFont(fuentePoppinsBold);
 
         } catch (FontFormatException | IOException e) {
-            poppinsRegular = new Font("SansSerif", Font.PLAIN, 14);
-            poppinsBold = new Font("SansSerif", Font.BOLD, 14);
+            fuentePoppinsRegular = new Font("SansSerif", Font.PLAIN, 14);
+            fuentePoppinsBold = new Font("SansSerif", Font.BOLD, 14);
         }
     }
 
