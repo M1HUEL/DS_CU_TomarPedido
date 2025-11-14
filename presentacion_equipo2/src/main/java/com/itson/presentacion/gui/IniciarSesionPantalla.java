@@ -1,5 +1,6 @@
 package com.itson.presentacion.gui;
 
+import com.itson.presentacion.controlador.IniciarSesionControlador;
 import com.itson.presentacion.util.Colores;
 import java.awt.BorderLayout;
 import java.awt.Color;
@@ -28,14 +29,12 @@ public class IniciarSesionPantalla extends JFrame {
     private Font fuentePoppinsBold;
 
     private final Color COLOR_PRIMARIO = Colores.NARANJA;
-    private final Color COLOR_PRIMARIO_CLARO = Colores.NARANJA_CLARO;
     private final Color COLOR_FONDO = Colores.CREMA;
     private final Color COLOR_BLANCO = Colores.BLANCO;
     private final Color COLOR_BORDE = Colores.GRIS_BORDE;
     private final Color COLOR_INPUT = Colores.NARANJA_MUY_CLARO;
 
     private JButton btnIniciarSesion;
-    private JButton btnCancelar;
 
     private JLabel lblTitulo;
     private JLabel lblSubtitulo;
@@ -54,6 +53,8 @@ public class IniciarSesionPantalla extends JFrame {
     private JPanel panelCampoNombre;
     private JPanel panelCampoContrasena;
     private JPanel panelBoton;
+
+    private final IniciarSesionControlador controlador = new IniciarSesionControlador();
 
     public IniciarSesionPantalla() {
         cargarFuentePoppins();
@@ -136,6 +137,12 @@ public class IniciarSesionPantalla extends JFrame {
         btnIniciarSesion.setFocusPainted(false);
         btnIniciarSesion.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
         btnIniciarSesion.setBorder(BorderFactory.createEmptyBorder(16, 46, 16, 46));
+
+        btnIniciarSesion.addActionListener(e -> {
+            String nombre = txtNombre.getText();
+            String contrasena = new String(txtContrasena.getPassword());
+            controlador.iniciarSesion(nombre, contrasena, this);
+        });
 
         panelBoton.add(btnIniciarSesion);
         panelFormulario.add(panelBoton);
