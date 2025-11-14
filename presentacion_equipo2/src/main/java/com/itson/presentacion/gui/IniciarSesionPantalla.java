@@ -76,27 +76,27 @@ public class IniciarSesionPantalla extends JFrame {
                 BorderFactory.createEmptyBorder(60, 120, 60, 120)
         ));
 
-        JPanel panelNombre = new JPanel(new BorderLayout(0, 8));
+        JPanel panelNombre = new JPanel(new BorderLayout());
         panelNombre.setBackground(BLANCO);
         JLabel lblNombre = new JLabel("Nombre");
         lblNombre.setFont(poppinsRegular.deriveFont(16f));
         txtNombre = new JTextField();
         txtNombre.setFont(poppinsRegular.deriveFont(16f));
         txtNombre.setBackground(NARANJA_MUY_CLARO);
-        txtNombre.setBorder(BorderFactory.createLineBorder(NARANJA, 2));
+        txtNombre.setBorder(BorderFactory.createLineBorder(GRIS_BORDE, 1));
         txtNombre.setPreferredSize(new Dimension(400, 45));
         panelNombre.add(lblNombre, BorderLayout.NORTH);
         panelNombre.add(txtNombre, BorderLayout.CENTER);
         panelBlanco.add(panelNombre);
 
-        JPanel panelContrasena = new JPanel(new BorderLayout(0, 8));
+        JPanel panelContrasena = new JPanel(new BorderLayout());
         panelContrasena.setBackground(BLANCO);
         JLabel lblContrasena = new JLabel("Contraseña");
         lblContrasena.setFont(poppinsRegular.deriveFont(16f));
         txtContrasena = new JPasswordField();
         txtContrasena.setFont(poppinsRegular.deriveFont(16f));
         txtContrasena.setBackground(NARANJA_MUY_CLARO);
-        txtContrasena.setBorder(BorderFactory.createLineBorder(NARANJA, 2));
+        txtContrasena.setBorder(BorderFactory.createLineBorder(GRIS_BORDE, 1));
         txtContrasena.setPreferredSize(new Dimension(400, 45));
         panelContrasena.add(lblContrasena, BorderLayout.NORTH);
         panelContrasena.add(txtContrasena, BorderLayout.CENTER);
