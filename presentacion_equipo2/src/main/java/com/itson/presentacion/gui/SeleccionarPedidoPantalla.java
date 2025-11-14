@@ -1,5 +1,6 @@
 package com.itson.presentacion.gui;
 
+import com.itson.presentacion.controlador.SeleccionarPedidoControlador;
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Cursor;
@@ -51,6 +52,8 @@ public class SeleccionarPedidoPantalla extends JFrame {
 
     private JScrollPane scrollTarjetas;
     private JPanel panelPrincipal;
+
+    SeleccionarPedidoControlador controlador = new SeleccionarPedidoControlador();
 
     public SeleccionarPedidoPantalla() {
 
@@ -112,6 +115,8 @@ public class SeleccionarPedidoPantalla extends JFrame {
             btnSeleccionar.setFocusPainted(false);
             btnSeleccionar.setBorder(BorderFactory.createEmptyBorder(10, 0, 10, 0));
             btnSeleccionar.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
+
+            btnSeleccionar.addActionListener(e -> controlador.seleccionarPedido(this));
 
             btnSeleccionar.addMouseListener(new MouseAdapter() {
                 @Override

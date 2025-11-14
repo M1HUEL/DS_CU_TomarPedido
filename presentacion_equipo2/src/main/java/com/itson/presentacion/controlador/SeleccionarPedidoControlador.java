@@ -1,19 +1,20 @@
 package com.itson.presentacion.controlador;
 
 import com.itson.presentacion.gui.PersonalizarPedidoPantalla;
+import javax.swing.JFrame;
 import javax.swing.JOptionPane;
 
 public class SeleccionarPedidoControlador {
 
-    public void mostrarPedidos() {
-        System.out.println("Mostrando lista de pedidos disponibles...");
-    }
+    public void seleccionarPedido(JFrame ventanaActual) {
+        JOptionPane.showMessageDialog(
+                ventanaActual,
+                "Pedido seleccionado correctamente.",
+                "Pedido",
+                JOptionPane.INFORMATION_MESSAGE
+        );
 
-    public void seleccionarPedido(int numeroPedido) {
-        JOptionPane.showMessageDialog(null,
-                "Has seleccionado el Pedido " + numeroPedido,
-                "Pedido seleccionado",
-                JOptionPane.INFORMATION_MESSAGE);
+        ventanaActual.dispose();
         new PersonalizarPedidoPantalla().setVisible(true);
     }
 }
