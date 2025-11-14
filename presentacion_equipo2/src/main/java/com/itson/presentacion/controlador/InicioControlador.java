@@ -1,39 +1,46 @@
 package com.itson.presentacion.controlador;
 
 import com.itson.presentacion.gui.IniciarSesionPantalla;
+import com.itson.presentacion.gui.SeleccionarPedidoPantalla;
 import javax.swing.JFrame;
 import javax.swing.JOptionPane;
 
 public class InicioControlador {
 
     public void abrirSeleccionarPedido(JFrame ventanaActual) {
-        JOptionPane.showMessageDialog(ventanaActual,
-                "Abriendo pantalla de selección de pedido...",
-                "Navegación",
-                JOptionPane.INFORMATION_MESSAGE);
+        ventanaActual.dispose();
+        new SeleccionarPedidoPantalla().setVisible(true);
+    }
+
+    public void verPedidos(JFrame ventanaActual) {
+        JOptionPane.showMessageDialog(
+                ventanaActual,
+                "Funcionalidad de ver pedidos aún no implementada.",
+                "Información",
+                JOptionPane.INFORMATION_MESSAGE
+        );
     }
 
     public void abrirDashboard(JFrame ventanaActual) {
-        JOptionPane.showMessageDialog(ventanaActual,
-                "Abriendo Dashboard...",
-                "Navegación",
-                JOptionPane.INFORMATION_MESSAGE);
+        JOptionPane.showMessageDialog(
+                ventanaActual,
+                "Funcionalidad de dashboard aún no implementada.",
+                "Información",
+                JOptionPane.INFORMATION_MESSAGE
+        );
     }
 
     public void cerrarSesion(JFrame ventanaActual) {
-        int confirmacion = JOptionPane.showConfirmDialog(
+        int opcion = JOptionPane.showConfirmDialog(
                 ventanaActual,
                 "¿Deseas cerrar sesión?",
                 "Confirmar",
                 JOptionPane.YES_NO_OPTION
         );
 
-        if (confirmacion == JOptionPane.YES_OPTION) {
-            JOptionPane.showMessageDialog(ventanaActual,
-                    "Sesión cerrada correctamente.");
-            new IniciarSesionPantalla().setVisible(true);
+        if (opcion == JOptionPane.YES_OPTION) {
             ventanaActual.dispose();
+            new IniciarSesionPantalla().setVisible(true);
         }
     }
-
 }

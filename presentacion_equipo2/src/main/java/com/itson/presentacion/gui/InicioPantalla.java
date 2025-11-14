@@ -1,5 +1,6 @@
 package com.itson.presentacion.gui;
 
+import com.itson.presentacion.controlador.InicioControlador;
 import com.itson.presentacion.util.Colores;
 import java.awt.BorderLayout;
 import java.awt.Color;
@@ -44,8 +45,9 @@ public class InicioPantalla extends JFrame {
     private JButton btnDashboard;
     private JButton btnCerrarSesion;
 
-    public InicioPantalla() {
+    private final InicioControlador controlador = new InicioControlador();
 
+    public InicioPantalla() {
         cargarFuentePoppins();
 
         setTitle("Inicio");
@@ -116,6 +118,14 @@ public class InicioPantalla extends JFrame {
         btnCerrarSesion.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
         btnCerrarSesion.setBorder(BorderFactory.createEmptyBorder(20, 0, 20, 0));
 
+        btnCrearPedido.addActionListener(e -> controlador.abrirSeleccionarPedido(this));
+
+        btnVerPedidos.addActionListener(e -> controlador.verPedidos(this));
+
+        btnDashboard.addActionListener(e -> controlador.abrirDashboard(this));
+
+        btnCerrarSesion.addActionListener(e -> controlador.cerrarSesion(this));
+
         panelBlanco.add(btnCrearPedido);
         panelBlanco.add(btnVerPedidos);
         panelBlanco.add(btnDashboard);
@@ -156,8 +166,6 @@ public class InicioPantalla extends JFrame {
     }
 
     public static void main(String[] args) {
-        SwingUtilities.invokeLater(() -> {
-            new InicioPantalla().setVisible(true);
-        });
+        SwingUtilities.invokeLater(() -> new InicioPantalla().setVisible(true));
     }
 }
