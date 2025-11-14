@@ -1,11 +1,23 @@
 package com.itson.presentacion.gui;
 
-import javax.swing.SwingUtilities;
-
-import javax.swing.*;
-import java.awt.*;
+import java.awt.BorderLayout;
+import java.awt.Color;
+import java.awt.Cursor;
+import java.awt.Dimension;
+import java.awt.FlowLayout;
+import java.awt.Font;
+import java.awt.FontFormatException;
+import java.awt.GraphicsEnvironment;
+import java.awt.GridLayout;
 import java.io.IOException;
 import java.io.InputStream;
+import javax.swing.BorderFactory;
+import javax.swing.JButton;
+import javax.swing.JFrame;
+import javax.swing.JLabel;
+import javax.swing.JPanel;
+import javax.swing.SwingConstants;
+import javax.swing.SwingUtilities;
 
 public class ConfirmacionPedidoPantalla extends JFrame {
 
