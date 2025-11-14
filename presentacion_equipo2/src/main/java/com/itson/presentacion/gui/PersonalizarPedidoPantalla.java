@@ -1,5 +1,6 @@
 package com.itson.presentacion.gui;
 
+import com.itson.presentacion.controlador.PersonalizarPedidoControlador;
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Cursor;
@@ -47,6 +48,8 @@ public class PersonalizarPedidoPantalla extends JFrame {
     private JPanel panelBotones;
     private JButton btnConfirmar;
     private JButton btnCancelar;
+
+    private PersonalizarPedidoControlador controlador = new PersonalizarPedidoControlador();
 
     public PersonalizarPedidoPantalla() {
         cargarFuentePoppins();
@@ -120,6 +123,10 @@ public class PersonalizarPedidoPantalla extends JFrame {
         btnCancelar.setFocusPainted(false);
         btnCancelar.setBorder(BorderFactory.createEmptyBorder(10, 50, 10, 50));
         btnCancelar.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
+
+        btnConfirmar.addActionListener(e -> controlador.confirmarPersonalizacion(this));
+
+        btnCancelar.addActionListener(e -> controlador.cancelarPersonalizacion(this));
 
         panelBotones.add(btnConfirmar);
         panelBotones.add(btnCancelar);
