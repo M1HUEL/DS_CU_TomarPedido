@@ -1,5 +1,6 @@
 package com.itson.presentacion.gui;
 
+import com.itson.presentacion.controlador.ConfirmacionPedidoControlador;
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Cursor;
@@ -25,27 +26,13 @@ public class ConfirmacionPedidoPantalla extends JFrame {
     private Font fuentePoppinsBold;
 
     private final Color COLOR_NARANJA = new Color(255, 140, 0);
-    private final Color COLOR_NARANJA_CLARO = new Color(255, 183, 77);
-    private final Color COLOR_NARANJA_MUY_CLARO = new Color(255, 250, 240);
     private final Color COLOR_CREMA = new Color(254, 249, 239);
     private final Color COLOR_BLANCO = Color.WHITE;
     private final Color COLOR_GRIS_BORDE = new Color(220, 220, 220);
 
-    private JPanel header;
-    private JPanel headerContenido;
-    private JPanel panelPrincipal;
-    private JPanel panelMensaje;
-    private JPanel panelTexto;
-    private JPanel panelBotones;
-    private JPanel contenedorCentral;
+    public JButton btnConfirmar;
 
-    private JLabel lblTitulo;
-    private JLabel lblSubtitulo;
-    private JLabel lblMensaje;
-    private JLabel lblSubMensaje;
-
-    private JButton btnConfirmar;
-    private JButton btnCancelar;
+    private ConfirmacionPedidoControlador controlador = new ConfirmacionPedidoControlador();
 
     public ConfirmacionPedidoPantalla() {
         cargarFuentePoppins();
@@ -56,50 +43,50 @@ public class ConfirmacionPedidoPantalla extends JFrame {
         setLocationRelativeTo(null);
         setResizable(false);
 
-        header = new JPanel(new BorderLayout());
+        JPanel header = new JPanel(new BorderLayout());
         header.setBackground(COLOR_NARANJA);
         header.setPreferredSize(new Dimension(1440, 160));
 
-        headerContenido = new JPanel(new GridLayout(2, 1));
+        JPanel headerContenido = new JPanel(new GridLayout(2, 1));
         headerContenido.setBackground(COLOR_NARANJA);
         headerContenido.setBorder(BorderFactory.createEmptyBorder(40, 100, 40, 100));
 
-        lblTitulo = new JLabel("Pantalla de confirmación", SwingConstants.LEFT);
-        lblTitulo.setFont(fuentePoppinsBold.deriveFont(Font.BOLD, 28f));
+        JLabel lblTitulo = new JLabel("Pantalla de confirmación", SwingConstants.LEFT);
+        lblTitulo.setFont(fuentePoppinsBold.deriveFont(28f));
         lblTitulo.setForeground(COLOR_BLANCO);
 
-        lblSubtitulo = new JLabel("Elige las opciones disponibles y personaliza la orden", SwingConstants.LEFT);
-        lblSubtitulo.setFont(fuentePoppinsRegular.deriveFont(Font.PLAIN, 16f));
+        JLabel lblSubtitulo = new JLabel("Elige las opciones disponibles y personaliza la orden", SwingConstants.LEFT);
+        lblSubtitulo.setFont(fuentePoppinsRegular.deriveFont(16f));
         lblSubtitulo.setForeground(COLOR_BLANCO);
 
         headerContenido.add(lblTitulo);
         headerContenido.add(lblSubtitulo);
         header.add(headerContenido, BorderLayout.CENTER);
 
-        panelPrincipal = new JPanel(new BorderLayout());
+        JPanel panelPrincipal = new JPanel(new BorderLayout());
         panelPrincipal.setBackground(COLOR_CREMA);
 
-        panelMensaje = new JPanel(new BorderLayout());
+        JPanel panelMensaje = new JPanel(new BorderLayout());
         panelMensaje.setBackground(COLOR_BLANCO);
         panelMensaje.setBorder(BorderFactory.createCompoundBorder(
                 BorderFactory.createLineBorder(COLOR_GRIS_BORDE, 1),
                 BorderFactory.createEmptyBorder(100, 60, 100, 60)
         ));
 
-        lblMensaje = new JLabel("El pedido se encuentra en preparación!", SwingConstants.CENTER);
-        lblMensaje.setFont(fuentePoppinsBold.deriveFont(Font.PLAIN, 22f));
+        JLabel lblMensaje = new JLabel("El pedido se encuentra en preparación!", SwingConstants.CENTER);
+        lblMensaje.setFont(fuentePoppinsBold.deriveFont(22f));
 
-        lblSubMensaje = new JLabel("Muchas gracias por comprar en este establecimiento.", SwingConstants.CENTER);
-        lblSubMensaje.setFont(fuentePoppinsRegular.deriveFont(Font.PLAIN, 16f));
+        JLabel lblSubMensaje = new JLabel("Muchas gracias por comprar en este establecimiento.", SwingConstants.CENTER);
+        lblSubMensaje.setFont(fuentePoppinsRegular.deriveFont(16f));
 
-        panelTexto = new JPanel(new GridLayout(2, 1, 0, 10));
+        JPanel panelTexto = new JPanel(new GridLayout(2, 1, 0, 10));
         panelTexto.setBackground(COLOR_BLANCO);
         panelTexto.add(lblMensaje);
         panelTexto.add(lblSubMensaje);
 
         panelMensaje.add(panelTexto, BorderLayout.CENTER);
 
-        panelBotones = new JPanel(new FlowLayout(FlowLayout.CENTER, 20, 20));
+        JPanel panelBotones = new JPanel(new FlowLayout(FlowLayout.CENTER, 20, 20));
         panelBotones.setBackground(COLOR_CREMA);
 
         btnConfirmar = new JButton("Confirmar");
@@ -110,18 +97,9 @@ public class ConfirmacionPedidoPantalla extends JFrame {
         btnConfirmar.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
         btnConfirmar.setBorder(BorderFactory.createEmptyBorder(10, 40, 10, 40));
 
-        btnCancelar = new JButton("Cancelar");
-        btnCancelar.setBackground(COLOR_NARANJA);
-        btnCancelar.setForeground(COLOR_BLANCO);
-        btnCancelar.setFont(fuentePoppinsRegular.deriveFont(15f));
-        btnCancelar.setFocusPainted(false);
-        btnCancelar.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
-        btnCancelar.setBorder(BorderFactory.createEmptyBorder(10, 40, 10, 40));
-
         panelBotones.add(btnConfirmar);
-        panelBotones.add(btnCancelar);
 
-        contenedorCentral = new JPanel(new BorderLayout());
+        JPanel contenedorCentral = new JPanel(new BorderLayout());
         contenedorCentral.setBackground(COLOR_CREMA);
         contenedorCentral.setBorder(BorderFactory.createEmptyBorder(60, 100, 100, 100));
         contenedorCentral.add(panelMensaje, BorderLayout.CENTER);
@@ -131,20 +109,17 @@ public class ConfirmacionPedidoPantalla extends JFrame {
         panelPrincipal.add(contenedorCentral, BorderLayout.CENTER);
 
         add(panelPrincipal);
+
+        btnConfirmar.addActionListener(e -> controlador.confirmarPedido(this));
     }
 
     private void cargarFuentePoppins() {
         try {
-            InputStream regular = getClass().getResourceAsStream("/fonts/Poppins-Regular.ttf");
-            InputStream bold = getClass().getResourceAsStream("/fonts/Poppins-Bold.ttf");
+            InputStream regularStream = getClass().getResourceAsStream("/fonts/Poppins-Regular.ttf");
+            InputStream boldStream = getClass().getResourceAsStream("/fonts/Poppins-Bold.ttf");
 
-            fuentePoppinsRegular = regular != null
-                    ? Font.createFont(Font.TRUETYPE_FONT, regular)
-                    : new Font("SansSerif", Font.PLAIN, 14);
-
-            fuentePoppinsBold = bold != null
-                    ? Font.createFont(Font.TRUETYPE_FONT, bold)
-                    : new Font("SansSerif", Font.BOLD, 14);
+            fuentePoppinsRegular = Font.createFont(Font.TRUETYPE_FONT, regularStream);
+            fuentePoppinsBold = Font.createFont(Font.TRUETYPE_FONT, boldStream);
 
             GraphicsEnvironment ge = GraphicsEnvironment.getLocalGraphicsEnvironment();
             ge.registerFont(fuentePoppinsRegular);
@@ -157,6 +132,6 @@ public class ConfirmacionPedidoPantalla extends JFrame {
     }
 
     public static void main(String[] args) {
-        SwingUtilities.invokeLater(() -> new ConfirmacionPedidoPantalla().setVisible(true));
+        SwingUtilities.invokeLater(() -> new IniciarSesionPantalla().setVisible(true));
     }
 }
