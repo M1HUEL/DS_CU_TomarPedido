@@ -1,5 +1,6 @@
 package com.itson.presentacion.gui;
 
+import com.itson.presentacion.controlador.SeleccionarMetodoPagoControlador;
 import com.itson.presentacion.util.Colores;
 import java.awt.BorderLayout;
 import java.awt.Color;
@@ -38,6 +39,8 @@ public class SeleccionarMetodoPagoPantalla extends JFrame {
     private JPanel panelPrincipal;
     private JPanel panelOpcionesPago;
     private JPanel panelCentro;
+
+    private SeleccionarMetodoPagoControlador controlador = new SeleccionarMetodoPagoControlador();
 
     public SeleccionarMetodoPagoPantalla() {
         cargarFuentePoppins();
@@ -96,6 +99,8 @@ public class SeleccionarMetodoPagoPantalla extends JFrame {
             btnMetodoPago.setFocusPainted(false);
             btnMetodoPago.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
             btnMetodoPago.setBorder(BorderFactory.createEmptyBorder(20, 0, 20, 0));
+
+            btnMetodoPago.addActionListener(e -> controlador.seleccionarMetodoPago(this, metodo));
 
             btnMetodoPago.addMouseListener(new java.awt.event.MouseAdapter() {
                 @Override
