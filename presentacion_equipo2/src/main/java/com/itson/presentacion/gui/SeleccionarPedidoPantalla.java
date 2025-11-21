@@ -36,22 +36,10 @@ public class SeleccionarPedidoPantalla extends JFrame {
     private final Color COLOR_BLANCO = Color.WHITE;
     private final Color COLOR_BORDE_GRIS = new Color(230, 230, 230);
 
-    private JPanel header;
-    private JPanel headerContenido;
-
-    private JLabel lblTitulo;
-    private JLabel lblSubtitulo;
-
-    private JPanel panelTarjetas;
-    private JPanel tarjeta;
-
-    private JLabel lblImagen;
-    private JLabel lblNombrePedido;
-
+    private JPanel header, headerContenido, panelTarjetas, tarjeta, panelPrincipal;
+    private JLabel lblTitulo, lblSubtitulo, lblImagen, lblNombrePedido;
     private JButton btnSeleccionar;
-
     private JScrollPane scrollTarjetas;
-    private JPanel panelPrincipal;
 
     SeleccionarPedidoControlador controlador = new SeleccionarPedidoControlador();
 
@@ -164,16 +152,11 @@ public class SeleccionarPedidoPantalla extends JFrame {
 
     private void cargarFuentePoppins() {
         try {
-            InputStream regular = getClass().getResourceAsStream("/fonts/Poppins-Regular.ttf");
-            InputStream bold = getClass().getResourceAsStream("/fonts/Poppins-Bold.ttf");
+            InputStream regularStream = getClass().getResourceAsStream("/fonts/Poppins-Regular.ttf");
+            InputStream boldStream = getClass().getResourceAsStream("/fonts/Poppins-Bold.ttf");
 
-            fuentePoppinsRegular = regular != null
-                    ? Font.createFont(Font.TRUETYPE_FONT, regular)
-                    : new Font("SansSerif", Font.PLAIN, 14);
-
-            fuentePoppinsBold = bold != null
-                    ? Font.createFont(Font.TRUETYPE_FONT, bold)
-                    : new Font("SansSerif", Font.BOLD, 14);
+            fuentePoppinsRegular = Font.createFont(Font.TRUETYPE_FONT, regularStream);
+            fuentePoppinsBold = Font.createFont(Font.TRUETYPE_FONT, boldStream);
 
             GraphicsEnvironment ge = GraphicsEnvironment.getLocalGraphicsEnvironment();
             ge.registerFont(fuentePoppinsRegular);
