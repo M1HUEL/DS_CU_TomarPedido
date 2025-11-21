@@ -1,6 +1,6 @@
 package com.itson.controlPedido;
 
-import com.itson.dtos.PedidoDTO;
+import com.itson.dto.PedidoDTO;
 
 public interface PedidoFachada {
 
