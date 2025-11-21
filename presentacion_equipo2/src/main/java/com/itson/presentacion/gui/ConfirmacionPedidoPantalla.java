@@ -30,7 +30,9 @@ public class ConfirmacionPedidoPantalla extends JFrame {
     private final Color COLOR_BLANCO = Color.WHITE;
     private final Color COLOR_GRIS_BORDE = new Color(220, 220, 220);
 
-    public JButton btnConfirmar;
+    public JButton btnConfirmar, btnCancelar;
+    public JLabel lblNombrePedido, lblPrecio;
+    public JPanel panelTexto, panelBotones, header, headerContenido, panelMensaje, contenedorCentral;
 
     private ConfirmacionPedidoControlador controlador = new ConfirmacionPedidoControlador();
 
@@ -43,53 +45,47 @@ public class ConfirmacionPedidoPantalla extends JFrame {
         setLocationRelativeTo(null);
         setResizable(false);
 
-        JPanel header = new JPanel(new BorderLayout());
+        header = new JPanel(new BorderLayout());
         header.setBackground(COLOR_NARANJA);
         header.setPreferredSize(new Dimension(1440, 160));
 
-        JPanel headerContenido = new JPanel(new GridLayout(2, 1));
+        headerContenido = new JPanel(new GridLayout(2, 1));
         headerContenido.setBackground(COLOR_NARANJA);
         headerContenido.setBorder(BorderFactory.createEmptyBorder(40, 100, 40, 100));
 
-        JLabel lblTitulo = new JLabel("Pantalla de confirmación", SwingConstants.LEFT);
-        lblTitulo.setFont(fuentePoppinsBold.deriveFont(28f));
-        lblTitulo.setForeground(COLOR_BLANCO);
+        lblNombrePedido = new JLabel("Combo Hamburguesa", SwingConstants.LEFT);
+        lblNombrePedido.setFont(fuentePoppinsBold.deriveFont(28f));
+        lblNombrePedido.setForeground(COLOR_BLANCO);
 
-        JLabel lblSubtitulo = new JLabel("Elige las opciones disponibles y personaliza la orden", SwingConstants.LEFT);
-        lblSubtitulo.setFont(fuentePoppinsRegular.deriveFont(16f));
-        lblSubtitulo.setForeground(COLOR_BLANCO);
+        lblPrecio = new JLabel("30$", SwingConstants.LEFT);
+        lblPrecio.setFont(fuentePoppinsRegular.deriveFont(16f));
+        lblPrecio.setForeground(COLOR_BLANCO);
 
-        headerContenido.add(lblTitulo);
-        headerContenido.add(lblSubtitulo);
+        headerContenido.add(lblNombrePedido);
+        headerContenido.add(lblPrecio);
         header.add(headerContenido, BorderLayout.CENTER);
 
         JPanel panelPrincipal = new JPanel(new BorderLayout());
         panelPrincipal.setBackground(COLOR_CREMA);
 
-        JPanel panelMensaje = new JPanel(new BorderLayout());
+        panelMensaje = new JPanel(new BorderLayout());
         panelMensaje.setBackground(COLOR_BLANCO);
         panelMensaje.setBorder(BorderFactory.createCompoundBorder(
                 BorderFactory.createLineBorder(COLOR_GRIS_BORDE, 1),
                 BorderFactory.createEmptyBorder(100, 60, 100, 60)
         ));
 
-        JLabel lblMensaje = new JLabel("El pedido se encuentra en preparación!", SwingConstants.CENTER);
-        lblMensaje.setFont(fuentePoppinsBold.deriveFont(22f));
-
-        JLabel lblSubMensaje = new JLabel("Muchas gracias por comprar en este establecimiento.", SwingConstants.CENTER);
-        lblSubMensaje.setFont(fuentePoppinsRegular.deriveFont(16f));
-
-        JPanel panelTexto = new JPanel(new GridLayout(2, 1, 0, 10));
+        panelTexto = new JPanel(new GridLayout(2, 1, 0, 10));
         panelTexto.setBackground(COLOR_BLANCO);
-        panelTexto.add(lblMensaje);
-        panelTexto.add(lblSubMensaje);
+        panelTexto.add(lblNombrePedido);
+        panelTexto.add(lblPrecio);
 
         panelMensaje.add(panelTexto, BorderLayout.CENTER);
 
-        JPanel panelBotones = new JPanel(new FlowLayout(FlowLayout.CENTER, 20, 20));
+        panelBotones = new JPanel(new FlowLayout(FlowLayout.CENTER, 20, 20));
         panelBotones.setBackground(COLOR_CREMA);
 
-        btnConfirmar = new JButton("Confirmar");
+        btnConfirmar = new JButton("Confirmar Pedido");
         btnConfirmar.setBackground(COLOR_NARANJA);
         btnConfirmar.setForeground(COLOR_BLANCO);
         btnConfirmar.setFont(fuentePoppinsRegular.deriveFont(15f));
@@ -97,9 +93,19 @@ public class ConfirmacionPedidoPantalla extends JFrame {
         btnConfirmar.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
         btnConfirmar.setBorder(BorderFactory.createEmptyBorder(10, 40, 10, 40));
 
-        panelBotones.add(btnConfirmar);
+        btnCancelar = new JButton("Cancelar");
+        btnCancelar.setBackground(COLOR_NARANJA);
+        btnCancelar.setForeground(COLOR_BLANCO);
+        btnCancelar.setFont(fuentePoppinsRegular.deriveFont(15f));
+        btnCancelar.setFocusPainted(false);
+        btnCancelar.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
+        btnCancelar.setBorder(BorderFactory.createEmptyBorder(10, 40, 10, 40));
+        btnCancelar.setPreferredSize(btnConfirmar.getPreferredSize());
 
-        JPanel contenedorCentral = new JPanel(new BorderLayout());
+        panelBotones.add(btnConfirmar);
+        panelBotones.add(btnCancelar);
+
+        contenedorCentral = new JPanel(new BorderLayout());
         contenedorCentral.setBackground(COLOR_CREMA);
         contenedorCentral.setBorder(BorderFactory.createEmptyBorder(60, 100, 100, 100));
         contenedorCentral.add(panelMensaje, BorderLayout.CENTER);
@@ -111,6 +117,7 @@ public class ConfirmacionPedidoPantalla extends JFrame {
         add(panelPrincipal);
 
         btnConfirmar.addActionListener(e -> controlador.confirmarPedido(this));
+        btnCancelar.addActionListener(e -> dispose());
     }
 
     private void cargarFuentePoppins() {
@@ -132,6 +139,6 @@ public class ConfirmacionPedidoPantalla extends JFrame {
     }
 
     public static void main(String[] args) {
-        SwingUtilities.invokeLater(() -> new IniciarSesionPantalla().setVisible(true));
+        SwingUtilities.invokeLater(() -> new ConfirmacionPedidoPantalla().setVisible(true));
     }
 }
