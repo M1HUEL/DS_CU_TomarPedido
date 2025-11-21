@@ -1,7 +1,6 @@
 package com.itson.presentacion.gui;
 
 import com.itson.presentacion.controlador.InicioControlador;
-import com.itson.presentacion.util.Colores;
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Cursor;
@@ -30,20 +29,9 @@ public class InicioPantalla extends JFrame {
     private final Color BLANCO = new Color(255, 255, 255);
     private final Color GRIS_BORDE = new Color(200, 200, 200);
 
-    private JPanel header;
-    private JPanel headerContenido;
-
-    private JLabel lblTitulo;
-    private JLabel lblSubtitulo;
-
-    private JPanel panelPrincipal;
-    private JPanel panelBlanco;
-    private JPanel contenedorCentral;
-
-    private JButton btnCrearPedido;
-    private JButton btnVerPedidos;
-    private JButton btnDashboard;
-    private JButton btnCerrarSesion;
+    private JPanel header, headerContenido, panelPrincipal, panelBlanco, contenedorCentral;
+    private JLabel lblTitulo, lblSubtitulo;
+    private JButton btnCrearPedido, btnVerPedidos, btnDashboard, btnCerrarSesion;
 
     private final InicioControlador controlador = new InicioControlador();
 
@@ -147,13 +135,8 @@ public class InicioPantalla extends JFrame {
             InputStream regularStream = getClass().getResourceAsStream("/fonts/Poppins-Regular.ttf");
             InputStream boldStream = getClass().getResourceAsStream("/fonts/Poppins-Bold.ttf");
 
-            fuentePoppinsRegular = (regularStream != null)
-                    ? Font.createFont(Font.TRUETYPE_FONT, regularStream)
-                    : new Font("SansSerif", Font.PLAIN, 14);
-
-            fuentePoppinsBold = (boldStream != null)
-                    ? Font.createFont(Font.TRUETYPE_FONT, boldStream)
-                    : new Font("SansSerif", Font.BOLD, 14);
+            fuentePoppinsRegular = Font.createFont(Font.TRUETYPE_FONT, regularStream);
+            fuentePoppinsBold = Font.createFont(Font.TRUETYPE_FONT, boldStream);
 
             GraphicsEnvironment ge = GraphicsEnvironment.getLocalGraphicsEnvironment();
             ge.registerFont(fuentePoppinsRegular);
