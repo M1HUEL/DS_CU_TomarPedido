@@ -36,18 +36,10 @@ public class PersonalizarPedidoPantalla extends JFrame {
     private final Color COLOR_BLANCO = new Color(255, 255, 255);
     private final Color COLOR_BORDE = new Color(200, 200, 200);
 
-    private JPanel header;
-    private JPanel headerContenido;
-    private JLabel lblTitulo;
-    private JLabel lblSubtitulo;
-
-    private JPanel panelPrincipal;
-    private JPanel panelContenido;
+    private JPanel header, headerContenido, panelPrincipal, panelContenido, panelBotones;
+    private JLabel lblTitulo, lblSubtitulo;
     private JScrollPane scrollPane;
-
-    private JPanel panelBotones;
-    private JButton btnConfirmar;
-    private JButton btnCancelar;
+    private JButton btnConfirmar, btnCancelar;
 
     private PersonalizarPedidoControlador controlador = new PersonalizarPedidoControlador();
 
@@ -213,17 +205,8 @@ public class PersonalizarPedidoPantalla extends JFrame {
             InputStream regularStream = getClass().getResourceAsStream("/fonts/Poppins-Regular.ttf");
             InputStream boldStream = getClass().getResourceAsStream("/fonts/Poppins-Bold.ttf");
 
-            if (regularStream != null) {
-                fuentePoppinsRegular = Font.createFont(Font.TRUETYPE_FONT, regularStream);
-            } else {
-                fuentePoppinsRegular = new Font("SansSerif", Font.PLAIN, 14);
-            }
-
-            if (boldStream != null) {
-                fuentePoppinsBold = Font.createFont(Font.TRUETYPE_FONT, boldStream);
-            } else {
-                fuentePoppinsBold = new Font("SansSerif", Font.BOLD, 14);
-            }
+            fuentePoppinsRegular = Font.createFont(Font.TRUETYPE_FONT, regularStream);
+            fuentePoppinsBold = Font.createFont(Font.TRUETYPE_FONT, boldStream);
 
             GraphicsEnvironment ge = GraphicsEnvironment.getLocalGraphicsEnvironment();
             ge.registerFont(fuentePoppinsRegular);
