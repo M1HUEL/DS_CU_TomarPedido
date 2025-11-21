@@ -1,28 +1,43 @@
 package com.itson.controlPedido.controlador;
 
-import com.itson.controlPedido.objetosNegocio.Pedido;
+import com.itson.persistencia.dao.PedidoDAO;
+import com.itson.persistencia.dao.impl.PedidoDAOImpl;
+import com.itson.persistencia.dominio.Pedido;
 import java.util.List;
 
 public class PedidoControlador {
 
+    private final PedidoDAO pedidoDAO;
+
+    public PedidoControlador() {
+        this.pedidoDAO = new PedidoDAOImpl();
+    }
+
     public List<Pedido> obtenerTodosLosPedidos() {
-        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+        return pedidoDAO.consultarTodos();
     }
 
-    public Pedido obtenerPedidoPorId(int id) {
-        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+    public Pedido obtenerPedidoPorId(String id) {
+        return pedidoDAO.consultar(id);
     }
 
-    public void crearPedido(Pedido pedido) {
-        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+    public boolean crearPedido(Pedido pedido) {
+        if (pedido == null) {
+            System.out.println("Pedido nulo. No se puede crear.");
+            return false;
+        }
+        return pedidoDAO.agregar(pedido);
     }
 
-    public boolean actualizarPedido(int id, Pedido pedido) {
-        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+    public boolean actualizarPedido(String id, Pedido pedido) {
+        if (pedido == null) {
+            System.out.println("Pedido nulo. No se puede actualizar.");
+            return false;
+        }
+        return pedidoDAO.actualizar(id, pedido);
     }
 
-    public boolean eliminarPedido(int id) {
-        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+    public boolean eliminarPedido(String id) {
+        return pedidoDAO.eliminar(id);
     }
-
 }
