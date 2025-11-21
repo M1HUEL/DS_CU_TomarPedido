@@ -6,14 +6,13 @@ import com.itson.persistencia.dominio.Extra;
 import com.itson.persistencia.dominio.Ingrediente;
 import com.itson.persistencia.dominio.Producto;
 import com.itson.persistencia.util.Mongo;
-import com.itson.persistencia.util.MongoUtil;
+import com.itson.persistencia.util.Util;
 import com.mongodb.client.MongoCollection;
 import com.mongodb.client.MongoDatabase;
 import com.mongodb.client.model.Filters;
 import com.mongodb.client.result.DeleteResult;
 import com.mongodb.client.result.InsertOneResult;
 import com.mongodb.client.result.UpdateResult;
-import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
 import org.bson.Document;
@@ -32,8 +31,8 @@ public class ProductoDAOImpl implements ProductoDAO {
     @Override
     public List<Producto> consultarTodos() {
         List<Producto> lista = new ArrayList<>();
-        for (Document doc : productosCollection.find()) {
-            lista.add(documentoAProducto(doc));
+        for (Document documento : productosCollection.find()) {
+            lista.add(documentoAProducto(documento));
         }
         return lista;
     }
@@ -41,11 +40,12 @@ public class ProductoDAOImpl implements ProductoDAO {
     @Override
     public Producto consultar(String id) {
         try {
-            Document doc = productosCollection.find(Filters.eq("_id", new ObjectId(id))).first();
-            if (doc != null) {
-                return documentoAProducto(doc);
+            Document documento = productosCollection.find(Filters.eq("_id", new ObjectId(id))).first();
+            if (documento != null) {
+                return documentoAProducto(documento);
             }
         } catch (Exception e) {
+            System.out.println("_id del producto inválido: " + id);
             e.printStackTrace();
         }
         return null;
@@ -58,22 +58,21 @@ public class ProductoDAOImpl implements ProductoDAO {
                 producto.setId(new ObjectId().toHexString());
             }
 
-            Document doc = new Document()
+            Document documento = new Document()
                     .append("nombre", producto.getNombre())
-                    .append("ingredientes", MongoUtil.mapIngredientes(producto.getIngredientes()))
-                    .append("complementos", MongoUtil.mapComplementos(producto.getComplementos()))
-                    .append("extras", MongoUtil.mapExtras(producto.getExtras()))
+                    .append("ingredientes", Util.mapIngredientes(producto.getIngredientes()))
+                    .append("complementos", Util.mapComplementos(producto.getComplementos()))
+                    .append("extras", Util.mapExtras(producto.getExtras()))
                     .append("precio", producto.getPrecio());
 
-            InsertOneResult result = productosCollection.insertOne(doc);
+            InsertOneResult resultado = productosCollection.insertOne(documento);
 
-            if (result == null || result.getInsertedId() == null) {
-                System.out.println("Error al insertar producto");
+            if (resultado == null || resultado.getInsertedId() == null) {
+                System.out.println("Error al agregar el producto");
                 return false;
             }
 
             return true;
-
         } catch (Exception e) {
             e.printStackTrace();
             return false;
@@ -83,20 +82,20 @@ public class ProductoDAOImpl implements ProductoDAO {
     @Override
     public boolean actualizar(String id, Producto producto) {
         try {
-            Document updateDoc = new Document()
+            Document documentoActualizado = new Document()
                     .append("nombre", producto.getNombre())
-                    .append("ingredientes", MongoUtil.mapIngredientes(producto.getIngredientes()))
-                    .append("complementos", MongoUtil.mapComplementos(producto.getComplementos()))
-                    .append("extras", MongoUtil.mapExtras(producto.getExtras()))
+                    .append("ingredientes", Util.mapIngredientes(producto.getIngredientes()))
+                    .append("complementos", Util.mapComplementos(producto.getComplementos()))
+                    .append("extras", Util.mapExtras(producto.getExtras()))
                     .append("precio", producto.getPrecio());
 
             UpdateResult result = productosCollection.updateOne(
                     Filters.eq("_id", new ObjectId(id)),
-                    new Document("$set", updateDoc)
+                    new Document("$set", documentoActualizado)
             );
 
             if (result.getMatchedCount() == 0) {
-                System.out.println("No existe un producto con el ID: " + id);
+                System.out.println("No existe un producto con el _id: " + id);
                 return false;
             }
 
@@ -104,12 +103,10 @@ public class ProductoDAOImpl implements ProductoDAO {
                 System.out.println("Producto encontrado, pero no hubo cambios.");
                 return false;
             }
-
             return true;
-
         } catch (Exception e) {
             e.printStackTrace();
-            System.out.println("Error al actualizar el producto con ID: " + id);
+            System.out.println("Error al actualizar el producto con _id: " + id);
             return false;
         }
     }
@@ -117,12 +114,12 @@ public class ProductoDAOImpl implements ProductoDAO {
     @Override
     public boolean eliminar(String id) {
         try {
-            DeleteResult result = productosCollection.deleteOne(
+            DeleteResult resultado = productosCollection.deleteOne(
                     Filters.eq("_id", new ObjectId(id))
             );
 
-            if (result.getDeletedCount() == 0) {
-                System.out.println("No se eliminó ningún producto. No existe un producto con el ID: " + id);
+            if (resultado.getDeletedCount() == 0) {
+                System.out.println("No se eliminó ningún producto. No existe un producto con el _id: " + id);
                 return false;
             }
 
@@ -130,55 +127,71 @@ public class ProductoDAOImpl implements ProductoDAO {
             return true;
         } catch (Exception e) {
             e.printStackTrace();
-            System.out.println("Error al eliminar el producto con ID: " + id);
+            System.out.println("Error al eliminar el producto con _id: " + id);
             return false;
         }
     }
 
-    private Producto documentoAProducto(Document doc) {
+    private Producto documentoAProducto(Document documento) {
         List<Ingrediente> ingredientes = new ArrayList<>();
-        List<Document> ingDocs = (List<Document>) doc.get("ingredientes");
-        if (ingDocs != null) {
-            for (Document idoc : ingDocs) {
+        List<Document> ingredienteDocumentos = (List<Document>) documento.get("ingredientes");
+
+        if (ingredienteDocumentos != null) {
+            for (Document ingredienteDocumento : ingredienteDocumentos) {
+                if (ingredienteDocumento == null) {
+                    continue;
+                }
+
                 ingredientes.add(new Ingrediente(
-                        idoc.getString("id"),
-                        idoc.getString("nombre"),
-                        BigDecimal.valueOf(idoc.getDouble("precio"))
+                        ingredienteDocumento.getString("id"),
+                        ingredienteDocumento.getString("nombre"),
+                        Util.convertirABigDecimal(ingredienteDocumento.get("precio"))
                 ));
             }
         }
 
         List<Complemento> complementos = new ArrayList<>();
-        List<Document> compDocs = (List<Document>) doc.get("complementos");
-        if (compDocs != null) {
-            for (Document cdoc : compDocs) {
+        List<Document> complementoDocumentos = (List<Document>) documento.get("complementos");
+
+        if (complementoDocumentos != null) {
+            for (Document complementoDocumento : complementoDocumentos) {
+                if (complementoDocumento == null) {
+                    continue;
+                }
+
                 complementos.add(new Complemento(
-                        cdoc.getString("id"),
-                        cdoc.getString("nombre"),
-                        BigDecimal.valueOf(cdoc.getDouble("precio"))
+                        complementoDocumento.getString("id"),
+                        complementoDocumento.getString("nombre"),
+                        Util.convertirABigDecimal(complementoDocumento.get("precio"))
                 ));
             }
         }
 
         List<Extra> extras = new ArrayList<>();
-        List<Document> extDocs = (List<Document>) doc.get("extras");
-        if (extDocs != null) {
-            for (Document edoc : extDocs) {
+        List<Document> extraDocumentos = (List<Document>) documento.get("extras");
+
+        if (extraDocumentos != null) {
+            for (Document extraDocumento : extraDocumentos) {
+                if (extraDocumento == null) {
+                    continue;
+                }
+
                 extras.add(new Extra(
-                        edoc.getString("id"),
-                        edoc.getString("nombre"),
-                        BigDecimal.valueOf(edoc.getDouble("precio"))
+                        extraDocumento.getString("id"),
+                        extraDocumento.getString("nombre"),
+                        Util.convertirABigDecimal(extraDocumento.get("precio"))
                 ));
             }
         }
 
         return new Producto(
-                doc.getObjectId("_id").toHexString(),
-                doc.getString("nombre"),
+                documento.getObjectId("_id").toHexString(),
+                documento.getString("nombre"),
                 ingredientes,
                 complementos,
                 extras,
-                BigDecimal.valueOf(doc.getDouble("precio"))
+                Util.convertirABigDecimal(documento.get("precio"))
         );
     }
+
 }

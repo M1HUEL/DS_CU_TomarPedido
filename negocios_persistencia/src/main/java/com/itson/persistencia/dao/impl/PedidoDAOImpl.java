@@ -7,7 +7,7 @@ import com.itson.persistencia.dominio.Ingrediente;
 import com.itson.persistencia.dominio.Pedido;
 import com.itson.persistencia.dominio.Producto;
 import com.itson.persistencia.util.Mongo;
-import com.itson.persistencia.util.MongoUtil;
+import com.itson.persistencia.util.Util;
 import com.mongodb.client.MongoCollection;
 import com.mongodb.client.MongoDatabase;
 import com.mongodb.client.model.Filters;
@@ -35,8 +35,8 @@ public class PedidoDAOImpl implements PedidoDAO {
     @Override
     public List<Pedido> consultarTodos() {
         List<Pedido> lista = new ArrayList<>();
-        for (Document doc : pedidosCollection.find()) {
-            lista.add(documentoAPedido(doc));
+        for (Document documento : pedidosCollection.find()) {
+            lista.add(documentoAPedido(documento));
         }
         return lista;
     }
@@ -44,11 +44,12 @@ public class PedidoDAOImpl implements PedidoDAO {
     @Override
     public Pedido consultar(String id) {
         try {
-            Document doc = pedidosCollection.find(Filters.eq("_id", new ObjectId(id))).first();
-            if (doc != null) {
-                return documentoAPedido(doc);
+            Document documento = pedidosCollection.find(Filters.eq("_id", new ObjectId(id))).first();
+            if (documento != null) {
+                return documentoAPedido(documento);
             }
         } catch (Exception e) {
+            System.out.println("_id del pedido inválido: " + id);
             e.printStackTrace();
         }
         return null;
@@ -61,17 +62,17 @@ public class PedidoDAOImpl implements PedidoDAO {
                 pedido.setId(new ObjectId().toHexString());
             }
 
-            Document doc = new Document("_id", new ObjectId(pedido.getId()))
+            Document documento = new Document("_id", new ObjectId(pedido.getId()))
                     .append("nombre", pedido.getNombre())
                     .append("productos", productosADocumento(pedido.getProductos()))
                     .append("comentario", pedido.getComentario())
                     .append("precio", pedido.getPrecio())
                     .append("fechaPedido", java.util.Date.from(pedido.getFechaPedido().atZone(ZoneId.systemDefault()).toInstant()));
 
-            InsertOneResult result = pedidosCollection.insertOne(doc);
+            InsertOneResult resultado = pedidosCollection.insertOne(documento);
 
-            if (result == null || result.getInsertedId() == null) {
-                System.out.println("Error al insertar pedido");
+            if (resultado == null || resultado.getInsertedId() == null) {
+                System.out.println("Error al agregar pedido");
                 return false;
             }
 
@@ -86,34 +87,33 @@ public class PedidoDAOImpl implements PedidoDAO {
     @Override
     public boolean actualizar(String id, Pedido pedido) {
         try {
-            Document updateDoc = new Document()
+            Document documentoActualizado = new Document()
                     .append("nombre", pedido.getNombre())
                     .append("productos", productosADocumento(pedido.getProductos()))
                     .append("comentario", pedido.getComentario())
                     .append("precio", pedido.getPrecio())
                     .append("fechaPedido", java.util.Date.from(pedido.getFechaPedido().atZone(ZoneId.systemDefault()).toInstant()));
 
-            UpdateResult result = pedidosCollection.updateOne(
+            UpdateResult resultado = pedidosCollection.updateOne(
                     Filters.eq("_id", new ObjectId(id)),
-                    new Document("$set", updateDoc)
+                    new Document("$set", documentoActualizado)
             );
 
-            if (result.getMatchedCount() == 0) {
-                System.out.println("No existe un pedido con el ID: " + id);
+            if (resultado.getMatchedCount() == 0) {
+                System.out.println("No existe un pedido con el _id: " + id);
                 return false;
             }
 
-            if (result.getModifiedCount() == 0) {
+            if (resultado.getModifiedCount() == 0) {
                 System.out.println("Pedido encontrado, pero no hubo cambios.");
                 return false;
             }
 
             System.out.println("Pedido actualizado correctamente: " + id);
             return true;
-
         } catch (Exception e) {
             e.printStackTrace();
-            System.out.println("Error al actualizar el pedido con ID: " + id);
+            System.out.println("Error al actualizar el pedido con _id: " + id);
             return false;
         }
     }
@@ -121,12 +121,12 @@ public class PedidoDAOImpl implements PedidoDAO {
     @Override
     public boolean eliminar(String id) {
         try {
-            DeleteResult result = pedidosCollection.deleteOne(
+            DeleteResult resultado = pedidosCollection.deleteOne(
                     Filters.eq("_id", new ObjectId(id))
             );
 
-            if (result.getDeletedCount() == 0) {
-                System.out.println("No se eliminó ningún pedido. No existe un pedido con el ID: " + id);
+            if (resultado.getDeletedCount() == 0) {
+                System.out.println("No se eliminó ningún pedido. No existe un pedido con el _id: " + id);
                 return false;
             }
 
@@ -135,14 +135,14 @@ public class PedidoDAOImpl implements PedidoDAO {
 
         } catch (Exception e) {
             e.printStackTrace();
-            System.out.println("Error al eliminar el pedido con ID: " + id);
+            System.out.println("Error al eliminar el pedido con _id: " + id);
             return false;
         }
     }
 
-    private Pedido documentoAPedido(Document doc) {
+    private Pedido documentoAPedido(Document documento) {
         List<Producto> productos = new ArrayList<>();
-        List<Document> productosDocs = (List<Document>) doc.get("productos");
+        List<Document> productosDocs = (List<Document>) documento.get("productos");
         if (productosDocs != null) {
             for (Document pdoc : productosDocs) {
                 List<Ingrediente> ingredientes = new ArrayList<>();
@@ -194,16 +194,16 @@ public class PedidoDAOImpl implements PedidoDAO {
         }
 
         LocalDateTime fechaPedido = LocalDateTime.ofInstant(
-                doc.getDate("fechaPedido").toInstant(),
+                documento.getDate("fechaPedido").toInstant(),
                 ZoneId.systemDefault()
         );
 
         return new Pedido(
-                doc.getObjectId("_id").toHexString(),
-                doc.getString("nombre"),
+                documento.getObjectId("_id").toHexString(),
+                documento.getString("nombre"),
                 productos,
-                doc.getString("comentario"),
-                BigDecimal.valueOf(doc.getDouble("precio")),
+                documento.getString("comentario"),
+                BigDecimal.valueOf(documento.getDouble("precio")),
                 fechaPedido
         );
     }
@@ -216,15 +216,15 @@ public class PedidoDAOImpl implements PedidoDAO {
                     p.setId(new ObjectId().toHexString());
                 }
 
-                Document doc = new Document()
+                Document documento = new Document()
                         .append("id", p.getId())
                         .append("nombre", p.getNombre())
-                        .append("ingredientes", MongoUtil.mapIngredientes(p.getIngredientes()))
-                        .append("complementos", MongoUtil.mapComplementos(p.getComplementos()))
-                        .append("extras", MongoUtil.mapExtras(p.getExtras()))
+                        .append("ingredientes", Util.mapIngredientes(p.getIngredientes()))
+                        .append("complementos", Util.mapComplementos(p.getComplementos()))
+                        .append("extras", Util.mapExtras(p.getExtras()))
                         .append("precio", p.getPrecio());
 
-                lista.add(doc);
+                lista.add(documento);
             }
         }
         return lista;

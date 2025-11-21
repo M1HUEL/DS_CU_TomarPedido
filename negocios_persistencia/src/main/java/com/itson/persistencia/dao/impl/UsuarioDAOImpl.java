@@ -28,8 +28,8 @@ public class UsuarioDAOImpl implements UsuarioDAO {
     @Override
     public List<Usuario> consultarTodos() {
         List<Usuario> lista = new ArrayList<>();
-        for (Document doc : usuariosCollection.find()) {
-            lista.add(documentoAUsuario(doc));
+        for (Document documento : usuariosCollection.find()) {
+            lista.add(documentoAUsuario(documento));
         }
         return lista;
     }
@@ -37,18 +37,15 @@ public class UsuarioDAOImpl implements UsuarioDAO {
     @Override
     public Usuario consultar(String id) {
         try {
-            ObjectId oid = new ObjectId(id);
-
-            Document doc = usuariosCollection
-                    .find(Filters.eq("_id", oid))
-                    .first();
-
-            return doc != null ? documentoAUsuario(doc) : null;
-
+            Document documento = usuariosCollection.find(Filters.eq("_id", new ObjectId(id))).first();
+            if (documento != null) {
+                return documentoAUsuario(documento);
+            }
         } catch (Exception e) {
-            System.out.println("ID de usuario inválido: " + id);
+            System.out.println("_id del usuario inválido: " + id);
             return null;
         }
+        return null;
     }
 
     @Override
@@ -58,15 +55,19 @@ public class UsuarioDAOImpl implements UsuarioDAO {
                 usuario.setId(new ObjectId().toHexString());
             }
 
-            Document doc = new Document("_id", new ObjectId(usuario.getId()))
+            Document documento = new Document("_id", new ObjectId(usuario.getId()))
                     .append("nombre", usuario.getNombre())
                     .append("contraseña", usuario.getContraseña())
                     .append("rol", usuario.getRol().name());
 
-            InsertOneResult result = usuariosCollection.insertOne(doc);
+            InsertOneResult resultado = usuariosCollection.insertOne(documento);
 
-            return result != null && result.getInsertedId() != null;
+            if (resultado == null || resultado.getInsertedId() == null) {
+                System.out.println("Error al agregar el usuario");
+                return false;
+            }
 
+            return true;
         } catch (Exception e) {
             e.printStackTrace();
             System.out.println("Error al agregar usuario");
@@ -77,24 +78,22 @@ public class UsuarioDAOImpl implements UsuarioDAO {
     @Override
     public boolean actualizar(String id, Usuario usuario) {
         try {
-            ObjectId oid = new ObjectId(id);
-
-            Document update = new Document()
+            Document documentoActualizado = new Document()
                     .append("nombre", usuario.getNombre())
                     .append("contraseña", usuario.getContraseña())
                     .append("rol", usuario.getRol().name());
 
-            UpdateResult result = usuariosCollection.updateOne(
-                    Filters.eq("_id", oid),
-                    new Document("$set", update)
+            UpdateResult resultado = usuariosCollection.updateOne(
+                    Filters.eq("_id", new ObjectId(id)),
+                    new Document("$set", documentoActualizado)
             );
 
-            if (result.getMatchedCount() == 0) {
-                System.out.println("Usuario no encontrado: " + id);
+            if (resultado.getMatchedCount() == 0) {
+                System.out.println("No existe un usuario con el _id: " + id);
                 return false;
             }
 
-            if (result.getModifiedCount() == 0) {
+            if (resultado.getModifiedCount() == 0) {
                 System.out.println("Usuario encontrado pero sin cambios.");
                 return false;
             }
@@ -103,7 +102,7 @@ public class UsuarioDAOImpl implements UsuarioDAO {
 
         } catch (Exception e) {
             e.printStackTrace();
-            System.out.println("Error al actualizar usuario con ID: " + id);
+            System.out.println("Error al actualizar usuario con _id: " + id);
             return false;
         }
     }
@@ -111,14 +110,17 @@ public class UsuarioDAOImpl implements UsuarioDAO {
     @Override
     public boolean eliminar(String id) {
         try {
-            ObjectId oid = new ObjectId(id);
-
-            DeleteResult result = usuariosCollection.deleteOne(
-                    Filters.eq("_id", oid)
+            DeleteResult resultado = usuariosCollection.deleteOne(
+                    Filters.eq("_id", new ObjectId(id))
             );
 
-            return result.getDeletedCount() > 0;
+            if (resultado.getDeletedCount() == 0) {
+                System.out.println("No se eliminó ningún usuario. No existe un usuario con el _id: " + id);
+                return false;
+            }
 
+            System.out.println("Usuario eliminado correctamente: " + id);
+            return true;
         } catch (Exception e) {
             e.printStackTrace();
             System.out.println("Error al eliminar usuario: " + id);
@@ -126,12 +128,12 @@ public class UsuarioDAOImpl implements UsuarioDAO {
         }
     }
 
-    private Usuario documentoAUsuario(Document doc) {
+    private Usuario documentoAUsuario(Document documento) {
         return new Usuario(
-                doc.getObjectId("_id").toHexString(),
-                doc.getString("nombre"),
-                doc.getString("contraseña"),
-                UsuarioTipo.valueOf(doc.getString("rol"))
+                documento.getObjectId("_id").toHexString(),
+                documento.getString("nombre"),
+                documento.getString("contraseña"),
+                UsuarioTipo.valueOf(documento.getString("rol"))
         );
     }
 }
