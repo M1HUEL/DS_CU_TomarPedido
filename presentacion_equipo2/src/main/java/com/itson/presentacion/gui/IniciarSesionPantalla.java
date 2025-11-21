@@ -36,23 +36,11 @@ public class IniciarSesionPantalla extends JFrame {
 
     private JButton btnIniciarSesion;
 
-    private JLabel lblTitulo;
-    private JLabel lblSubtitulo;
-    private JLabel lblNombre;
-    private JLabel lblContrasena;
-
+    private JLabel lblTitulo, lblSubtitulo, lblNombre, lblContrasena;
     private JTextField txtNombre;
     private JPasswordField txtContrasena;
-
-    private JPanel panelHeader;
-    private JPanel panelHeaderContenido;
-    private JPanel panelPrincipal;
-    private JPanel panelCentro;
-
-    private JPanel panelFormulario;
-    private JPanel panelCampoNombre;
-    private JPanel panelCampoContrasena;
-    private JPanel panelBoton;
+    private JPanel panelHeader, panelHeaderContenido, panelPrincipal, panelCentro;
+    private JPanel panelFormulario, panelCampoNombre, panelCampoContrasena, panelBoton;
 
     private final IniciarSesionControlador controlador = new IniciarSesionControlador();
 
