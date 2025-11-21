@@ -31,14 +31,8 @@ public class SeleccionarMetodoPagoPantalla extends JFrame {
     private final Color COLOR_BLANCO = Colores.BLANCO;
     private final Color COLOR_BORDE = Colores.GRIS_BORDE;
 
-    private JPanel panelHeader;
-    private JPanel panelHeaderContenido;
-    private JLabel lblTitulo;
-    private JLabel lblSubtitulo;
-
-    private JPanel panelPrincipal;
-    private JPanel panelOpcionesPago;
-    private JPanel panelCentro;
+    private JPanel panelHeader, panelHeaderContenido, panelPrincipal, panelOpcionesPago, panelCentro;
+    private JLabel lblTitulo, lblSubtitulo;
 
     private SeleccionarMetodoPagoControlador controlador = new SeleccionarMetodoPagoControlador();
 
@@ -143,17 +137,8 @@ public class SeleccionarMetodoPagoPantalla extends JFrame {
             InputStream regularStream = getClass().getResourceAsStream("/fonts/Poppins-Regular.ttf");
             InputStream boldStream = getClass().getResourceAsStream("/fonts/Poppins-Bold.ttf");
 
-            if (regularStream != null) {
-                fuentePoppinsRegular = Font.createFont(Font.TRUETYPE_FONT, regularStream);
-            } else {
-                fuentePoppinsRegular = new Font("SansSerif", Font.PLAIN, 14);
-            }
-
-            if (boldStream != null) {
-                fuentePoppinsBold = Font.createFont(Font.TRUETYPE_FONT, boldStream);
-            } else {
-                fuentePoppinsBold = new Font("SansSerif", Font.BOLD, 14);
-            }
+            fuentePoppinsRegular = Font.createFont(Font.TRUETYPE_FONT, regularStream);
+            fuentePoppinsBold = Font.createFont(Font.TRUETYPE_FONT, boldStream);
 
             GraphicsEnvironment ge = GraphicsEnvironment.getLocalGraphicsEnvironment();
             ge.registerFont(fuentePoppinsRegular);
