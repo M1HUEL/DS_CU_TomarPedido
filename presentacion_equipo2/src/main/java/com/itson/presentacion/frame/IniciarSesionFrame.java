@@ -92,7 +92,6 @@ public class IniciarSesionFrame extends JFrame {
         txtNombre.setFont(fuentePoppinsRegular.deriveFont(14f));
         txtNombre.setBackground(CREMA);
         txtNombre.setBorder(BorderFactory.createLineBorder(GRIS, 1));
-        txtNombre.setPreferredSize(new Dimension(400, 45));
 
         panelCampoNombre.add(lblNombre, BorderLayout.NORTH);
         panelCampoNombre.add(txtNombre, BorderLayout.CENTER);
@@ -109,7 +108,6 @@ public class IniciarSesionFrame extends JFrame {
         txtContrasena.setFont(fuentePoppinsRegular.deriveFont(14f));
         txtContrasena.setBackground(CREMA);
         txtContrasena.setBorder(BorderFactory.createLineBorder(GRIS, 1));
-        txtContrasena.setPreferredSize(new Dimension(400, 45));
 
         panelCampoContrasena.add(lblContrasena, BorderLayout.NORTH);
         panelCampoContrasena.add(txtContrasena, BorderLayout.CENTER);
@@ -125,8 +123,9 @@ public class IniciarSesionFrame extends JFrame {
         btnIniciarSesion.setForeground(BLANCO);
         btnIniciarSesion.setFont(fuentePoppinsRegular.deriveFont(14f));
         btnIniciarSesion.setFocusPainted(false);
+        btnIniciarSesion.setBorder(null);
         btnIniciarSesion.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
-        btnIniciarSesion.setBorder(BorderFactory.createEmptyBorder(20, 0, 20, 0));
+        btnIniciarSesion.setPreferredSize(new Dimension(200, 40));
 
         IniciarSesionControlador controlador = new IniciarSesionControlador();
 

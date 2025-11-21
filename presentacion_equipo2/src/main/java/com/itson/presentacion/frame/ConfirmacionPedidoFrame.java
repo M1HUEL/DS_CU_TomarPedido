@@ -68,7 +68,7 @@ public class ConfirmacionPedidoFrame extends JFrame {
         panelPrincipal.setLayout(new BorderLayout());
         panelPrincipal.setBackground(CREMA);
 
-        JPanel panelMensaje = new JPanel(new BorderLayout());
+        JPanel panelMensaje = new JPanel();
         panelMensaje.setLayout(new BorderLayout());
         panelMensaje.setBackground(BLANCO);
 
@@ -85,11 +85,9 @@ public class ConfirmacionPedidoFrame extends JFrame {
 
         JLabel lblNombrePedido = new JLabel("Combo Hamburguesa", SwingConstants.CENTER);
         lblNombrePedido.setFont(fuentePoppinsBold.deriveFont(24f));
-        lblNombrePedido.setForeground(GRIS);
 
         JLabel lblPrecio = new JLabel("$30.00", SwingConstants.CENTER);
-        lblPrecio.setFont(fuentePoppinsRegular.deriveFont(18f));
-        lblPrecio.setForeground(GRIS);
+        lblPrecio.setFont(fuentePoppinsRegular.deriveFont(14f));
 
         panelTexto.add(lblNombrePedido);
         panelTexto.add(lblPrecio);
@@ -102,7 +100,7 @@ public class ConfirmacionPedidoFrame extends JFrame {
         btnConfirmar.setFont(fuentePoppinsRegular.deriveFont(14f));
         btnConfirmar.setFocusPainted(false);
         btnConfirmar.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
-        btnConfirmar.setBorder(BorderFactory.createEmptyBorder(15, 40, 15, 40));
+        btnConfirmar.setBorder(BorderFactory.createEmptyBorder(10, 20, 10, 20));
 
         JButton btnCancelar = new JButton("Cancelar");
         btnCancelar.setBackground(NARANJA);
@@ -110,7 +108,7 @@ public class ConfirmacionPedidoFrame extends JFrame {
         btnCancelar.setFont(fuentePoppinsRegular.deriveFont(14f));
         btnCancelar.setFocusPainted(false);
         btnCancelar.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
-        btnCancelar.setBorder(BorderFactory.createEmptyBorder(15, 40, 15, 40));
+        btnCancelar.setBorder(BorderFactory.createEmptyBorder(10, 20, 10, 20));
         btnCancelar.setPreferredSize(btnConfirmar.getPreferredSize());
 
         ConfirmacionPedidoControlador controlador = new ConfirmacionPedidoControlador();

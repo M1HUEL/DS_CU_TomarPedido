@@ -107,7 +107,7 @@ public class PersonalizarPedidoFrame extends JFrame {
         btnConfirmar.setFont(fuentePoppinsRegular.deriveFont(14f));
         btnConfirmar.setFocusPainted(false);
         btnConfirmar.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
-        btnConfirmar.setBorder(BorderFactory.createEmptyBorder(20, 0, 20, 0));
+        btnConfirmar.setBorder(BorderFactory.createEmptyBorder(10, 60, 10, 60));
 
         JButton btnCancelar = new JButton("Cancelar");
         btnCancelar.setBackground(NARANJA);
@@ -115,7 +115,7 @@ public class PersonalizarPedidoFrame extends JFrame {
         btnCancelar.setFont(fuentePoppinsRegular.deriveFont(14f));
         btnCancelar.setFocusPainted(false);
         btnCancelar.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
-        btnCancelar.setBorder(BorderFactory.createEmptyBorder(20, 0, 20, 0));
+        btnCancelar.setBorder(BorderFactory.createEmptyBorder(10, 60, 10, 60));
 
         PersonalizarPedidoControlador controlador = new PersonalizarPedidoControlador();
 
