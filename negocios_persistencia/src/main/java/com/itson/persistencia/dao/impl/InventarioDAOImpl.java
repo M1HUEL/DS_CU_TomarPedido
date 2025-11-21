@@ -157,20 +157,15 @@ public class InventarioDAOImpl implements InventarioDAO {
 
     private InventarioItem documentoAItem(Document documento) {
         InventarioItem item = new InventarioItem();
-
         item.setId(documento.getObjectId("_id").toHexString());
         item.setNombre(documento.getString("nombre"));
-
         item.setCantidadDisponible(
                 Util.convertirADouble(documento.get("cantidadDisponible"))
         );
-
         item.setPrecioUnidad(
                 Util.convertirABigDecimal(documento.get("precioUnidad"))
         );
-
         item.setTipo(InventarioTipo.valueOf(documento.getString("tipo")));
-
         return item;
     }
 
