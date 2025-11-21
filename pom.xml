@@ -10,6 +10,7 @@
         <module>negocios_controlPedido</module>
         <module>negocios_persistencia</module>
         <module>presentacion_equipo2</module>
+        <module>negocios_controlSesion</module>
     </modules>
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
