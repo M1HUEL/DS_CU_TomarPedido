@@ -1,4 +1,4 @@
-package com.itson.presentacion.gui;
+package com.itson.presentacion.frame;
 
 import com.itson.presentacion.controlador.IniciarSesionControlador;
 import com.itson.presentacion.util.Colores;
@@ -23,7 +23,7 @@ import javax.swing.JTextField;
 import javax.swing.SwingConstants;
 import javax.swing.SwingUtilities;
 
-public class IniciarSesionPantalla extends JFrame {
+public class IniciarSesionFrame extends JFrame {
 
     private Font fuentePoppinsRegular;
     private Font fuentePoppinsBold;
@@ -44,7 +44,7 @@ public class IniciarSesionPantalla extends JFrame {
 
     private final IniciarSesionControlador controlador = new IniciarSesionControlador();
 
-    public IniciarSesionPantalla() {
+    public IniciarSesionFrame() {
         cargarFuentePoppins();
 
         setTitle("Iniciar Sesión");
@@ -165,6 +165,6 @@ public class IniciarSesionPantalla extends JFrame {
     }
 
     public static void main(String[] args) {
-        SwingUtilities.invokeLater(() -> new IniciarSesionPantalla().setVisible(true));
+        SwingUtilities.invokeLater(() -> new IniciarSesionFrame().setVisible(true));
     }
 }

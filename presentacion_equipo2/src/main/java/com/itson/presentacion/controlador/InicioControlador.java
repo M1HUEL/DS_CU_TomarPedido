@@ -1,7 +1,7 @@
 package com.itson.presentacion.controlador;
 
-import com.itson.presentacion.gui.IniciarSesionPantalla;
-import com.itson.presentacion.gui.SeleccionarPedidoPantalla;
+import com.itson.presentacion.frame.IniciarSesionFrame;
+import com.itson.presentacion.frame.SeleccionarPedidoFrame;
 import javax.swing.JFrame;
 import javax.swing.JOptionPane;
 
@@ -9,7 +9,7 @@ public class InicioControlador {
 
     public void abrirSeleccionarPedido(JFrame ventanaActual) {
         ventanaActual.dispose();
-        new SeleccionarPedidoPantalla().setVisible(true);
+        new SeleccionarPedidoFrame().setVisible(true);
     }
 
     public void verPedidos(JFrame ventanaActual) {
@@ -40,7 +40,7 @@ public class InicioControlador {
 
         if (opcion == JOptionPane.YES_OPTION) {
             ventanaActual.dispose();
-            new IniciarSesionPantalla().setVisible(true);
+            new IniciarSesionFrame().setVisible(true);
         }
     }
 }

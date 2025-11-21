@@ -1,4 +1,4 @@
-package com.itson.presentacion.gui;
+package com.itson.presentacion.frame;
 
 import com.itson.presentacion.controlador.ConfirmacionPedidoControlador;
 import java.awt.BorderLayout;
@@ -20,7 +20,7 @@ import javax.swing.JPanel;
 import javax.swing.SwingConstants;
 import javax.swing.SwingUtilities;
 
-public class ConfirmacionPedidoPantalla extends JFrame {
+public class ConfirmacionPedidoFrame extends JFrame {
 
     private Font fuentePoppinsRegular;
     private Font fuentePoppinsBold;
@@ -36,7 +36,7 @@ public class ConfirmacionPedidoPantalla extends JFrame {
 
     private ConfirmacionPedidoControlador controlador = new ConfirmacionPedidoControlador();
 
-    public ConfirmacionPedidoPantalla() {
+    public ConfirmacionPedidoFrame() {
         cargarFuentePoppins();
 
         setTitle("Pantalla de Confirmación");
@@ -139,6 +139,6 @@ public class ConfirmacionPedidoPantalla extends JFrame {
     }
 
     public static void main(String[] args) {
-        SwingUtilities.invokeLater(() -> new ConfirmacionPedidoPantalla().setVisible(true));
+        SwingUtilities.invokeLater(() -> new ConfirmacionPedidoFrame().setVisible(true));
     }
 }

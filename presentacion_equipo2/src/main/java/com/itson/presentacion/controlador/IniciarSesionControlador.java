@@ -1,6 +1,6 @@
 package com.itson.presentacion.controlador;
 
-import com.itson.presentacion.gui.InicioPantalla;
+import com.itson.presentacion.frame.InicioFrame;
 import javax.swing.JFrame;
 import javax.swing.JOptionPane;
 
@@ -14,7 +14,7 @@ public class IniciarSesionControlador {
 
         if (validarUsuario(nombre, contraseña)) {
             mostrarMensaje("¡Inicio de sesión correcto!");
-            new InicioPantalla().setVisible(true);
+            new InicioFrame().setVisible(true);
             ventanaActual.dispose();
         } else {
             mostrarError("Usuario o contraseña incorrectos.");

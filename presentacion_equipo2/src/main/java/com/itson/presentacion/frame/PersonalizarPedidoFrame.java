@@ -1,4 +1,4 @@
-package com.itson.presentacion.gui;
+package com.itson.presentacion.frame;
 
 import com.itson.presentacion.controlador.PersonalizarPedidoControlador;
 import java.awt.BorderLayout;
@@ -26,7 +26,7 @@ import javax.swing.ScrollPaneConstants;
 import javax.swing.SwingConstants;
 import javax.swing.SwingUtilities;
 
-public class PersonalizarPedidoPantalla extends JFrame {
+public class PersonalizarPedidoFrame extends JFrame {
 
     private Font fuentePoppinsRegular;
     private Font fuentePoppinsBold;
@@ -43,7 +43,7 @@ public class PersonalizarPedidoPantalla extends JFrame {
 
     private PersonalizarPedidoControlador controlador = new PersonalizarPedidoControlador();
 
-    public PersonalizarPedidoPantalla() {
+    public PersonalizarPedidoFrame() {
         cargarFuentePoppins();
 
         setTitle("Personalizar Pedido");
@@ -219,6 +219,6 @@ public class PersonalizarPedidoPantalla extends JFrame {
     }
 
     public static void main(String[] args) {
-        SwingUtilities.invokeLater(() -> new PersonalizarPedidoPantalla().setVisible(true));
+        SwingUtilities.invokeLater(() -> new PersonalizarPedidoFrame().setVisible(true));
     }
 }

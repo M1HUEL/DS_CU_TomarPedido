@@ -1,6 +1,6 @@
 package com.itson.presentacion.controlador;
 
-import com.itson.presentacion.gui.ConfirmacionPedidoPantalla;
+import com.itson.presentacion.frame.ConfirmacionPedidoFrame;
 import javax.swing.JFrame;
 import javax.swing.JOptionPane;
 
@@ -16,6 +16,6 @@ public class SeleccionarMetodoPagoControlador {
         );
 
         ventanaActual.dispose();
-        new ConfirmacionPedidoPantalla().setVisible(true);
+        new ConfirmacionPedidoFrame().setVisible(true);
     }
 }

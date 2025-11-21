@@ -1,4 +1,4 @@
-package com.itson.presentacion.gui;
+package com.itson.presentacion.frame;
 
 import com.itson.presentacion.controlador.SeleccionarMetodoPagoControlador;
 import com.itson.presentacion.util.Colores;
@@ -20,7 +20,7 @@ import javax.swing.JPanel;
 import javax.swing.SwingConstants;
 import javax.swing.SwingUtilities;
 
-public class SeleccionarMetodoPagoPantalla extends JFrame {
+public class SeleccionarMetodoPagoFrame extends JFrame {
 
     private Font fuentePoppinsRegular;
     private Font fuentePoppinsBold;
@@ -36,7 +36,7 @@ public class SeleccionarMetodoPagoPantalla extends JFrame {
 
     private SeleccionarMetodoPagoControlador controlador = new SeleccionarMetodoPagoControlador();
 
-    public SeleccionarMetodoPagoPantalla() {
+    public SeleccionarMetodoPagoFrame() {
         cargarFuentePoppins();
 
         setTitle("Seleccionar Método de Pago");
@@ -151,6 +151,6 @@ public class SeleccionarMetodoPagoPantalla extends JFrame {
     }
 
     public static void main(String[] args) {
-        SwingUtilities.invokeLater(() -> new SeleccionarMetodoPagoPantalla().setVisible(true));
+        SwingUtilities.invokeLater(() -> new SeleccionarMetodoPagoFrame().setVisible(true));
     }
 }

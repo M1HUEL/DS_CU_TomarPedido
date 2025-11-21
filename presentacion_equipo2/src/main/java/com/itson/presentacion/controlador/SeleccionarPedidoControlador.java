@@ -1,6 +1,6 @@
 package com.itson.presentacion.controlador;
 
-import com.itson.presentacion.gui.PersonalizarPedidoPantalla;
+import com.itson.presentacion.frame.PersonalizarPedidoFrame;
 import javax.swing.JFrame;
 import javax.swing.JOptionPane;
 
@@ -15,6 +15,6 @@ public class SeleccionarPedidoControlador {
         );
 
         ventanaActual.dispose();
-        new PersonalizarPedidoPantalla().setVisible(true);
+        new PersonalizarPedidoFrame().setVisible(true);
     }
 }

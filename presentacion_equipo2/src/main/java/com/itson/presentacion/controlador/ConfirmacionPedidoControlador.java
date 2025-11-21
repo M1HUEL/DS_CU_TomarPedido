@@ -1,7 +1,7 @@
 package com.itson.presentacion.controlador;
 
-import com.itson.presentacion.gui.ConfirmacionPedidoPantalla;
-import com.itson.presentacion.gui.InicioPantalla;
+import com.itson.presentacion.frame.ConfirmacionPedidoFrame;
+import com.itson.presentacion.frame.InicioFrame;
 import javax.swing.JFrame;
 import javax.swing.JOptionPane;
 
@@ -15,7 +15,7 @@ public class ConfirmacionPedidoControlador {
                 JOptionPane.INFORMATION_MESSAGE
         );
 
-        new InicioPantalla().setVisible(true);
+        new InicioFrame().setVisible(true);
         ventanaActual.dispose();
     }
 }

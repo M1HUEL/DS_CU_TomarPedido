@@ -1,7 +1,7 @@
 package com.itson.presentacion.controlador;
 
-import com.itson.presentacion.gui.SeleccionarMetodoPagoPantalla;
-import com.itson.presentacion.gui.SeleccionarPedidoPantalla;
+import com.itson.presentacion.frame.SeleccionarMetodoPagoFrame;
+import com.itson.presentacion.frame.SeleccionarPedidoFrame;
 import javax.swing.JFrame;
 import javax.swing.JOptionPane;
 
@@ -16,7 +16,7 @@ public class PersonalizarPedidoControlador {
         );
 
         ventanaActual.dispose();
-        new SeleccionarMetodoPagoPantalla().setVisible(true);
+        new SeleccionarMetodoPagoFrame().setVisible(true);
     }
 
     public void cancelarPersonalizacion(JFrame ventanaActual) {
@@ -29,7 +29,7 @@ public class PersonalizarPedidoControlador {
 
         if (opcion == JOptionPane.YES_OPTION) {
             ventanaActual.dispose();
-            new SeleccionarPedidoPantalla().setVisible(true);
+            new SeleccionarPedidoFrame().setVisible(true);
         }
     }
 }

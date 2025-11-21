@@ -1,4 +1,4 @@
-package com.itson.presentacion.gui;
+package com.itson.presentacion.frame;
 
 import com.itson.presentacion.controlador.InicioControlador;
 import java.awt.BorderLayout;
@@ -19,7 +19,7 @@ import javax.swing.JPanel;
 import javax.swing.SwingConstants;
 import javax.swing.SwingUtilities;
 
-public class InicioPantalla extends JFrame {
+public class InicioFrame extends JFrame {
 
     private Font fuentePoppinsRegular;
     private Font fuentePoppinsBold;
@@ -35,7 +35,7 @@ public class InicioPantalla extends JFrame {
 
     private final InicioControlador controlador = new InicioControlador();
 
-    public InicioPantalla() {
+    public InicioFrame() {
         cargarFuentePoppins();
 
         setTitle("Inicio");
@@ -149,6 +149,6 @@ public class InicioPantalla extends JFrame {
     }
 
     public static void main(String[] args) {
-        SwingUtilities.invokeLater(() -> new InicioPantalla().setVisible(true));
+        SwingUtilities.invokeLater(() -> new InicioFrame().setVisible(true));
     }
 }

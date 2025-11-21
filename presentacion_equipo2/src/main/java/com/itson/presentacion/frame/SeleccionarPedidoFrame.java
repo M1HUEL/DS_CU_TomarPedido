@@ -1,4 +1,4 @@
-package com.itson.presentacion.gui;
+package com.itson.presentacion.frame;
 
 import com.itson.presentacion.controlador.SeleccionarPedidoControlador;
 import java.awt.BorderLayout;
@@ -25,7 +25,7 @@ import javax.swing.ScrollPaneConstants;
 import javax.swing.SwingConstants;
 import javax.swing.SwingUtilities;
 
-public class SeleccionarPedidoPantalla extends JFrame {
+public class SeleccionarPedidoFrame extends JFrame {
 
     private Font fuentePoppinsRegular;
     private Font fuentePoppinsBold;
@@ -43,7 +43,7 @@ public class SeleccionarPedidoPantalla extends JFrame {
 
     SeleccionarPedidoControlador controlador = new SeleccionarPedidoControlador();
 
-    public SeleccionarPedidoPantalla() {
+    public SeleccionarPedidoFrame() {
 
         cargarFuentePoppins();
 
@@ -169,6 +169,6 @@ public class SeleccionarPedidoPantalla extends JFrame {
     }
 
     public static void main(String[] args) {
-        SwingUtilities.invokeLater(() -> new SeleccionarPedidoPantalla().setVisible(true));
+        SwingUtilities.invokeLater(() -> new SeleccionarPedidoFrame().setVisible(true));
     }
 }
