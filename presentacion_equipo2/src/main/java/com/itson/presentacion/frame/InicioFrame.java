@@ -1,6 +1,7 @@
 package com.itson.presentacion.frame;
 
 import com.itson.presentacion.controlador.InicioControlador;
+import com.itson.presentacion.util.Colores;
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Cursor;
@@ -18,100 +19,102 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.SwingConstants;
 import javax.swing.SwingUtilities;
+import javax.swing.border.Border;
 
 public class InicioFrame extends JFrame {
 
     private Font fuentePoppinsRegular;
     private Font fuentePoppinsBold;
 
-    private final Color NARANJA = new Color(255, 140, 0);
-    private final Color CREMA = new Color(255, 245, 230);
-    private final Color BLANCO = new Color(255, 255, 255);
-    private final Color GRIS_BORDE = new Color(200, 200, 200);
-
-    private JPanel header, headerContenido, panelPrincipal, panelBlanco, contenedorCentral;
-    private JLabel lblTitulo, lblSubtitulo;
-    private JButton btnCrearPedido, btnVerPedidos, btnDashboard, btnCerrarSesion;
-
-    private final InicioControlador controlador = new InicioControlador();
+    private final Color NARANJA = Colores.NARANJA;
+    private final Color CREMA = Colores.CREMA;
+    private final Color BLANCO = Colores.BLANCO;
+    private final Color GRIS = Colores.GRIS;
 
     public InicioFrame() {
-        cargarFuentePoppins();
-
-        setTitle("Inicio");
+        super("Inicio");
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setSize(1440, 720);
         setLocationRelativeTo(null);
         setResizable(false);
 
-        header = new JPanel(new BorderLayout());
+        cargarFuentePoppins();
+
+        JPanel header = new JPanel();
+        header.setLayout(new BorderLayout());
         header.setBackground(NARANJA);
         header.setPreferredSize(new Dimension(1440, 160));
 
-        headerContenido = new JPanel(new GridLayout(2, 1));
+        JPanel headerContenido = new JPanel();
+        headerContenido.setLayout(new GridLayout(2, 1));
         headerContenido.setBackground(NARANJA);
         headerContenido.setBorder(BorderFactory.createEmptyBorder(40, 100, 40, 100));
 
-        lblTitulo = new JLabel("Inicio", SwingConstants.LEFT);
+        JLabel lblTitulo = new JLabel("Inicio", SwingConstants.LEFT);
         lblTitulo.setFont(fuentePoppinsBold.deriveFont(28f));
         lblTitulo.setForeground(BLANCO);
 
-        lblSubtitulo = new JLabel("Selecciona una opción para continuar", SwingConstants.LEFT);
+        JLabel lblSubtitulo = new JLabel("Selecciona una opción para continuar", SwingConstants.LEFT);
         lblSubtitulo.setFont(fuentePoppinsRegular.deriveFont(16f));
         lblSubtitulo.setForeground(BLANCO);
 
         headerContenido.add(lblTitulo);
         headerContenido.add(lblSubtitulo);
+
         header.add(headerContenido, BorderLayout.CENTER);
 
-        panelPrincipal = new JPanel(new BorderLayout());
+        JPanel panelPrincipal = new JPanel();
+        panelPrincipal.setLayout(new BorderLayout());
         panelPrincipal.setBackground(CREMA);
 
-        panelBlanco = new JPanel(new GridLayout(4, 1, 0, 20));
+        JPanel panelBlanco = new JPanel();
+        panelBlanco.setLayout(new GridLayout(4, 1, 0, 20));
         panelBlanco.setBackground(BLANCO);
-        panelBlanco.setBorder(BorderFactory.createCompoundBorder(
-                BorderFactory.createLineBorder(GRIS_BORDE, 1),
-                BorderFactory.createEmptyBorder(60, 120, 60, 120)
-        ));
 
-        btnCrearPedido = new JButton("Crear Pedido");
+        Border bordePanelBlanco = BorderFactory.createCompoundBorder(
+                BorderFactory.createLineBorder(GRIS, 1),
+                BorderFactory.createEmptyBorder(60, 120, 60, 120)
+        );
+
+        panelBlanco.setBorder(bordePanelBlanco);
+
+        JButton btnCrearPedido = new JButton("Crear Pedido");
         btnCrearPedido.setBackground(NARANJA);
         btnCrearPedido.setForeground(BLANCO);
-        btnCrearPedido.setFont(fuentePoppinsRegular.deriveFont(16f));
+        btnCrearPedido.setFont(fuentePoppinsRegular.deriveFont(14f));
         btnCrearPedido.setFocusPainted(false);
         btnCrearPedido.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
         btnCrearPedido.setBorder(BorderFactory.createEmptyBorder(20, 0, 20, 0));
 
-        btnVerPedidos = new JButton("Ver Pedidos");
+        JButton btnVerPedidos = new JButton("Ver Pedidos");
         btnVerPedidos.setBackground(NARANJA);
         btnVerPedidos.setForeground(BLANCO);
-        btnVerPedidos.setFont(fuentePoppinsRegular.deriveFont(16f));
+        btnVerPedidos.setFont(fuentePoppinsRegular.deriveFont(14f));
         btnVerPedidos.setFocusPainted(false);
         btnVerPedidos.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
         btnVerPedidos.setBorder(BorderFactory.createEmptyBorder(20, 0, 20, 0));
 
-        btnDashboard = new JButton("Dashboard");
+        JButton btnDashboard = new JButton("Dashboard");
         btnDashboard.setBackground(NARANJA);
         btnDashboard.setForeground(BLANCO);
-        btnDashboard.setFont(fuentePoppinsRegular.deriveFont(16f));
+        btnDashboard.setFont(fuentePoppinsRegular.deriveFont(14f));
         btnDashboard.setFocusPainted(false);
         btnDashboard.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
         btnDashboard.setBorder(BorderFactory.createEmptyBorder(20, 0, 20, 0));
 
-        btnCerrarSesion = new JButton("Cerrar Sesión");
+        JButton btnCerrarSesion = new JButton("Cerrar Sesión");
         btnCerrarSesion.setBackground(NARANJA);
         btnCerrarSesion.setForeground(BLANCO);
-        btnCerrarSesion.setFont(fuentePoppinsRegular.deriveFont(16f));
+        btnCerrarSesion.setFont(fuentePoppinsRegular.deriveFont(14f));
         btnCerrarSesion.setFocusPainted(false);
         btnCerrarSesion.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
         btnCerrarSesion.setBorder(BorderFactory.createEmptyBorder(20, 0, 20, 0));
 
+        InicioControlador controlador = new InicioControlador();
+
         btnCrearPedido.addActionListener(e -> controlador.abrirSeleccionarPedido(this));
-
         btnVerPedidos.addActionListener(e -> controlador.verPedidos(this));
-
         btnDashboard.addActionListener(e -> controlador.abrirDashboard(this));
-
         btnCerrarSesion.addActionListener(e -> controlador.cerrarSesion(this));
 
         panelBlanco.add(btnCrearPedido);
@@ -119,7 +122,8 @@ public class InicioFrame extends JFrame {
         panelBlanco.add(btnDashboard);
         panelBlanco.add(btnCerrarSesion);
 
-        contenedorCentral = new JPanel(new BorderLayout());
+        JPanel contenedorCentral = new JPanel();
+        contenedorCentral.setLayout(new BorderLayout());
         contenedorCentral.setBackground(CREMA);
         contenedorCentral.setBorder(BorderFactory.createEmptyBorder(60, 100, 100, 100));
         contenedorCentral.add(panelBlanco, BorderLayout.CENTER);

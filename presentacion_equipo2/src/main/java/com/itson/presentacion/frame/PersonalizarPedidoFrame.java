@@ -1,6 +1,7 @@
 package com.itson.presentacion.frame;
 
 import com.itson.presentacion.controlador.PersonalizarPedidoControlador;
+import com.itson.presentacion.util.Colores;
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Cursor;
@@ -25,23 +26,17 @@ import javax.swing.JTextArea;
 import javax.swing.ScrollPaneConstants;
 import javax.swing.SwingConstants;
 import javax.swing.SwingUtilities;
+import javax.swing.border.Border;
 
 public class PersonalizarPedidoFrame extends JFrame {
 
     private Font fuentePoppinsRegular;
     private Font fuentePoppinsBold;
 
-    private final Color COLOR_PRIMARIO = new Color(255, 140, 0);
-    private final Color COLOR_FONDO = new Color(255, 245, 230);
-    private final Color COLOR_BLANCO = new Color(255, 255, 255);
-    private final Color COLOR_BORDE = new Color(200, 200, 200);
-
-    private JPanel header, headerContenido, panelPrincipal, panelContenido, panelBotones;
-    private JLabel lblTitulo, lblSubtitulo;
-    private JScrollPane scrollPane;
-    private JButton btnConfirmar, btnCancelar;
-
-    private PersonalizarPedidoControlador controlador = new PersonalizarPedidoControlador();
+    private final Color NARANJA = Colores.NARANJA;
+    private final Color CREMA = Colores.CREMA;
+    private final Color BLANCO = Colores.BLANCO;
+    private final Color GRIS = Colores.GRIS;
 
     public PersonalizarPedidoFrame() {
         cargarFuentePoppins();
@@ -52,32 +47,36 @@ public class PersonalizarPedidoFrame extends JFrame {
         setLocationRelativeTo(null);
         setResizable(false);
 
-        header = new JPanel(new BorderLayout());
-        header.setBackground(COLOR_PRIMARIO);
+        JPanel header = new JPanel();
+        header.setLayout(new BorderLayout());
+        header.setBackground(NARANJA);
         header.setPreferredSize(new Dimension(1440, 160));
 
-        headerContenido = new JPanel(new GridLayout(2, 1));
-        headerContenido.setBackground(COLOR_PRIMARIO);
+        JPanel headerContenido = new JPanel();
+        headerContenido.setLayout(new GridLayout(2, 1));
+        headerContenido.setBackground(NARANJA);
         headerContenido.setBorder(BorderFactory.createEmptyBorder(40, 100, 40, 100));
 
-        lblTitulo = new JLabel("Personalizar el pedido", SwingConstants.LEFT);
-        lblTitulo.setFont(fuentePoppinsBold.deriveFont(Font.BOLD, 28f));
-        lblTitulo.setForeground(COLOR_BLANCO);
+        JLabel lblTitulo = new JLabel("Personalizar el pedido", SwingConstants.LEFT);
+        lblTitulo.setFont(fuentePoppinsBold.deriveFont(28f));
+        lblTitulo.setForeground(BLANCO);
 
-        lblSubtitulo = new JLabel("Elige las opciones disponibles y personaliza la orden", SwingConstants.LEFT);
+        JLabel lblSubtitulo = new JLabel("Elige las opciones disponibles y personaliza la orden", SwingConstants.LEFT);
         lblSubtitulo.setFont(fuentePoppinsRegular.deriveFont(16f));
-        lblSubtitulo.setForeground(COLOR_BLANCO);
+        lblSubtitulo.setForeground(BLANCO);
 
         headerContenido.add(lblTitulo);
         headerContenido.add(lblSubtitulo);
+
         header.add(headerContenido, BorderLayout.CENTER);
 
-        panelPrincipal = new JPanel(new BorderLayout());
-        panelPrincipal.setBackground(COLOR_FONDO);
+        JPanel panelPrincipal = new JPanel();
+        panelPrincipal.setLayout(new BorderLayout());
+        panelPrincipal.setBackground(CREMA);
 
-        panelContenido = new JPanel();
+        JPanel panelContenido = new JPanel();
         panelContenido.setLayout(new BoxLayout(panelContenido, BoxLayout.Y_AXIS));
-        panelContenido.setBackground(COLOR_FONDO);
+        panelContenido.setBackground(CREMA);
         panelContenido.setBorder(BorderFactory.createEmptyBorder(30, 100, 30, 100));
 
         panelContenido.add(crearSeccion("Ingrediente Principal"));
@@ -91,33 +90,36 @@ public class PersonalizarPedidoFrame extends JFrame {
 
         panelContenido.add(crearSeccionComentarios("Comentarios"));
 
-        scrollPane = new JScrollPane(panelContenido);
+        JScrollPane scrollPane = new JScrollPane(panelContenido);
         scrollPane.setBorder(null);
         scrollPane.getVerticalScrollBar().setUnitIncrement(16);
         scrollPane.setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
-        scrollPane.getViewport().setBackground(COLOR_FONDO);
+        scrollPane.getViewport().setBackground(CREMA);
+        scrollPane.setBackground(CREMA);
 
-        panelBotones = new JPanel(new FlowLayout(FlowLayout.CENTER, 40, 20));
-        panelBotones.setBackground(COLOR_FONDO);
+        JPanel panelBotones = new JPanel();
+        panelBotones.setLayout(new FlowLayout(FlowLayout.CENTER, 40, 20));
+        panelBotones.setBackground(CREMA);
 
-        btnConfirmar = new JButton("Confirmar");
-        btnConfirmar.setBackground(COLOR_PRIMARIO);
-        btnConfirmar.setForeground(COLOR_BLANCO);
+        JButton btnConfirmar = new JButton("Confirmar");
+        btnConfirmar.setBackground(NARANJA);
+        btnConfirmar.setForeground(BLANCO);
         btnConfirmar.setFont(fuentePoppinsRegular.deriveFont(14f));
         btnConfirmar.setFocusPainted(false);
-        btnConfirmar.setBorder(BorderFactory.createEmptyBorder(10, 50, 10, 50));
         btnConfirmar.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
+        btnConfirmar.setBorder(BorderFactory.createEmptyBorder(20, 0, 20, 0));
 
-        btnCancelar = new JButton("Cancelar");
-        btnCancelar.setBackground(COLOR_PRIMARIO);
-        btnCancelar.setForeground(COLOR_BLANCO);
+        JButton btnCancelar = new JButton("Cancelar");
+        btnCancelar.setBackground(NARANJA);
+        btnCancelar.setForeground(BLANCO);
         btnCancelar.setFont(fuentePoppinsRegular.deriveFont(14f));
         btnCancelar.setFocusPainted(false);
-        btnCancelar.setBorder(BorderFactory.createEmptyBorder(10, 50, 10, 50));
         btnCancelar.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
+        btnCancelar.setBorder(BorderFactory.createEmptyBorder(20, 0, 20, 0));
+
+        PersonalizarPedidoControlador controlador = new PersonalizarPedidoControlador();
 
         btnConfirmar.addActionListener(e -> controlador.confirmarPersonalizacion(this));
-
         btnCancelar.addActionListener(e -> controlador.cancelarPersonalizacion(this));
 
         panelBotones.add(btnConfirmar);
@@ -131,28 +133,32 @@ public class PersonalizarPedidoFrame extends JFrame {
     }
 
     private JPanel crearSeccion(String titulo) {
-        JPanel contenedor = new JPanel(new BorderLayout());
-        contenedor.setBackground(COLOR_FONDO);
+        JPanel contenedor = new JPanel();
+        contenedor.setLayout(new BorderLayout());
+        contenedor.setBackground(CREMA);
 
         JLabel lblSeccionTitulo = new JLabel(titulo);
         lblSeccionTitulo.setFont(fuentePoppinsBold.deriveFont(Font.BOLD, 14f));
-        lblSeccionTitulo.setForeground(COLOR_BLANCO);
+        lblSeccionTitulo.setForeground(BLANCO);
 
-        JPanel panelTitulo = new JPanel(new FlowLayout(FlowLayout.LEFT));
-        panelTitulo.setBackground(COLOR_PRIMARIO);
+        JPanel panelTitulo = new JPanel();
+        panelTitulo.setLayout(new FlowLayout(FlowLayout.LEFT));
+        panelTitulo.setBackground(NARANJA);
         panelTitulo.add(lblSeccionTitulo);
 
-        JPanel opcionesPanel = new JPanel(new GridLayout(4, 2, 10, 10));
-        opcionesPanel.setBackground(COLOR_FONDO);
+        JPanel opcionesPanel = new JPanel();
+        opcionesPanel.setLayout(new GridLayout(4, 2, 10, 10));
+        opcionesPanel.setBackground(CREMA);
         opcionesPanel.setBorder(BorderFactory.createEmptyBorder(20, 0, 0, 0));
 
         for (int i = 0; i < 8; i++) {
-            JPanel opcion = new JPanel(new FlowLayout(FlowLayout.LEFT));
-            opcion.setBackground(COLOR_BLANCO);
-            opcion.setBorder(BorderFactory.createLineBorder(COLOR_BORDE));
+            JPanel opcion = new JPanel();
+            opcion.setLayout(new FlowLayout(FlowLayout.LEFT));
+            opcion.setBackground(BLANCO);
+            opcion.setBorder(BorderFactory.createLineBorder(GRIS));
 
             JCheckBox check = new JCheckBox("Opción " + (i + 1));
-            check.setBackground(COLOR_BLANCO);
+            check.setBackground(BLANCO);
             check.setFont(fuentePoppinsRegular.deriveFont(14f));
 
             opcion.add(check);
@@ -166,35 +172,38 @@ public class PersonalizarPedidoFrame extends JFrame {
     }
 
     private JPanel crearSeccionComentarios(String titulo) {
-        JPanel contenedor = new JPanel(new BorderLayout());
-        contenedor.setBackground(COLOR_FONDO);
+        JPanel contenedor = new JPanel();
+        contenedor.setLayout(new BorderLayout());
+        contenedor.setBackground(CREMA);
 
         JLabel lblSeccionTitulo = new JLabel(titulo);
         lblSeccionTitulo.setFont(fuentePoppinsBold.deriveFont(Font.BOLD, 14f));
-        lblSeccionTitulo.setForeground(COLOR_BLANCO);
+        lblSeccionTitulo.setForeground(BLANCO);
 
-        JPanel panelComentariosTitulo = new JPanel(new FlowLayout(FlowLayout.LEFT));
-        panelComentariosTitulo.setBackground(COLOR_PRIMARIO);
-        panelComentariosTitulo.add(lblSeccionTitulo);
+        JPanel panelTitulo = new JPanel();
+        panelTitulo.setLayout(new FlowLayout(FlowLayout.LEFT));
+        panelTitulo.setBackground(NARANJA);
+        panelTitulo.add(lblSeccionTitulo);
 
         JTextArea areaTextoComentarios = new JTextArea(5, 20);
-        areaTextoComentarios.setFont(fuentePoppinsRegular.deriveFont(Font.PLAIN, 13f));
+        areaTextoComentarios.setFont(fuentePoppinsRegular.deriveFont(Font.PLAIN, 14f));
         areaTextoComentarios.setLineWrap(true);
         areaTextoComentarios.setWrapStyleWord(true);
-        areaTextoComentarios.setBorder(
-                BorderFactory.createCompoundBorder(
-                        BorderFactory.createLineBorder(COLOR_BORDE, 1, true),
-                        BorderFactory.createEmptyBorder(10, 10, 10, 10)
-                )
+
+        Border bordeAreaComentarios = BorderFactory.createCompoundBorder(
+                BorderFactory.createLineBorder(GRIS, 1, true),
+                BorderFactory.createEmptyBorder(10, 10, 10, 10)
         );
+
+        areaTextoComentarios.setBorder(bordeAreaComentarios);
 
         JScrollPane scrollComentarios = new JScrollPane(areaTextoComentarios);
         scrollComentarios.setBorder(BorderFactory.createEmptyBorder(20, 0, 0, 0));
         scrollComentarios.setPreferredSize(new Dimension(400, 120));
-        scrollComentarios.getViewport().setBackground(COLOR_FONDO);
-        scrollComentarios.setBackground(COLOR_FONDO);
+        scrollComentarios.getViewport().setBackground(CREMA);
+        scrollComentarios.setBackground(CREMA);
 
-        contenedor.add(panelComentariosTitulo, BorderLayout.NORTH);
+        contenedor.add(panelTitulo, BorderLayout.NORTH);
         contenedor.add(scrollComentarios, BorderLayout.CENTER);
 
         return contenedor;

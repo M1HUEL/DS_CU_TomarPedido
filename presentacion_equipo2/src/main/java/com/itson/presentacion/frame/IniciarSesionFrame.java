@@ -22,109 +22,113 @@ import javax.swing.JPasswordField;
 import javax.swing.JTextField;
 import javax.swing.SwingConstants;
 import javax.swing.SwingUtilities;
+import javax.swing.border.Border;
 
 public class IniciarSesionFrame extends JFrame {
 
     private Font fuentePoppinsRegular;
     private Font fuentePoppinsBold;
 
-    private final Color COLOR_PRIMARIO = Colores.NARANJA;
-    private final Color COLOR_FONDO = Colores.CREMA;
-    private final Color COLOR_BLANCO = Colores.BLANCO;
-    private final Color COLOR_BORDE = Colores.GRIS_BORDE;
-    private final Color COLOR_INPUT = Colores.NARANJA_MUY_CLARO;
-
-    private JButton btnIniciarSesion;
-
-    private JLabel lblTitulo, lblSubtitulo, lblNombre, lblContrasena;
-    private JTextField txtNombre;
-    private JPasswordField txtContrasena;
-    private JPanel panelHeader, panelHeaderContenido, panelPrincipal, panelCentro;
-    private JPanel panelFormulario, panelCampoNombre, panelCampoContrasena, panelBoton;
-
-    private final IniciarSesionControlador controlador = new IniciarSesionControlador();
+    private final Color NARANJA = Colores.NARANJA;
+    private final Color CREMA = Colores.CREMA;
+    private final Color BLANCO = Colores.BLANCO;
+    private final Color GRIS = Colores.GRIS;
 
     public IniciarSesionFrame() {
-        cargarFuentePoppins();
-
-        setTitle("Iniciar Sesión");
+        super("Iniciar Sesión");
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setSize(1440, 720);
         setLocationRelativeTo(null);
         setResizable(false);
 
-        panelHeader = new JPanel(new BorderLayout());
-        panelHeader.setBackground(COLOR_PRIMARIO);
-        panelHeader.setPreferredSize(new Dimension(1440, 160));
+        cargarFuentePoppins();
 
-        panelHeaderContenido = new JPanel(new GridLayout(2, 1));
-        panelHeaderContenido.setBackground(COLOR_PRIMARIO);
-        panelHeaderContenido.setBorder(BorderFactory.createEmptyBorder(40, 100, 40, 100));
+        JPanel header = new JPanel();
+        header.setLayout(new BorderLayout());
+        header.setBackground(NARANJA);
+        header.setPreferredSize(new Dimension(1440, 160));
 
-        lblTitulo = new JLabel("Iniciar Sesión", SwingConstants.LEFT);
+        JPanel headerContenido = new JPanel();
+        headerContenido.setLayout(new GridLayout(2, 1));
+        headerContenido.setBackground(NARANJA);
+        headerContenido.setBorder(BorderFactory.createEmptyBorder(40, 100, 40, 100));
+
+        JLabel lblTitulo = new JLabel("Iniciar Sesión", SwingConstants.LEFT);
         lblTitulo.setFont(fuentePoppinsBold.deriveFont(28f));
-        lblTitulo.setForeground(COLOR_BLANCO);
+        lblTitulo.setForeground(BLANCO);
 
-        lblSubtitulo = new JLabel("Introduce tus credenciales para continuar", SwingConstants.LEFT);
+        JLabel lblSubtitulo = new JLabel("Introduce tus credenciales para continuar", SwingConstants.LEFT);
         lblSubtitulo.setFont(fuentePoppinsRegular.deriveFont(16f));
-        lblSubtitulo.setForeground(COLOR_BLANCO);
+        lblSubtitulo.setForeground(BLANCO);
 
-        panelHeaderContenido.add(lblTitulo);
-        panelHeaderContenido.add(lblSubtitulo);
-        panelHeader.add(panelHeaderContenido, BorderLayout.CENTER);
+        headerContenido.add(lblTitulo);
+        headerContenido.add(lblSubtitulo);
 
-        panelPrincipal = new JPanel(new BorderLayout());
-        panelPrincipal.setBackground(COLOR_FONDO);
+        header.add(headerContenido, BorderLayout.CENTER);
 
-        panelFormulario = new JPanel(new GridLayout(3, 1, 0, 20));
-        panelFormulario.setBackground(COLOR_BLANCO);
-        panelFormulario.setBorder(BorderFactory.createCompoundBorder(
-                BorderFactory.createLineBorder(COLOR_BORDE, 1),
+        JPanel panelPrincipal = new JPanel();
+        panelPrincipal.setLayout(new BorderLayout());
+        panelPrincipal.setBackground(CREMA);
+
+        JPanel panelBlanco = new JPanel();
+        panelBlanco.setLayout(new GridLayout(4, 1, 0, 20));
+        panelBlanco.setBackground(BLANCO);
+
+        Border bordePanelBlanco = BorderFactory.createCompoundBorder(
+                BorderFactory.createLineBorder(GRIS, 1),
                 BorderFactory.createEmptyBorder(60, 120, 60, 120)
-        ));
+        );
 
-        panelCampoNombre = new JPanel(new BorderLayout());
-        panelCampoNombre.setBackground(COLOR_BLANCO);
+        panelBlanco.setBorder(bordePanelBlanco);
 
-        lblNombre = new JLabel("Nombre");
-        lblNombre.setFont(fuentePoppinsRegular.deriveFont(16f));
+        JPanel panelCampoNombre = new JPanel();
+        panelCampoNombre.setLayout(new BorderLayout());
+        panelCampoNombre.setBackground(BLANCO);
 
-        txtNombre = new JTextField();
-        txtNombre.setFont(fuentePoppinsRegular.deriveFont(16f));
-        txtNombre.setBackground(COLOR_INPUT);
-        txtNombre.setBorder(BorderFactory.createLineBorder(COLOR_BORDE, 1));
+        JLabel lblNombre = new JLabel("Nombre");
+        lblNombre.setFont(fuentePoppinsRegular.deriveFont(14f));
+
+        JTextField txtNombre = new JTextField();
+        txtNombre.setFont(fuentePoppinsRegular.deriveFont(14f));
+        txtNombre.setBackground(CREMA);
+        txtNombre.setBorder(BorderFactory.createLineBorder(GRIS, 1));
         txtNombre.setPreferredSize(new Dimension(400, 45));
 
         panelCampoNombre.add(lblNombre, BorderLayout.NORTH);
         panelCampoNombre.add(txtNombre, BorderLayout.CENTER);
-        panelFormulario.add(panelCampoNombre);
+        panelBlanco.add(panelCampoNombre);
 
-        panelCampoContrasena = new JPanel(new BorderLayout());
-        panelCampoContrasena.setBackground(COLOR_BLANCO);
+        JPanel panelCampoContrasena = new JPanel();
+        panelCampoContrasena.setLayout(new BorderLayout());
+        panelCampoContrasena.setBackground(BLANCO);
 
-        lblContrasena = new JLabel("Contraseña");
-        lblContrasena.setFont(fuentePoppinsRegular.deriveFont(16f));
+        JLabel lblContrasena = new JLabel("Contraseña");
+        lblContrasena.setFont(fuentePoppinsRegular.deriveFont(14f));
 
-        txtContrasena = new JPasswordField();
-        txtContrasena.setFont(fuentePoppinsRegular.deriveFont(16f));
-        txtContrasena.setBackground(COLOR_INPUT);
-        txtContrasena.setBorder(BorderFactory.createLineBorder(COLOR_BORDE, 1));
+        JPasswordField txtContrasena = new JPasswordField();
+        txtContrasena.setFont(fuentePoppinsRegular.deriveFont(14f));
+        txtContrasena.setBackground(CREMA);
+        txtContrasena.setBorder(BorderFactory.createLineBorder(GRIS, 1));
         txtContrasena.setPreferredSize(new Dimension(400, 45));
 
         panelCampoContrasena.add(lblContrasena, BorderLayout.NORTH);
         panelCampoContrasena.add(txtContrasena, BorderLayout.CENTER);
-        panelFormulario.add(panelCampoContrasena);
 
-        panelBoton = new JPanel(new FlowLayout(FlowLayout.CENTER));
-        panelBoton.setBackground(COLOR_BLANCO);
+        panelBlanco.add(panelCampoContrasena);
 
-        btnIniciarSesion = new JButton("Iniciar Sesión");
-        btnIniciarSesion.setBackground(COLOR_PRIMARIO);
-        btnIniciarSesion.setForeground(COLOR_BLANCO);
-        btnIniciarSesion.setFont(fuentePoppinsRegular.deriveFont(15f));
+        JPanel panelBoton = new JPanel();
+        panelBoton.setLayout(new FlowLayout(FlowLayout.CENTER));
+        panelBoton.setBackground(BLANCO);
+
+        JButton btnIniciarSesion = new JButton("Iniciar Sesión");
+        btnIniciarSesion.setBackground(NARANJA);
+        btnIniciarSesion.setForeground(BLANCO);
+        btnIniciarSesion.setFont(fuentePoppinsRegular.deriveFont(14f));
         btnIniciarSesion.setFocusPainted(false);
         btnIniciarSesion.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
-        btnIniciarSesion.setBorder(BorderFactory.createEmptyBorder(16, 46, 16, 46));
+        btnIniciarSesion.setBorder(BorderFactory.createEmptyBorder(20, 0, 20, 0));
+
+        IniciarSesionControlador controlador = new IniciarSesionControlador();
 
         btnIniciarSesion.addActionListener(e -> {
             String nombre = txtNombre.getText();
@@ -133,15 +137,16 @@ public class IniciarSesionFrame extends JFrame {
         });
 
         panelBoton.add(btnIniciarSesion);
-        panelFormulario.add(panelBoton);
+        panelBlanco.add(panelBoton);
 
-        panelCentro = new JPanel(new BorderLayout());
-        panelCentro.setBackground(COLOR_FONDO);
-        panelCentro.setBorder(BorderFactory.createEmptyBorder(60, 100, 100, 100));
-        panelCentro.add(panelFormulario, BorderLayout.CENTER);
+        JPanel contenedorCentral = new JPanel();
+        contenedorCentral.setLayout(new BorderLayout());
+        contenedorCentral.setBackground(CREMA);
+        contenedorCentral.setBorder(BorderFactory.createEmptyBorder(60, 100, 100, 100));
+        contenedorCentral.add(panelBlanco, BorderLayout.CENTER);
 
-        panelPrincipal.add(panelHeader, BorderLayout.NORTH);
-        panelPrincipal.add(panelCentro, BorderLayout.CENTER);
+        panelPrincipal.add(header, BorderLayout.NORTH);
+        panelPrincipal.add(contenedorCentral, BorderLayout.CENTER);
 
         add(panelPrincipal);
     }
