@@ -6,7 +6,13 @@ import javax.swing.JOptionPane;
 
 public class SeleccionarPedidoControlador {
 
-    public void seleccionarPedido(JFrame ventanaActual) {
+    private final JFrame ventanaActual;
+
+    public SeleccionarPedidoControlador(JFrame ventanaActual) {
+        this.ventanaActual = ventanaActual;
+    }
+
+    public void seleccionarPedido() {
         JOptionPane.showMessageDialog(
                 ventanaActual,
                 "Pedido seleccionado correctamente.",

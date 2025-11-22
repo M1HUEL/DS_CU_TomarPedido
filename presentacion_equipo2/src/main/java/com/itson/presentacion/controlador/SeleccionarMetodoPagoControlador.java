@@ -6,7 +6,13 @@ import javax.swing.JOptionPane;
 
 public class SeleccionarMetodoPagoControlador {
 
-    public void seleccionarMetodoPago(JFrame ventanaActual, String metodo) {
+    private final JFrame ventanaActual;
+
+    public SeleccionarMetodoPagoControlador(JFrame ventanaActual) {
+        this.ventanaActual = ventanaActual;
+    }
+
+    public void seleccionarMetodoPago(String metodo) {
 
         JOptionPane.showMessageDialog(
                 ventanaActual,

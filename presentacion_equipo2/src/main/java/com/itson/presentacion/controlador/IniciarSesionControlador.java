@@ -6,7 +6,13 @@ import javax.swing.JOptionPane;
 
 public class IniciarSesionControlador {
 
-    public void iniciarSesion(String nombre, String contraseña, JFrame ventanaActual) {
+    private final JFrame ventanaActual;
+
+    public IniciarSesionControlador(JFrame ventanaActual) {
+        this.ventanaActual = ventanaActual;
+    }
+
+    public void iniciarSesion(String nombre, String contraseña) {
         if (nombre.isEmpty() || contraseña.isEmpty()) {
             mostrarError("Por favor completa todos los campos.");
             return;

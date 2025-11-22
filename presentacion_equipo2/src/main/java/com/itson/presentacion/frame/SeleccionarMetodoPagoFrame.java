@@ -83,7 +83,7 @@ public class SeleccionarMetodoPagoFrame extends JFrame {
             "Transferencia"
         };
 
-        SeleccionarMetodoPagoControlador controlador = new SeleccionarMetodoPagoControlador();
+        SeleccionarMetodoPagoControlador controlador = new SeleccionarMetodoPagoControlador(this);
 
         for (String metodo : metodosPago) {
             JButton btnMetodoPago = new JButton(metodo);
@@ -94,7 +94,7 @@ public class SeleccionarMetodoPagoFrame extends JFrame {
             btnMetodoPago.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
             btnMetodoPago.setBorder(BorderFactory.createEmptyBorder(20, 0, 20, 0));
 
-            btnMetodoPago.addActionListener(e -> controlador.seleccionarMetodoPago(this, metodo));
+            btnMetodoPago.addActionListener(e -> controlador.seleccionarMetodoPago(metodo));
 
             panelOpcionesPago.add(btnMetodoPago);
         }

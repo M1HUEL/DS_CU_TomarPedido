@@ -7,7 +7,13 @@ import javax.swing.JOptionPane;
 
 public class PersonalizarPedidoControlador {
 
-    public void confirmarPersonalizacion(JFrame ventanaActual) {
+    private final JFrame ventanaActual;
+
+    public PersonalizarPedidoControlador(JFrame ventanaActual) {
+        this.ventanaActual = ventanaActual;
+    }
+
+    public void confirmarPersonalizacion() {
         JOptionPane.showMessageDialog(
                 ventanaActual,
                 "Personalización confirmada. Procediendo a seleccionar método de pago...",
@@ -19,7 +25,7 @@ public class PersonalizarPedidoControlador {
         new SeleccionarMetodoPagoFrame().setVisible(true);
     }
 
-    public void cancelarPersonalizacion(JFrame ventanaActual) {
+    public void cancelarPersonalizacion() {
         int opcion = JOptionPane.showConfirmDialog(
                 ventanaActual,
                 "¿Deseas cancelar la personalización y volver a seleccionar un pedido?",

@@ -110,12 +110,12 @@ public class InicioFrame extends JFrame {
         btnCerrarSesion.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
         btnCerrarSesion.setBorder(BorderFactory.createEmptyBorder(20, 0, 20, 0));
 
-        InicioControlador controlador = new InicioControlador();
+        InicioControlador controlador = new InicioControlador(this);
 
-        btnCrearPedido.addActionListener(e -> controlador.abrirSeleccionarPedido(this));
-        btnVerPedidos.addActionListener(e -> controlador.verPedidos(this));
-        btnDashboard.addActionListener(e -> controlador.abrirDashboard(this));
-        btnCerrarSesion.addActionListener(e -> controlador.cerrarSesion(this));
+        btnCrearPedido.addActionListener(e -> controlador.abrirSeleccionarPedido());
+        btnVerPedidos.addActionListener(e -> controlador.verPedidos());
+        btnDashboard.addActionListener(e -> controlador.abrirDashboard());
+        btnCerrarSesion.addActionListener(e -> controlador.cerrarSesion());
 
         panelBlanco.add(btnCrearPedido);
         panelBlanco.add(btnVerPedidos);

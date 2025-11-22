@@ -7,12 +7,18 @@ import javax.swing.JOptionPane;
 
 public class InicioControlador {
 
-    public void abrirSeleccionarPedido(JFrame ventanaActual) {
+    private final JFrame ventanaActual;
+
+    public InicioControlador(JFrame ventanaActual) {
+        this.ventanaActual = ventanaActual;
+    }
+
+    public void abrirSeleccionarPedido() {
         ventanaActual.dispose();
         new SeleccionarPedidoFrame().setVisible(true);
     }
 
-    public void verPedidos(JFrame ventanaActual) {
+    public void verPedidos() {
         JOptionPane.showMessageDialog(
                 ventanaActual,
                 "Funcionalidad de ver pedidos aún no implementada.",
@@ -21,7 +27,7 @@ public class InicioControlador {
         );
     }
 
-    public void abrirDashboard(JFrame ventanaActual) {
+    public void abrirDashboard() {
         JOptionPane.showMessageDialog(
                 ventanaActual,
                 "Funcionalidad de dashboard aún no implementada.",
@@ -30,7 +36,7 @@ public class InicioControlador {
         );
     }
 
-    public void cerrarSesion(JFrame ventanaActual) {
+    public void cerrarSesion() {
         int opcion = JOptionPane.showConfirmDialog(
                 ventanaActual,
                 "¿Deseas cerrar sesión?",

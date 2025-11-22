@@ -117,10 +117,10 @@ public class PersonalizarPedidoFrame extends JFrame {
         btnCancelar.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
         btnCancelar.setBorder(BorderFactory.createEmptyBorder(10, 60, 10, 60));
 
-        PersonalizarPedidoControlador controlador = new PersonalizarPedidoControlador();
+        PersonalizarPedidoControlador controlador = new PersonalizarPedidoControlador(this);
 
-        btnConfirmar.addActionListener(e -> controlador.confirmarPersonalizacion(this));
-        btnCancelar.addActionListener(e -> controlador.cancelarPersonalizacion(this));
+        btnConfirmar.addActionListener(e -> controlador.confirmarPersonalizacion());
+        btnCancelar.addActionListener(e -> controlador.cancelarPersonalizacion());
 
         panelBotones.add(btnConfirmar);
         panelBotones.add(btnCancelar);

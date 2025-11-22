@@ -111,9 +111,9 @@ public class ConfirmacionPedidoFrame extends JFrame {
         btnCancelar.setBorder(BorderFactory.createEmptyBorder(10, 20, 10, 20));
         btnCancelar.setPreferredSize(btnConfirmar.getPreferredSize());
 
-        ConfirmacionPedidoControlador controlador = new ConfirmacionPedidoControlador();
+        ConfirmacionPedidoControlador controlador = new ConfirmacionPedidoControlador(this);
 
-        btnConfirmar.addActionListener(e -> controlador.confirmarPedido(this));
+        btnConfirmar.addActionListener(e -> controlador.confirmarPedido());
         btnCancelar.addActionListener(e -> dispose());
 
         JPanel panelBotones = new JPanel();

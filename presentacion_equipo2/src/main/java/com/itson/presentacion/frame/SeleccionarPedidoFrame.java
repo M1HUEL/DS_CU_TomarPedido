@@ -73,7 +73,7 @@ public class SeleccionarPedidoFrame extends JFrame {
         panelTarjetas.setBackground(CREMA);
         panelTarjetas.setBorder(BorderFactory.createEmptyBorder(40, 100, 60, 100));
 
-        SeleccionarPedidoControlador controlador = new SeleccionarPedidoControlador();
+        SeleccionarPedidoControlador controlador = new SeleccionarPedidoControlador(this);
 
         for (int i = 0; i < 12; i++) {
             JPanel tarjeta = new JPanel();
@@ -107,7 +107,7 @@ public class SeleccionarPedidoFrame extends JFrame {
             btnSeleccionar.setBorder(BorderFactory.createEmptyBorder(10, 0, 10, 0));
             btnSeleccionar.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
 
-            btnSeleccionar.addActionListener(e -> controlador.seleccionarPedido(this));
+            btnSeleccionar.addActionListener(e -> controlador.seleccionarPedido());
 
             tarjeta.add(imagen, BorderLayout.NORTH);
             tarjeta.add(lblNombrePedido, BorderLayout.CENTER);
