@@ -8,8 +8,15 @@
     </parent>
     <artifactId>negocios_controlInventario</artifactId>
     <packaging>jar</packaging>
+    <dependencies>
+        <dependency>
+            <groupId>${project.groupId}</groupId>
+            <artifactId>negocios_persistencia</artifactId>
+            <version>${project.version}</version>
+        </dependency>
+    </dependencies>
     <properties>
-        <maven.compiler.release>24</maven.compiler.release>
+        <maven.compiler.release>17</maven.compiler.release>
         <exec.mainClass>com.itson.controlInventario.Negocios_controlInventario</exec.mainClass>
     </properties>
 </project>
