@@ -7,14 +7,18 @@ public class IngredienteDTO {
     private String id;
     private String nombre;
     private BigDecimal precio;
+    private String inventarioItemId;
+    private Double cantidadRequerida;
 
     public IngredienteDTO() {
     }
 
-    public IngredienteDTO(String id, String nombre, BigDecimal precio) {
+    public IngredienteDTO(String id, String nombre, BigDecimal precio, String inventarioItemId, Double cantidadRequerida) {
         this.id = id;
         this.nombre = nombre;
         this.precio = precio;
+        this.inventarioItemId = inventarioItemId;
+        this.cantidadRequerida = cantidadRequerida;
     }
 
     public String getId() {
@@ -41,9 +45,20 @@ public class IngredienteDTO {
         this.precio = precio;
     }
 
-    @Override
-    public String toString() {
-        return "IngredienteDTO{" + "id=" + id + ", nombre=" + nombre + ", precio=" + precio + '}';
+    public String getInventarioItemId() {
+        return inventarioItemId;
+    }
+
+    public void setInventarioItemId(String inventarioItemId) {
+        this.inventarioItemId = inventarioItemId;
+    }
+
+    public Double getCantidadRequerida() {
+        return cantidadRequerida;
+    }
+
+    public void setCantidadRequerida(Double cantidadRequerida) {
+        this.cantidadRequerida = cantidadRequerida;
     }
 
 }
