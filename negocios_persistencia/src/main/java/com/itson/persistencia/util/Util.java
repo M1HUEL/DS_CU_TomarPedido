@@ -12,42 +12,57 @@ import org.bson.types.Decimal128;
 public class Util {
 
     public static List<Document> mapIngredientes(List<Ingrediente> ingredientes) {
-        List<Document> lista = new ArrayList<>();
-        if (ingredientes != null) {
-            for (Ingrediente i : ingredientes) {
-                lista.add(new Document()
-                        .append("id", i.getId())
-                        .append("nombre", i.getNombre())
-                        .append("precio", i.getPrecio()));
-            }
+        List<Document> docs = new ArrayList<>();
+        if (ingredientes == null) {
+            return docs;
         }
-        return lista;
+
+        for (Ingrediente ing : ingredientes) {
+            docs.add(new Document()
+                    .append("id", ing.getId())
+                    .append("nombre", ing.getNombre())
+                    .append("precio", ing.getPrecio())
+                    .append("inventarioItemId", ing.getInventarioItemId())
+                    .append("cantidadRequerida", ing.getCantidadRequerida())
+            );
+        }
+        return docs;
     }
 
     public static List<Document> mapComplementos(List<Complemento> complementos) {
-        List<Document> lista = new ArrayList<>();
-        if (complementos != null) {
-            for (Complemento c : complementos) {
-                lista.add(new Document()
-                        .append("id", c.getId())
-                        .append("nombre", c.getNombre())
-                        .append("precio", c.getPrecio()));
-            }
+        List<Document> docs = new ArrayList<>();
+        if (complementos == null) {
+            return docs;
         }
-        return lista;
+
+        for (Complemento c : complementos) {
+            docs.add(new Document()
+                    .append("id", c.getId())
+                    .append("nombre", c.getNombre())
+                    .append("precio", c.getPrecio())
+                    .append("inventarioItemId", c.getInventarioItemId())
+                    .append("cantidadRequerida", c.getCantidadRequerida())
+            );
+        }
+        return docs;
     }
 
     public static List<Document> mapExtras(List<Extra> extras) {
-        List<Document> lista = new ArrayList<>();
-        if (extras != null) {
-            for (Extra e : extras) {
-                lista.add(new Document()
-                        .append("id", e.getId())
-                        .append("nombre", e.getNombre())
-                        .append("precio", e.getPrecio()));
-            }
+        List<Document> docs = new ArrayList<>();
+        if (extras == null) {
+            return docs;
         }
-        return lista;
+
+        for (Extra e : extras) {
+            docs.add(new Document()
+                    .append("id", e.getId())
+                    .append("nombre", e.getNombre())
+                    .append("precio", e.getPrecio())
+                    .append("inventarioItemId", e.getInventarioItemId())
+                    .append("cantidadRequerida", e.getCantidadRequerida())
+            );
+        }
+        return docs;
     }
 
     public static double convertirADouble(Object valor) {
