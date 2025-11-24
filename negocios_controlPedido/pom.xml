@@ -19,9 +19,14 @@
             <artifactId>negocios_persistencia</artifactId>
             <version>${project.version}</version>
         </dependency>
+        <dependency>
+            <groupId>${project.groupId}</groupId>
+            <artifactId>negocios_controlInventario</artifactId>
+            <version>${project.version}</version>
+        </dependency>
     </dependencies>
     <properties>
-        <maven.compiler.release>24</maven.compiler.release>
+        <maven.compiler.release>17</maven.compiler.release>
         <exec.mainClass>com.itson.controlPedido.Negocios_controlPedido</exec.mainClass>
     </properties>
 </project>
