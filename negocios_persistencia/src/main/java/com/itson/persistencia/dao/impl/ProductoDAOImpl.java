@@ -59,6 +59,7 @@ public class ProductoDAOImpl implements ProductoDAO {
             }
 
             Document documento = new Document()
+                    .append("_id", new ObjectId(producto.getId()))
                     .append("nombre", producto.getNombre())
                     .append("ingredientes", Util.mapIngredientes(producto.getIngredientes()))
                     .append("complementos", Util.mapComplementos(producto.getComplementos()))
@@ -137,15 +138,13 @@ public class ProductoDAOImpl implements ProductoDAO {
         List<Document> ingredienteDocumentos = (List<Document>) documento.get("ingredientes");
 
         if (ingredienteDocumentos != null) {
-            for (Document ingredienteDocumento : ingredienteDocumentos) {
-                if (ingredienteDocumento == null) {
-                    continue;
-                }
-
+            for (Document doc : ingredienteDocumentos) {
                 ingredientes.add(new Ingrediente(
-                        ingredienteDocumento.getString("id"),
-                        ingredienteDocumento.getString("nombre"),
-                        Util.convertirABigDecimal(ingredienteDocumento.get("precio"))
+                        doc.getString("id"),
+                        doc.getString("nombre"),
+                        Util.convertirABigDecimal(doc.get("precio")),
+                        doc.getString("inventarioItemId"),
+                        Util.convertirADouble(doc.get("cantidadRequerida"))
                 ));
             }
         }
@@ -154,15 +153,13 @@ public class ProductoDAOImpl implements ProductoDAO {
         List<Document> complementoDocumentos = (List<Document>) documento.get("complementos");
 
         if (complementoDocumentos != null) {
-            for (Document complementoDocumento : complementoDocumentos) {
-                if (complementoDocumento == null) {
-                    continue;
-                }
-
+            for (Document doc : complementoDocumentos) {
                 complementos.add(new Complemento(
-                        complementoDocumento.getString("id"),
-                        complementoDocumento.getString("nombre"),
-                        Util.convertirABigDecimal(complementoDocumento.get("precio"))
+                        doc.getString("id"),
+                        doc.getString("nombre"),
+                        Util.convertirABigDecimal(doc.get("precio")),
+                        doc.getString("inventarioItemId"),
+                        Util.convertirADouble(doc.get("cantidadRequerida"))
                 ));
             }
         }
@@ -171,15 +168,13 @@ public class ProductoDAOImpl implements ProductoDAO {
         List<Document> extraDocumentos = (List<Document>) documento.get("extras");
 
         if (extraDocumentos != null) {
-            for (Document extraDocumento : extraDocumentos) {
-                if (extraDocumento == null) {
-                    continue;
-                }
-
+            for (Document doc : extraDocumentos) {
                 extras.add(new Extra(
-                        extraDocumento.getString("id"),
-                        extraDocumento.getString("nombre"),
-                        Util.convertirABigDecimal(extraDocumento.get("precio"))
+                        doc.getString("id"),
+                        doc.getString("nombre"),
+                        Util.convertirABigDecimal(doc.get("precio")),
+                        doc.getString("inventarioItemId"),
+                        Util.convertirADouble(doc.get("cantidadRequerida"))
                 ));
             }
         }
@@ -193,5 +188,4 @@ public class ProductoDAOImpl implements ProductoDAO {
                 Util.convertirABigDecimal(documento.get("precio"))
         );
     }
-
 }
