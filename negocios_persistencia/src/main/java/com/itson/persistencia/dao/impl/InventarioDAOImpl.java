@@ -81,6 +81,7 @@ public class InventarioDAOImpl implements InventarioDAO {
             }
 
             Document documento = new Document()
+                    .append("_id", new ObjectId(item.getId()))
                     .append("nombre", item.getNombre())
                     .append("cantidadDisponible", item.getCantidadDisponible())
                     .append("precioUnidad", new Decimal128(item.getPrecioUnidad()))
