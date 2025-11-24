@@ -7,14 +7,18 @@ public class Complemento {
     private String id;
     private String nombre;
     private BigDecimal precio;
+    private String inventarioItemId;
+    private double cantidadRequerida;
 
     public Complemento() {
     }
 
-    public Complemento(String id, String nombre, BigDecimal precio) {
+    public Complemento(String id, String nombre, BigDecimal precio, String inventarioItemId, double cantidadRequerida) {
         this.id = id;
         this.nombre = nombre;
         this.precio = precio;
+        this.inventarioItemId = inventarioItemId;
+        this.cantidadRequerida = cantidadRequerida;
     }
 
     public String getId() {
@@ -41,9 +45,25 @@ public class Complemento {
         this.precio = precio;
     }
 
+    public String getInventarioItemId() {
+        return inventarioItemId;
+    }
+
+    public void setInventarioItemId(String inventarioItemId) {
+        this.inventarioItemId = inventarioItemId;
+    }
+
+    public double getCantidadRequerida() {
+        return cantidadRequerida;
+    }
+
+    public void setCantidadRequerida(double cantidadRequerida) {
+        this.cantidadRequerida = cantidadRequerida;
+    }
+
     @Override
     public String toString() {
-        return "Complemento{" + "id=" + id + ", nombre=" + nombre + ", precio=" + precio + '}';
+        return "Complemento{" + "id=" + id + ", nombre=" + nombre + ", precio=" + precio + ", inventarioItemId=" + inventarioItemId + ", cantidadRequerida=" + cantidadRequerida + '}';
     }
 
 }
