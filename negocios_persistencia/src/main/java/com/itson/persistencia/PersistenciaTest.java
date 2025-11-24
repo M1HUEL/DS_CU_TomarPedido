@@ -1,5 +1,16 @@
 package com.itson.persistencia;
 
+import com.itson.persistencia.dao.InventarioDAO;
+import com.itson.persistencia.dao.ProductoDAO;
+import com.itson.persistencia.dao.impl.InventarioDAOImpl;
+import com.itson.persistencia.dao.impl.ProductoDAOImpl;
+import com.itson.persistencia.dominio.Complemento;
+import com.itson.persistencia.dominio.Extra;
+import com.itson.persistencia.dominio.Ingrediente;
+import com.itson.persistencia.dominio.InventarioItem;
+import com.itson.persistencia.dominio.InventarioTipo;
+import com.itson.persistencia.dominio.Pedido;
+import com.itson.persistencia.dominio.Producto;
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.Arrays;
@@ -7,119 +18,104 @@ import java.util.List;
 
 public class PersistenciaTest {
 
-//    private static final InventarioService inventarioService = new InventarioService();
-//    private static final ProductoService productoService = new ProductoService();
-//    private static final PedidoDAO pedidoDAO = new PedidoDAOImpl();
-//
-//    public static void main(String[] args) {
-//        generarInventario();
-//        Producto producto = generarProductos();
-//        generarPedidos(producto);
-//    }
-//
-//    public static void generarInventario() {
-//        poblarItems(
-//                new String[]{"Pan", "Carne", "Queso", "Lechuga", "Tomate", "Cebolla", "Pepinillos", "Jalapeños", "Huevo", "Tocino"},
-//                InventarioTipo.INGREDIENTE, 50, 100, 5, 10
-//        );
-//
-//        poblarItems(
-//                new String[]{"Papas fritas", "Salsa BBQ", "Ketchup", "Mayonesa", "Mostaza", "Refresco"},
-//                InventarioTipo.COMPLEMENTO, 20, 30, 3, 5
-//        );
-//
-//        poblarItems(
-//                new String[]{"Extra Queso", "Extra Carne", "Extra Tocino", "Extra Huevo", "Extra Jalapeños"},
-//                InventarioTipo.EXTRA, 10, 20, 5, 10
-//        );
-//
-//        System.out.println("Inventario generado correctamente.");
-//    }
-//
-//    private static void poblarItems(String[] nombres, InventarioTipo tipo,
-//            double minCant, double maxCant, double minPrecio, double maxPrecio) {
-//
-//        for (String nombre : nombres) {
-//            double cantidad = minCant + Math.random() * (maxCant - minCant);
-//            double precio = minPrecio + Math.random() * (maxPrecio - minPrecio);
-//            inventarioService.agregarItem(nombre, cantidad, BigDecimal.valueOf(precio), tipo);
-//            System.out.println(tipo + " agregado: " + nombre);
-//        }
-//    }
-//
-//    public static Producto generarProductos() {
-//
-//        Ingrediente pan = inventarioService.obtenerIngrediente("Pan")
-//                .orElseThrow(() -> new RuntimeException("No existe Pan en inventario"));
-//
-//        Ingrediente carne = inventarioService.obtenerIngrediente("Carne")
-//                .orElseThrow(() -> new RuntimeException("No existe Carne"));
-//
-//        Ingrediente queso = inventarioService.obtenerIngrediente("Queso")
-//                .orElseThrow(() -> new RuntimeException("No existe Queso"));
-//
-//        Ingrediente tocino = inventarioService.obtenerIngrediente("Tocino")
-//                .orElseThrow(() -> new RuntimeException("No existe Tocino"));
-//
-//        Ingrediente cebolla = inventarioService.obtenerIngrediente("Cebolla")
-//                .orElseThrow(() -> new RuntimeException("No existe Cebolla"));
-//
-//        Complemento papas = inventarioService.obtenerComplemento("Papas fritas")
-//                .orElseThrow(() -> new RuntimeException("No existe Papas fritas"));
-//
-//        Complemento mayonesa = inventarioService.obtenerComplemento("Mayonesa")
-//                .orElseThrow(() -> new RuntimeException("No existe Mayonesa"));
-//
-//        Extra extraQueso = inventarioService.obtenerExtra("Extra Queso")
-//                .orElseThrow(() -> new RuntimeException("No existe Extra Queso"));
-//
-//        Extra extraTocino = inventarioService.obtenerExtra("Extra Tocino")
-//                .orElseThrow(() -> new RuntimeException("No existe Extra Tocino"));
-//
-//        Producto hamburguesaDeluxe = new Producto(
-//                "Hamburguesa Doble Deluxe",
-//                Arrays.asList(pan, carne, carne, queso, tocino, cebolla),
-//                Arrays.asList(papas, mayonesa),
-//                Arrays.asList(extraQueso, extraTocino),
-//                BigDecimal.valueOf(89.0)
-//        );
-//
-//        Producto productoCreado = productoService.crearProducto(hamburguesaDeluxe)
-//                .orElseThrow(() -> new RuntimeException("No se pudo crear el producto"));
-//
-//        System.out.println("Producto creado correctamente: " + productoCreado.getNombre()
-//                + " | ID = " + productoCreado.getId());
-//
-//        return productoCreado;
-//    }
-//
-//    public static void generarPedidos(Producto hamburguesa) {
-//
-//        if (hamburguesa == null) {
-//            System.out.println("No se pueden crear pedidos sin productos.");
-//            return;
-//        }
-//
-//        List<Pedido> pedidos = Arrays.asList(
-//                new Pedido(null, "Juan Perez",
-//                        Arrays.asList(hamburguesa),
-//                        "Sin cebolla",
-//                        hamburguesa.getPrecio(),
-//                        LocalDateTime.now()),
-//                new Pedido(null, "Maria Lopez",
-//                        Arrays.asList(hamburguesa),
-//                        "Extra ketchup",
-//                        hamburguesa.getPrecio(),
-//                        LocalDateTime.now())
-//        );
-//
-//        for (Pedido pedido : pedidos) {
-//            boolean agregado = pedidoDAO.agregar(pedido);
-//            System.out.println(
-//                    agregado
-//                            ? "Pedido creado para: " + pedido.getNombre()
-//                            : "Error al crear pedido para: " + pedido.getNombre()
-//            );
-//        }
-//    }
+    private static final InventarioDAO inventarioDAO = new InventarioDAOImpl();
+    private static final ProductoDAO productoDAO = new ProductoDAOImpl();
+
+    public static void main(String[] args) {
+        crearInventario();
+        crearProductos();
+    }
+
+    // -----------------------------
+    // Crear inventario
+    // -----------------------------
+    private static void crearInventario() {
+        agregarItem("Pan", 50, InventarioTipo.INGREDIENTE);
+        agregarItem("Carne", 40, InventarioTipo.INGREDIENTE);
+        agregarItem("Queso", 30, InventarioTipo.INGREDIENTE);
+        agregarItem("Tocino", 20, InventarioTipo.INGREDIENTE);
+        agregarItem("Cebolla", 25, InventarioTipo.INGREDIENTE);
+        agregarItem("Papas fritas", 20, InventarioTipo.COMPLEMENTO);
+        agregarItem("Mayonesa", 10, InventarioTipo.COMPLEMENTO);
+        agregarItem("Extra Queso", 15, InventarioTipo.EXTRA);
+        agregarItem("Extra Tocino", 10, InventarioTipo.EXTRA);
+
+        System.out.println("Inventario inicial generado correctamente.\n");
+    }
+
+    private static void agregarItem(String nombre, double cantidad, InventarioTipo tipo) {
+        InventarioItem item = new InventarioItem();
+        item.setNombre(nombre);
+        item.setTipo(tipo);
+        item.setCantidadDisponible(cantidad);
+        item.setPrecioUnidad(BigDecimal.valueOf(1.0));
+        inventarioDAO.agregar(item);
+        System.out.println("Inventario agregado: " + nombre + " | Tipo: " + tipo);
+    }
+
+    // -----------------------------
+    // Crear y persistir productos
+    // -----------------------------
+    private static void crearProductos() {
+        Producto hamburguesaDeluxe = crearProducto(
+                "Hamburguesa Deluxe", BigDecimal.valueOf(89.0),
+                new String[]{"Pan", "Carne", "Carne", "Queso", "Tocino", "Cebolla"},
+                new String[]{"Papas fritas", "Mayonesa"},
+                new String[]{"Extra Queso", "Extra Tocino"}
+        );
+
+        Producto hamburguesaSimple = crearProducto(
+                "Hamburguesa Simple", BigDecimal.valueOf(59.0),
+                new String[]{"Pan", "Carne", "Queso"},
+                new String[]{"Mayonesa"},
+                new String[]{"Extra Queso"}
+        );
+
+        System.out.println("Productos creados y guardados correctamente.\n");
+    }
+
+    private static Producto crearProducto(String nombre, BigDecimal precio,
+            String[] ingredientesNombres,
+            String[] complementosNombres,
+            String[] extrasNombres) {
+
+        Producto producto = new Producto();
+        producto.setNombre(nombre);
+        producto.setPrecio(precio);
+
+        // Ingredientes
+        producto.setIngredientes(Arrays.stream(ingredientesNombres)
+                .map(n -> new Ingrediente(
+                "i-" + n.replace(" ", ""),
+                n,
+                BigDecimal.ZERO,
+                inventarioDAO.consultarPorNombre(n).getId(),
+                1.0
+        )).toList());
+
+        // Complementos
+        producto.setComplementos(Arrays.stream(complementosNombres)
+                .map(n -> new Complemento(
+                "c-" + n.replace(" ", ""),
+                n,
+                BigDecimal.ZERO,
+                inventarioDAO.consultarPorNombre(n).getId(),
+                1.0
+        )).toList());
+
+        // Extras
+        producto.setExtras(Arrays.stream(extrasNombres)
+                .map(n -> new Extra(
+                "e-" + n.replace(" ", ""),
+                n,
+                BigDecimal.ZERO,
+                inventarioDAO.consultarPorNombre(n).getId(),
+                1.0
+        )).toList());
+
+        // Persistir producto
+        productoDAO.agregar(producto);
+        System.out.println("Producto guardado: " + nombre + " | ID: ");
+        return producto;
+    }
 }
