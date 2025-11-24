@@ -14,7 +14,6 @@ import com.mongodb.client.model.Filters;
 import com.mongodb.client.result.DeleteResult;
 import com.mongodb.client.result.InsertOneResult;
 import com.mongodb.client.result.UpdateResult;
-import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.util.ArrayList;
@@ -62,7 +61,8 @@ public class PedidoDAOImpl implements PedidoDAO {
                 pedido.setId(new ObjectId().toHexString());
             }
 
-            Document documento = new Document("_id", new ObjectId(pedido.getId()))
+            Document documento = new Document()
+                    .append("_id", new ObjectId(pedido.getId()))
                     .append("nombre", pedido.getNombre())
                     .append("productos", productosADocumento(pedido.getProductos()))
                     .append("comentario", pedido.getComentario())
@@ -140,6 +140,25 @@ public class PedidoDAOImpl implements PedidoDAO {
         }
     }
 
+    private List<Document> productosADocumento(List<Producto> productos) {
+        List<Document> documentos = new ArrayList<>();
+        if (productos == null) {
+            return documentos;
+        }
+
+        for (Producto p : productos) {
+            documentos.add(new Document()
+                    .append("id", p.getId())
+                    .append("nombre", p.getNombre())
+                    .append("ingredientes", Util.mapIngredientes(p.getIngredientes()))
+                    .append("complementos", Util.mapComplementos(p.getComplementos()))
+                    .append("extras", Util.mapExtras(p.getExtras()))
+                    .append("precio", p.getPrecio())
+            );
+        }
+        return documentos;
+    }
+
     private Pedido documentoAPedido(Document documento) {
         List<Producto> productos = new ArrayList<>();
         List<Document> productosDocs = (List<Document>) documento.get("productos");
@@ -151,33 +170,39 @@ public class PedidoDAOImpl implements PedidoDAO {
 
                 List<Document> ingDocs = (List<Document>) pdoc.get("ingredientes");
                 if (ingDocs != null) {
-                    for (Document idoc : ingDocs) {
+                    for (Document doc : ingDocs) {
                         ingredientes.add(new Ingrediente(
-                                idoc.getString("id"),
-                                idoc.getString("nombre"),
-                                BigDecimal.valueOf(idoc.getDouble("precio"))
+                                doc.getString("id"),
+                                doc.getString("nombre"),
+                                Util.convertirABigDecimal(doc.get("precio")),
+                                doc.getString("inventarioItemId"),
+                                Util.convertirADouble(doc.get("cantidadRequerida"))
                         ));
                     }
                 }
 
                 List<Document> compDocs = (List<Document>) pdoc.get("complementos");
                 if (compDocs != null) {
-                    for (Document cdoc : compDocs) {
+                    for (Document doc : compDocs) {
                         complementos.add(new Complemento(
-                                cdoc.getString("id"),
-                                cdoc.getString("nombre"),
-                                BigDecimal.valueOf(cdoc.getDouble("precio"))
+                                doc.getString("id"),
+                                doc.getString("nombre"),
+                                Util.convertirABigDecimal(doc.get("precio")),
+                                doc.getString("inventarioItemId"),
+                                Util.convertirADouble(doc.get("cantidadRequerida"))
                         ));
                     }
                 }
 
                 List<Document> extDocs = (List<Document>) pdoc.get("extras");
                 if (extDocs != null) {
-                    for (Document edoc : extDocs) {
+                    for (Document doc : extDocs) {
                         extras.add(new Extra(
-                                edoc.getString("id"),
-                                edoc.getString("nombre"),
-                                BigDecimal.valueOf(edoc.getDouble("precio"))
+                                doc.getString("id"),
+                                doc.getString("nombre"),
+                                Util.convertirABigDecimal(doc.get("precio")),
+                                doc.getString("inventarioItemId"),
+                                Util.convertirADouble(doc.get("cantidadRequerida"))
                         ));
                     }
                 }
@@ -188,7 +213,7 @@ public class PedidoDAOImpl implements PedidoDAO {
                         ingredientes,
                         complementos,
                         extras,
-                        BigDecimal.valueOf(pdoc.getDouble("precio"))
+                        Util.convertirABigDecimal(pdoc.get("precio"))
                 ));
             }
         }
@@ -203,30 +228,8 @@ public class PedidoDAOImpl implements PedidoDAO {
                 documento.getString("nombre"),
                 productos,
                 documento.getString("comentario"),
-                BigDecimal.valueOf(documento.getDouble("precio")),
+                Util.convertirABigDecimal(documento.get("precio")),
                 fechaPedido
         );
-    }
-
-    private List<Document> productosADocumento(List<Producto> productos) {
-        List<Document> lista = new ArrayList<>();
-        if (productos != null) {
-            for (Producto p : productos) {
-                if (p.getId() == null || p.getId().isEmpty()) {
-                    p.setId(new ObjectId().toHexString());
-                }
-
-                Document documento = new Document()
-                        .append("id", p.getId())
-                        .append("nombre", p.getNombre())
-                        .append("ingredientes", Util.mapIngredientes(p.getIngredientes()))
-                        .append("complementos", Util.mapComplementos(p.getComplementos()))
-                        .append("extras", Util.mapExtras(p.getExtras()))
-                        .append("precio", p.getPrecio());
-
-                lista.add(documento);
-            }
-        }
-        return lista;
     }
 }
