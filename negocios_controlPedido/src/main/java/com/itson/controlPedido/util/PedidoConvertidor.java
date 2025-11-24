@@ -40,37 +40,51 @@ public class PedidoConvertidor {
         if (dto.getIngredientes() != null) {
             producto.setIngredientes(
                     dto.getIngredientes().stream()
-                            .map(i -> new Ingrediente(
-                            i.getId(),
-                            i.getNombre(),
-                            i.getPrecio()
-                    )).collect(Collectors.toList())
+                            .map(i -> {
+                                Ingrediente ing = new Ingrediente();
+                                ing.setId(i.getId());
+                                ing.setNombre(i.getNombre());
+                                ing.setPrecio(i.getPrecio());
+                                ing.setInventarioItemId(i.getInventarioItemId());
+                                ing.setCantidadRequerida(i.getCantidadRequerida());
+                                return ing;
+                            })
+                            .collect(Collectors.toList())
             );
         }
 
         if (dto.getComplementos() != null) {
             producto.setComplementos(
                     dto.getComplementos().stream()
-                            .map(c -> new Complemento(
-                            c.getId(),
-                            c.getNombre(),
-                            c.getPrecio()
-                    )).collect(Collectors.toList())
+                            .map(c -> {
+                                Complemento comp = new Complemento();
+                                comp.setId(c.getId());
+                                comp.setNombre(c.getNombre());
+                                comp.setPrecio(c.getPrecio());
+                                comp.setInventarioItemId(c.getInventarioItemId());
+                                comp.setCantidadRequerida(c.getCantidadRequerida());
+                                return comp;
+                            })
+                            .collect(Collectors.toList())
             );
         }
 
         if (dto.getExtras() != null) {
             producto.setExtras(
                     dto.getExtras().stream()
-                            .map(e -> new Extra(
-                            e.getId(),
-                            e.getNombre(),
-                            e.getPrecio()
-                    )).collect(Collectors.toList())
+                            .map(e -> {
+                                Extra extra = new Extra();
+                                extra.setId(e.getId());
+                                extra.setNombre(e.getNombre());
+                                extra.setPrecio(e.getPrecio());
+                                extra.setInventarioItemId(e.getInventarioItemId());
+                                extra.setCantidadRequerida(e.getCantidadRequerida());
+                                return extra;
+                            })
+                            .collect(Collectors.toList())
             );
         }
 
         return producto;
     }
-
 }
