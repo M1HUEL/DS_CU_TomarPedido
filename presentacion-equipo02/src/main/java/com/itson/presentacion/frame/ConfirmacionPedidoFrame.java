@@ -2,8 +2,7 @@ package com.itson.presentacion.frame;
 
 import com.itson.persistencia.dominio.Pedido;
 import com.itson.persistencia.dominio.Producto;
-import com.itson.presentacion.controlador.ConfirmacionPedidoControlador;
-import com.itson.presentacion.controlador.impl.ConfirmacionPedidoControladorImpl;
+import com.itson.presentacion.controller.impl.ConfirmacionPedidoControllerImpl;
 import com.itson.presentacion.util.Colores;
 import com.itson.presentacion.util.Fuentes;
 import java.awt.BorderLayout;
@@ -29,6 +28,7 @@ import javax.swing.JTextArea;
 import javax.swing.ScrollPaneConstants;
 import javax.swing.SwingConstants;
 import javax.swing.border.Border;
+import com.itson.presentacion.controller.ConfirmacionPedidoController;
 
 public class ConfirmacionPedidoFrame extends JFrame {
 
@@ -40,12 +40,12 @@ public class ConfirmacionPedidoFrame extends JFrame {
 
     private Pedido pedido;
     // Add the Controller
-    private ConfirmacionPedidoControlador controlador;
+    private ConfirmacionPedidoController controlador;
 
     public ConfirmacionPedidoFrame(Pedido pedido) {
         this.pedido = pedido;
         // Initialize Controller
-        this.controlador = new ConfirmacionPedidoControladorImpl();
+        this.controlador = new ConfirmacionPedidoControllerImpl();
 
         setTitle("Confirmación de Pedido");
         setSize(1624, 864);
