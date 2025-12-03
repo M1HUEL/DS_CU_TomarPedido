@@ -58,6 +58,12 @@ public class ProductoDAOImpl implements ProductoDAO {
         try {
             Document doc = ProductoMapper.toDocument(producto);
             coleccion.insertOne(doc);
+
+            ObjectId id = doc.getObjectId("_id");
+            if (id != null) {
+                producto.setId(id.toHexString());
+            }
+
         } catch (Exception e) {
             throw new PersistenciaException("Error agregando producto", e);
         }

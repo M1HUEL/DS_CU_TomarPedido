@@ -31,7 +31,7 @@ public class UsuarioDAOImpl implements UsuarioDAO {
             }
             return usuarios;
         } catch (Exception e) {
-            throw new PersistenciaException("Error consultando todos los usuarios", e);
+            throw new PersistenciaException("Error consultando usuarios", e);
         }
     }
 
@@ -44,7 +44,7 @@ public class UsuarioDAOImpl implements UsuarioDAO {
             }
             return usuarios;
         } catch (Exception e) {
-            throw new PersistenciaException("Error consultando usuarios por sexo", e);
+            throw new PersistenciaException("Error consultando por sexo", e);
         }
     }
 
@@ -57,7 +57,7 @@ public class UsuarioDAOImpl implements UsuarioDAO {
             }
             return usuarios;
         } catch (Exception e) {
-            throw new PersistenciaException("Error consultando usuarios por rol", e);
+            throw new PersistenciaException("Error consultando por rol", e);
         }
     }
 
@@ -67,7 +67,7 @@ public class UsuarioDAOImpl implements UsuarioDAO {
             Document doc = coleccion.find(Filters.eq("_id", new ObjectId(usuarioId))).first();
             return UsuarioMapper.fromDocument(doc);
         } catch (Exception e) {
-            throw new PersistenciaException("Error consultando usuario por id", e);
+            throw new PersistenciaException("Error consultando por id", e);
         }
     }
 
@@ -77,7 +77,7 @@ public class UsuarioDAOImpl implements UsuarioDAO {
             Document doc = coleccion.find(Filters.eq("nombre", nombre)).first();
             return UsuarioMapper.fromDocument(doc);
         } catch (Exception e) {
-            throw new PersistenciaException("Error consultando usuario por nombre", e);
+            throw new PersistenciaException("Error consultando por nombre", e);
         }
     }
 
@@ -86,6 +86,12 @@ public class UsuarioDAOImpl implements UsuarioDAO {
         try {
             Document doc = UsuarioMapper.toDocument(usuario);
             coleccion.insertOne(doc);
+
+            ObjectId id = doc.getObjectId("_id");
+            if (id != null) {
+                usuario.setId(id.toHexString());
+            }
+
         } catch (Exception e) {
             throw new PersistenciaException("Error agregando usuario", e);
         }
@@ -109,5 +115,4 @@ public class UsuarioDAOImpl implements UsuarioDAO {
             throw new PersistenciaException("Error eliminando usuario", e);
         }
     }
-
 }
