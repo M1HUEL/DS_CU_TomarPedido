@@ -7,7 +7,6 @@ import org.bson.Document;
 
 public class UsuarioMapper {
 
-    // Convierte un Document de Mongo a Usuario
     public static Usuario fromDocument(Document doc) {
         if (doc == null) {
             return null;
@@ -22,26 +21,38 @@ public class UsuarioMapper {
         usuario.setNombre(doc.getString("nombre"));
         usuario.setContrasena(doc.getString("contrasena"));
 
-        String sexoStr = doc.getString("sexo");
-        if (sexoStr != null) {
-            usuario.setSexo(Sexo.valueOf(sexoStr));
+        try {
+            String sexoStr = doc.getString("sexo");
+
+            if (sexoStr != null) {
+                usuario.setSexo(Sexo.valueOf(sexoStr));
+            }
+
+        } catch (IllegalArgumentException e) {
+            System.err.println("Error mapeando Sexo: " + e.getMessage());
         }
 
-        String rolStr = doc.getString("rol");
-        if (rolStr != null) {
-            usuario.setRol(Rol.valueOf(rolStr));
+        try {
+            String rolStr = doc.getString("rol");
+
+            if (rolStr != null) {
+                usuario.setRol(Rol.valueOf(rolStr));
+            }
+
+        } catch (IllegalArgumentException e) {
+            System.err.println("Error mapeando Rol: " + e.getMessage());
         }
 
         return usuario;
     }
 
-    // Convierte un Usuario a Document para Mongo
     public static Document toDocument(Usuario usuario) {
         if (usuario == null) {
             return null;
         }
 
         Document doc = new Document();
+
         doc.append("nombre", usuario.getNombre());
         doc.append("contrasena", usuario.getContrasena());
         doc.append("sexo", usuario.getSexo() != null ? usuario.getSexo().name() : null);
