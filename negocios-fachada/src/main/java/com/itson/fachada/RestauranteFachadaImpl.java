@@ -1,34 +1,36 @@
 package com.itson.fachada;
 
 import com.itson.fachada.exception.RestauranteFachadaException;
-import com.itson.inventario.servicio.InventarioServicio;
-import com.itson.inventario.servicio.impl.InventarioServicioImpl;
+import com.itson.inventario.exception.InventarioException;
+import com.itson.inventario.service.InventarioService;
+import com.itson.inventario.service.impl.InventarioServiceImpl;
 import com.itson.negocios.usuario.exception.UsuarioException;
-import com.itson.negocios.usuario.servicio.UsuarioServicio;
-import com.itson.negocios.usuario.servicio.impl.UsuarioServicioImpl;
+import com.itson.negocios.usuario.service.UsuarioService;
+import com.itson.negocios.usuario.service.impl.UsuarioServiceImpl;
 import com.itson.pedido.exception.PedidoException;
-import com.itson.pedido.servicio.PedidoServicio;
-import com.itson.pedido.servicio.impl.PedidoServicioImpl;
+import com.itson.pedido.service.PedidoService;
+import com.itson.pedido.service.impl.PedidoServiceImpl;
+import com.itson.persistencia.dominio.Insumo;
 import com.itson.persistencia.dominio.Pedido;
 import com.itson.persistencia.dominio.Producto;
 import com.itson.persistencia.dominio.Usuario;
 import com.itson.producto.exception.ProductoException;
-import com.itson.producto.servicio.ProductoServicio;
-import com.itson.producto.servicio.impl.ProductoServicioImpl;
+import com.itson.producto.service.ProductoService;
+import com.itson.producto.service.impl.ProductoServiceImpl;
 import java.util.List;
 
 public class RestauranteFachadaImpl implements RestauranteFachada {
 
-    private final UsuarioServicio usuarioServicio;
-    private final ProductoServicio productoServicio;
-    private final PedidoServicio pedidoServicio;
-    private final InventarioServicio inventarioServicio;
+    private final UsuarioService usuarioServicio;
+    private final ProductoService productoServicio;
+    private final PedidoService pedidoServicio;
+    private final InventarioService inventarioServicio;
 
     public RestauranteFachadaImpl() {
-        this.usuarioServicio = new UsuarioServicioImpl();
-        this.productoServicio = new ProductoServicioImpl();
-        this.pedidoServicio = new PedidoServicioImpl();
-        this.inventarioServicio = new InventarioServicioImpl(); // todavía no se usa
+        this.usuarioServicio = new UsuarioServiceImpl();
+        this.productoServicio = new ProductoServiceImpl();
+        this.pedidoServicio = new PedidoServiceImpl();
+        this.inventarioServicio = new InventarioServiceImpl();
     }
 
     @Override
@@ -36,7 +38,7 @@ public class RestauranteFachadaImpl implements RestauranteFachada {
         try {
             return usuarioServicio.obtenerUsuarioPorId(id);
         } catch (UsuarioException e) {
-            throw new RestauranteFachadaException("Error obteniendo usuario por id", e);
+            throw new RestauranteFachadaException("Error obteniendo usuario", e);
         }
     }
 
@@ -81,7 +83,7 @@ public class RestauranteFachadaImpl implements RestauranteFachada {
         try {
             return productoServicio.obtenerProductoPorId(id);
         } catch (ProductoException e) {
-            throw new RestauranteFachadaException("Error obteniendo producto por id", e);
+            throw new RestauranteFachadaException("Error obteniendo producto", e);
         }
     }
 
@@ -144,7 +146,7 @@ public class RestauranteFachadaImpl implements RestauranteFachada {
         try {
             pedidoServicio.agregarPedido(pedido);
         } catch (PedidoException e) {
-            throw new RestauranteFachadaException("Error creando pedido", e);
+            throw new RestauranteFachadaException("Error al procesar el pedido: " + e.getMessage(), e);
         }
     }
 
@@ -167,7 +169,29 @@ public class RestauranteFachadaImpl implements RestauranteFachada {
     }
 
     @Override
-    public void actualizarInventario(String productoId, int cantidad) throws RestauranteFachadaException {
-        throw new RestauranteFachadaException("Funcionalidad de inventario no implementada todavía");
+    public List<Insumo> obtenerInsumos() throws RestauranteFachadaException {
+        try {
+            return inventarioServicio.obtenerTodosLosInsumos();
+        } catch (InventarioException e) {
+            throw new RestauranteFachadaException("Error al obtener inventario", e);
+        }
+    }
+
+    @Override
+    public void registrarInsumo(Insumo insumo) throws RestauranteFachadaException {
+        try {
+            inventarioServicio.registrarInsumo(insumo);
+        } catch (InventarioException e) {
+            throw new RestauranteFachadaException("Error al registrar insumo", e);
+        }
+    }
+
+    @Override
+    public void reabastecerInsumo(String insumoId, Double cantidad) throws RestauranteFachadaException {
+        try {
+            inventarioServicio.reabastecerStock(insumoId, cantidad);
+        } catch (InventarioException e) {
+            throw new RestauranteFachadaException("Error al reabastecer stock", e);
+        }
     }
 }
