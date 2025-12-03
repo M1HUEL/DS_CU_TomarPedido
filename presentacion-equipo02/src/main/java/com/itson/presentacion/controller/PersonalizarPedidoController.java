@@ -1,0 +1,25 @@
+package com.itson.presentacion.controller;
+
+import com.itson.persistencia.dominio.Complemento;
+import com.itson.persistencia.dominio.Extra;
+import com.itson.persistencia.dominio.Ingrediente;
+import com.itson.persistencia.dominio.Producto;
+import java.util.List;
+
+public interface PersonalizarPedidoController {
+
+    // --- Carga de Datos ---
+    List<Ingrediente> obtenerIngredientesDisponibles();
+
+    List<Extra> obtenerExtrasDisponibles();
+
+    List<Complemento> obtenerComplementosDisponibles();
+
+    // --- Acción Principal ---
+    /**
+     * Procesa la personalización y avanza a la confirmación.
+     */
+    void procesarPedido(Producto productoBase, List<Ingrediente> ingredientes, List<Extra> extras, List<Complemento> complementos, String comentario);
+
+    void cancelar();
+}
