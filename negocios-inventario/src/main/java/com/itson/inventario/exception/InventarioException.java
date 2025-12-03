@@ -2,6 +2,10 @@ package com.itson.inventario.exception;
 
 public class InventarioException extends Exception {
 
+    public InventarioException() {
+        super();
+    }
+
     public InventarioException(String mensaje) {
         super(mensaje);
     }
