@@ -1,34 +1,14 @@
 package com.itson.presentacion.frame;
 
 import com.itson.persistencia.dominio.Producto;
-import com.itson.presentacion.controlador.SeleccionarPedidoControlador;
-import com.itson.presentacion.controlador.impl.SeleccionarPedidoControladorImpl;
+import com.itson.presentacion.controller.SeleccionarPedidoController;
+import com.itson.presentacion.controller.impl.SeleccionarPedidoControllerImpl;
 import com.itson.presentacion.util.Colores;
 import com.itson.presentacion.util.Fuentes;
-import java.awt.BorderLayout;
-import java.awt.Color;
-import java.awt.Component;
-import java.awt.Cursor;
-import java.awt.Dimension;
-import java.awt.FlowLayout;
-import java.awt.Font;
-import java.awt.GridBagLayout;
-import java.awt.GridLayout;
-import java.awt.Image;
+import java.awt.*;
 import java.net.URL;
 import java.util.List;
-import javax.swing.BorderFactory;
-import javax.swing.Box;
-import javax.swing.BoxLayout;
-import javax.swing.ImageIcon;
-import javax.swing.JButton;
-import javax.swing.JFrame;
-import javax.swing.JLabel;
-import javax.swing.JPanel;
-import javax.swing.JScrollPane;
-import javax.swing.ScrollPaneConstants;
-import javax.swing.SwingConstants;
-import javax.swing.SwingUtilities;
+import javax.swing.*;
 import javax.swing.border.Border;
 
 public class SeleccionarPedidoFrame extends JFrame {
@@ -37,14 +17,20 @@ public class SeleccionarPedidoFrame extends JFrame {
     private final Color CREMA = Colores.CREMA;
     private final Color BLANCO = Colores.BLANCO;
 
-    private final SeleccionarPedidoControlador controlador;
+    private SeleccionarPedidoController controlador;
     private JPanel panelTarjetas;
 
     public SeleccionarPedidoFrame() {
         super("Seleccionar Pedido");
 
-        this.controlador = new SeleccionarPedidoControladorImpl();
+        // Inicializar el controlador pasándole esta vista
+        this.controlador = new SeleccionarPedidoControllerImpl(this);
 
+        inicializarComponentes();
+        cargarContenidoPanel();
+    }
+
+    private void inicializarComponentes() {
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setSize(1624, 864);
         setLocationRelativeTo(null);
@@ -76,9 +62,6 @@ public class SeleccionarPedidoFrame extends JFrame {
         panelTarjetas.setBackground(CREMA);
         panelTarjetas.setBorder(BorderFactory.createEmptyBorder(40, 100, 60, 100));
 
-        // Initial Load
-        cargarContenidoPanel();
-
         JScrollPane scrollTarjetas = new JScrollPane(panelTarjetas);
         scrollTarjetas.setBorder(null);
         scrollTarjetas.getVerticalScrollBar().setUnitIncrement(20);
@@ -97,14 +80,13 @@ public class SeleccionarPedidoFrame extends JFrame {
     private void cargarContenidoPanel() {
         panelTarjetas.removeAll();
 
+        // Llamada al controlador para obtener datos
         List<Producto> productos = controlador.obtenerProductos();
 
         if (productos.isEmpty()) {
-            // Use GridBagLayout to center the single "Empty" card
             panelTarjetas.setLayout(new GridBagLayout());
             panelTarjetas.add(crearTarjetaVacia());
         } else {
-            // Use GridLayout for the list of products
             panelTarjetas.setLayout(new GridLayout(0, 3, 30, 30));
             for (Producto producto : productos) {
                 panelTarjetas.add(crearTarjeta(producto));
@@ -115,56 +97,47 @@ public class SeleccionarPedidoFrame extends JFrame {
         panelTarjetas.repaint();
     }
 
-    // UPDATED METHOD
     private JPanel crearTarjetaVacia() {
         JPanel tarjeta = new JPanel();
         tarjeta.setLayout(new BoxLayout(tarjeta, BoxLayout.Y_AXIS));
         tarjeta.setBackground(BLANCO);
-        tarjeta.setPreferredSize(new Dimension(450, 350)); // Slightly larger to fit buttons
+        tarjeta.setPreferredSize(new Dimension(450, 350));
 
-        // Border styling
         tarjeta.setBorder(BorderFactory.createCompoundBorder(
                 BorderFactory.createLineBorder(new Color(220, 220, 220), 1),
                 BorderFactory.createEmptyBorder(40, 40, 40, 40)
         ));
 
-        // Icon 
         JLabel lblIcono = new JLabel("☹");
         lblIcono.setFont(new Font("SansSerif", Font.PLAIN, 60));
         lblIcono.setForeground(Color.LIGHT_GRAY);
         lblIcono.setAlignmentX(Component.CENTER_ALIGNMENT);
 
-        // Title
         JLabel lblTitulo = new JLabel("We are sorry!");
         lblTitulo.setFont(Fuentes.getPoppinsBold(24f));
         lblTitulo.setForeground(NARANJA);
         lblTitulo.setAlignmentX(Component.CENTER_ALIGNMENT);
 
-        // Description (Updated Text)
         JLabel lblDesc = new JLabel("<html><div style='text-align: center;'>Sorry, we couldn't find any products<br>available at this moment.</div></html>");
         lblDesc.setFont(Fuentes.getPoppinsRegular(14f));
         lblDesc.setForeground(Color.GRAY);
         lblDesc.setAlignmentX(Component.CENTER_ALIGNMENT);
         lblDesc.setHorizontalAlignment(SwingConstants.CENTER);
 
-        // --- Buttons Panel (To align them horizontally) ---
         JPanel btnPanel = new JPanel(new FlowLayout(FlowLayout.CENTER, 15, 0));
         btnPanel.setBackground(BLANCO);
-        btnPanel.setMaximumSize(new Dimension(400, 50)); // Prevent it from stretching too much
+        btnPanel.setMaximumSize(new Dimension(400, 50));
 
-        // Cancel / Go Back Button
         JButton btnCancelar = new JButton("Cancel / Go Back");
         btnCancelar.setBackground(Color.LIGHT_GRAY);
         btnCancelar.setForeground(Color.BLACK);
         btnCancelar.setFont(Fuentes.getPoppinsBold(13f));
         btnCancelar.setFocusPainted(false);
         btnCancelar.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
-        btnCancelar.addActionListener(e -> {
-            // Close the frame or navigate back
-            this.dispose();
-        });
 
-        // Retry Button
+        // DELEGACIÓN AL CONTROLADOR
+        btnCancelar.addActionListener(e -> controlador.cancelarSeleccion());
+
         JButton btnRecargar = new JButton("Retry");
         btnRecargar.setBackground(NARANJA);
         btnRecargar.setForeground(BLANCO);
@@ -176,14 +149,13 @@ public class SeleccionarPedidoFrame extends JFrame {
         btnPanel.add(btnCancelar);
         btnPanel.add(btnRecargar);
 
-        // Add components to card
         tarjeta.add(lblIcono);
         tarjeta.add(Box.createVerticalStrut(20));
         tarjeta.add(lblTitulo);
         tarjeta.add(Box.createVerticalStrut(10));
         tarjeta.add(lblDesc);
         tarjeta.add(Box.createVerticalStrut(30));
-        tarjeta.add(btnPanel); // Add the horizontal button panel
+        tarjeta.add(btnPanel);
 
         return tarjeta;
     }
@@ -251,14 +223,9 @@ public class SeleccionarPedidoFrame extends JFrame {
         btnSeleccionar.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
         btnSeleccionar.setBorder(BorderFactory.createEmptyBorder(10, 0, 10, 0));
 
+        // DELEGACIÓN AL CONTROLADOR
         btnSeleccionar.addActionListener(e -> {
-            // 1. Close current window
-            this.dispose();
-
-            // 2. Open Customization Window passing the selected Product
-            // Important: Ideally pass a CLONE of the product if you don't want 
-            // changes to affect the main menu list permanently.
-            new PersonalizarPedidoFrame(producto).setVisible(true);
+            controlador.seleccionarProducto(producto);
         });
 
         tarjeta.add(lblImagen, BorderLayout.NORTH);
