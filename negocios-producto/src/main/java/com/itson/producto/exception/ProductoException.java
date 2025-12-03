@@ -2,6 +2,10 @@ package com.itson.producto.exception;
 
 public class ProductoException extends Exception {
 
+    public ProductoException() {
+        super();
+    }
+
     public ProductoException(String mensaje) {
         super(mensaje);
     }
