@@ -58,6 +58,12 @@ public class PedidoDAOImpl implements PedidoDAO {
         try {
             Document doc = PedidoMapper.toDocument(pedido);
             coleccion.insertOne(doc);
+
+            ObjectId id = doc.getObjectId("_id");
+            if (id != null) {
+                pedido.setId(id.toHexString());
+            }
+
         } catch (Exception e) {
             throw new PersistenciaException("Error agregando pedido", e);
         }
