@@ -1,6 +1,7 @@
 package com.itson.fachada;
 
 import com.itson.fachada.exception.RestauranteFachadaException;
+import com.itson.persistencia.dominio.Insumo;
 import com.itson.persistencia.dominio.Pedido;
 import com.itson.persistencia.dominio.Producto;
 import com.itson.persistencia.dominio.Usuario;
@@ -8,7 +9,6 @@ import java.util.List;
 
 public interface RestauranteFachada {
 
-    // Usuario
     Usuario obtenerUsuarioPorId(String id) throws RestauranteFachadaException;
 
     List<Usuario> obtenerUsuarios() throws RestauranteFachadaException;
@@ -19,7 +19,6 @@ public interface RestauranteFachada {
 
     void eliminarUsuario(String id) throws RestauranteFachadaException;
 
-    // Producto
     Producto obtenerProductoPorId(String id) throws RestauranteFachadaException;
 
     List<Producto> obtenerProductos() throws RestauranteFachadaException;
@@ -30,7 +29,6 @@ public interface RestauranteFachada {
 
     void eliminarProducto(String id) throws RestauranteFachadaException;
 
-    // Pedido
     Pedido obtenerPedidoPorId(String id) throws RestauranteFachadaException;
 
     List<Pedido> obtenerPedidos() throws RestauranteFachadaException;
@@ -41,7 +39,9 @@ public interface RestauranteFachada {
 
     void eliminarPedido(String id) throws RestauranteFachadaException;
 
-    // Inventario (ejemplo)
-    void actualizarInventario(String productoId, int cantidad) throws RestauranteFachadaException;
+    List<Insumo> obtenerInsumos() throws RestauranteFachadaException;
 
+    void registrarInsumo(Insumo insumo) throws RestauranteFachadaException;
+
+    void reabastecerInsumo(String insumoId, Double cantidad) throws RestauranteFachadaException;
 }
