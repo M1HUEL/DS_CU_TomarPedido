@@ -1,5 +1,7 @@
 package com.itson.presentacion.frame;
 
+import com.itson.presentacion.controller.InicioController;
+import com.itson.presentacion.controller.impl.InicioControllerImpl;
 import com.itson.presentacion.util.Colores;
 import com.itson.presentacion.util.Fuentes;
 import java.awt.BorderLayout;
@@ -19,7 +21,6 @@ import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
-import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.SwingConstants;
 import javax.swing.SwingUtilities;
@@ -28,13 +29,35 @@ import javax.swing.border.Border;
 public class InicioFrame extends JFrame {
 
     private final Color NARANJA = Colores.NARANJA;
-    private final Color NARANJA_OSCURO = new Color(230, 81, 0);
-    private final Color CREMA = Colores.CREMA;
     private final Color BLANCO = Colores.BLANCO;
+    private final Color CREMA = Colores.CREMA;
+    private final Color NARANJA_OSCURO = new Color(230, 81, 0);
     private final Color GRIS = Colores.GRIS;
+
+    // Los botones deben ser atributos de clase para asignarles listeners después
+    private JButton btnCrearPedido;
+    private JButton btnVerPedidos;
+    private JButton btnDashboard;
+    private JButton btnConfiguracion;
+    private JButton btnCerrarSesion;
+
+    private InicioController controller;
 
     public InicioFrame() {
         super("Inicio");
+        inicializarComponentes();
+    }
+
+    /**
+     * Este método es CLAVE. Se llama desde fuera para conectar la lógica una
+     * vez que el Frame y el Controller ya existen.
+     */
+    public void setController(InicioController controller) {
+        this.controller = controller;
+        asignarEventos();
+    }
+
+    private void inicializarComponentes() {
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setSize(1624, 864);
         setLocationRelativeTo(null);
@@ -67,43 +90,23 @@ public class InicioFrame extends JFrame {
         headerContenido.add(titulosHeader, BorderLayout.CENTER);
         header.add(headerContenido, BorderLayout.CENTER);
 
-        // --- PANEL DE BOTONES (TARJETA BLANCA) ---
+        // --- PANEL DE BOTONES ---
         JPanel panelBlanco = new JPanel();
-        // GridLayout con espacios más grandes para que los botones "respiren"
         panelBlanco.setLayout(new GridLayout(5, 1, 0, 15));
         panelBlanco.setBackground(BLANCO);
 
-        // CAMBIO: Margen interno del panel blanco más grande (padding) para centrar contenido
         Border bordePanelBlanco = BorderFactory.createCompoundBorder(
                 BorderFactory.createLineBorder(GRIS, 1),
-                BorderFactory.createEmptyBorder(30, 150, 30, 150) // Padding lateral aumentado
+                BorderFactory.createEmptyBorder(30, 150, 30, 150)
         );
         panelBlanco.setBorder(bordePanelBlanco);
 
-        // Botones
-        JButton btnCrearPedido = crearBoton("Crear Pedido", "/images/add.png", e -> {
-            new SeleccionarPedidoFrame().setVisible(true);
-            dispose();
-        });
-
-        JButton btnVerPedidos = crearBoton("Ver Pedidos", "/images/list.png", e
-                -> JOptionPane.showMessageDialog(this, "Función Ver Pedidos en construcción")
-        );
-
-        JButton btnDashboard = crearBoton("Dashboard", "/images/chart.png", e
-                -> JOptionPane.showMessageDialog(this, "Función Dashboard en construcción")
-        );
-
-        JButton btnConfiguracion = crearBoton("Configuración", "/images/settings.png", e
-                -> JOptionPane.showMessageDialog(this, "Función Configuración en construcción")
-        );
-
-        JButton btnCerrarSesion = crearBoton("Cerrar Sesión", "/images/logout.png", e -> {
-            int confirm = JOptionPane.showConfirmDialog(this, "¿Seguro que deseas salir?", "Cerrar Sesión", JOptionPane.YES_NO_OPTION);
-            if (confirm == JOptionPane.YES_OPTION) {
-                System.exit(0);
-            }
-        });
+        // Instanciamos los botones (sin listeners todavía)
+        btnCrearPedido = crearBotonVisual("Crear Pedido", "/images/add.png");
+        btnVerPedidos = crearBotonVisual("Ver Pedidos", "/images/list.png");
+        btnDashboard = crearBotonVisual("Dashboard", "/images/chart.png");
+        btnConfiguracion = crearBotonVisual("Configuración", "/images/settings.png");
+        btnCerrarSesion = crearBotonVisual("Cerrar Sesión", "/images/logout.png");
 
         panelBlanco.add(btnCrearPedido);
         panelBlanco.add(btnVerPedidos);
@@ -114,11 +117,7 @@ public class InicioFrame extends JFrame {
         // --- CONTENEDOR CENTRAL ---
         JPanel contenedorCentral = new JPanel(new BorderLayout());
         contenedorCentral.setBackground(CREMA);
-
-        // CAMBIO: Reducimos el margen lateral externo (de 420 a 350)
-        // Esto hace que el panel blanco se vea más ancho visualmente en la pantalla
         contenedorCentral.setBorder(BorderFactory.createEmptyBorder(50, 350, 80, 350));
-
         contenedorCentral.add(panelBlanco, BorderLayout.CENTER);
 
         // --- ARMADO FINAL ---
@@ -129,28 +128,42 @@ public class InicioFrame extends JFrame {
         add(panelPrincipal);
     }
 
-    private JButton crearBoton(String texto, String iconPath, ActionListener listener) {
+    /**
+     * Aquí conectamos los botones con los métodos del controlador.
+     */
+    private void asignarEventos() {
+        // Limpiamos listeners anteriores si hubiera
+        for (ActionListener al : btnCrearPedido.getActionListeners()) {
+            btnCrearPedido.removeActionListener(al);
+        }
+        // ... (repetir para otros si se reasigna el controlador dinámicamente)
+
+        btnCrearPedido.addActionListener(e -> controller.crearPedido());
+        btnVerPedidos.addActionListener(e -> controller.verPedidos());
+        btnDashboard.addActionListener(e -> controller.mostrarDashboard());
+        btnConfiguracion.addActionListener(e -> controller.configurar());
+        btnCerrarSesion.addActionListener(e -> controller.cerrarSesion());
+    }
+
+    /**
+     * Crea solo la parte visual del botón.
+     */
+    private JButton crearBotonVisual(String texto, String iconPath) {
         JButton btn = new JButton(texto);
         btn.setBackground(NARANJA);
         btn.setForeground(BLANCO);
-
-        // CAMBIO: Fuente reducida de 16f a 14f para que se vea más fino
         btn.setFont(Fuentes.getPoppinsSemiBold(14f));
-
         btn.setFocusPainted(false);
         btn.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
 
-        ImageIcon icon = cargarIcono(iconPath, 20, 20); // Icono ligeramente más pequeño
+        ImageIcon icon = cargarIcono(iconPath, 20, 20);
         if (icon != null) {
             btn.setIcon(icon);
             btn.setIconTextGap(10);
         }
 
-        // CAMBIO: Reducimos el padding interno del botón
-        // Antes era (10, 0, 10, 0), ahora es (8, 0, 8, 0) para hacerlo menos alto
         btn.setBorder(BorderFactory.createEmptyBorder(8, 0, 8, 0));
 
-        // Efecto Hover
         btn.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseEntered(MouseEvent e) {
@@ -163,7 +176,6 @@ public class InicioFrame extends JFrame {
             }
         });
 
-        btn.addActionListener(listener);
         return btn;
     }
 
@@ -181,7 +193,20 @@ public class InicioFrame extends JFrame {
         }
     }
 
+    // --- MAIN DE PRUEBA O CONFIGURACIÓN ---
     public static void main(String[] args) {
-        SwingUtilities.invokeLater(() -> new InicioFrame().setVisible(true));
+        SwingUtilities.invokeLater(() -> {
+            // 1. Crear la Vista (Frame)
+            InicioFrame frame = new InicioFrame();
+
+            // 2. Crear el Controlador (inyectándole la Vista)
+            InicioController controller = new InicioControllerImpl(frame);
+
+            // 3. Conectar el Controlador a la Vista
+            frame.setController(controller);
+
+            // 4. Mostrar
+            frame.setVisible(true);
+        });
     }
 }
