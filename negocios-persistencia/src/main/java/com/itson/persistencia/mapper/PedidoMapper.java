@@ -8,7 +8,6 @@ import org.bson.Document;
 
 public class PedidoMapper {
 
-    // Convierte un Document de Mongo a Pedido
     public static Pedido fromDocument(Document doc) {
         if (doc == null) {
             return null;
@@ -22,39 +21,47 @@ public class PedidoMapper {
 
         pedido.setNombre(doc.getString("nombre"));
         pedido.setComentario(doc.getString("comentario"));
-        pedido.setPrecio(doc.getDouble("precio") != null ? doc.getDouble("precio") : 0.0);
+        pedido.setPrecio(
+                doc.getDouble("precio") != null
+                ? doc.getDouble("precio")
+                : 0.0
+        );
 
-        // Productos
         List<Document> productosDocs = (List<Document>) doc.get("productos");
+
         if (productosDocs != null) {
             List<Producto> productos = new ArrayList<>();
+
             for (Document prodDoc : productosDocs) {
                 productos.add(ProductoMapper.fromDocument(prodDoc));
             }
+
             pedido.setProductos(productos);
         }
 
         return pedido;
     }
 
-    // Convierte un Pedido a Document para Mongo
     public static Document toDocument(Pedido pedido) {
         if (pedido == null) {
             return null;
         }
 
         Document doc = new Document();
+
         doc.append("nombre", pedido.getNombre());
         doc.append("comentario", pedido.getComentario());
         doc.append("precio", pedido.getPrecio());
 
-        // Productos
         List<Producto> productos = pedido.getProductos();
+
         if (productos != null) {
             List<Document> productosDocs = new ArrayList<>();
-            for (Producto producto : productos) {
-                productosDocs.add(ProductoMapper.toDocument(producto));
+
+            for (Producto prod : productos) {
+                productosDocs.add(ProductoMapper.toDocument(prod));
             }
+
             doc.append("productos", productosDocs);
         }
 
