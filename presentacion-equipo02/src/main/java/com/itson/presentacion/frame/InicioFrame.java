@@ -1,7 +1,10 @@
 package com.itson.presentacion.frame;
 
+import com.itson.persistencia.dominio.Rol;
+import com.itson.persistencia.dominio.Usuario;
 import com.itson.presentacion.controller.InicioController;
 import com.itson.presentacion.controller.impl.InicioControllerImpl;
+import com.itson.util.sesion.Sesion;
 import com.itson.presentacion.util.Colores;
 import com.itson.presentacion.util.Fuentes;
 import java.awt.BorderLayout;
@@ -9,16 +12,17 @@ import java.awt.Color;
 import java.awt.Cursor;
 import java.awt.Dimension;
 import java.awt.GridLayout;
-import java.awt.event.ActionListener;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 import javax.swing.BorderFactory;
 import javax.swing.Box;
 import javax.swing.BoxLayout;
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.SwingConstants;
-import javax.swing.SwingUtilities;
 import javax.swing.border.Border;
 
 public class InicioFrame extends JFrame {
@@ -28,16 +32,21 @@ public class InicioFrame extends JFrame {
     private final Color CREMA = Colores.CREMA;
     private final Color GRIS = Colores.GRIS;
 
-    private JButton btnCrearPedido;
-    private JButton btnVerPedidos;
-    private JButton btnDashboard;
-    private JButton btnConfiguracion;
-    private JButton btnCerrarSesion;
-
-    private final InicioController controlador = new InicioControllerImpl(this);
+    private final Usuario usuarioLogueado;
+    private final InicioController controlador;
 
     public InicioFrame() {
-        super("Inicio");
+        this.usuarioLogueado = Sesion.getInstancia().getUsuarioLogueado();
+
+        if (this.usuarioLogueado == null) {
+            JOptionPane.showMessageDialog(null, "No hay sesión activa. Por favor inicie sesión.");
+            dispose();
+            throw new IllegalStateException("No user logged in");
+        }
+
+        setTitle("Inicio - Bienvenido " + usuarioLogueado.getNombre());
+        this.controlador = new InicioControllerImpl(this);
+
         inicializarComponentes();
     }
 
@@ -73,7 +82,7 @@ public class InicioFrame extends JFrame {
         headerContenido.add(titulosHeader, BorderLayout.CENTER);
         header.add(headerContenido, BorderLayout.CENTER);
 
-        JPanel panelBlanco = new JPanel(new GridLayout(5, 1, 0, 15));
+        JPanel panelBlanco = new JPanel(new GridLayout(0, 1, 0, 15));
         panelBlanco.setBackground(BLANCO);
 
         Border bordePanelBlanco = BorderFactory.createCompoundBorder(
@@ -82,21 +91,51 @@ public class InicioFrame extends JFrame {
         );
         panelBlanco.setBorder(bordePanelBlanco);
 
-        btnCrearPedido = crearBoton("Crear Pedido");
-        btnVerPedidos = crearBoton("Ver Pedidos");
-        btnDashboard = crearBoton("Dashboard");
-        btnConfiguracion = crearBoton("Configuración");
-        btnCerrarSesion = crearBoton("Cerrar Sesión");
+        Rol rol = usuarioLogueado.getRol();
 
-        panelBlanco.add(btnCrearPedido);
-        panelBlanco.add(btnVerPedidos);
-        panelBlanco.add(btnDashboard);
-        panelBlanco.add(btnConfiguracion);
+        if (rol == Rol.CAJERO || rol == Rol.ADMINISTRADOR) {
+            JButton btnCrearPedido = crearBoton("Crear Pedido");
+            btnCrearPedido.addActionListener(e -> controlador.crearPedido());
+            panelBlanco.add(btnCrearPedido);
+
+            JButton btnVerPedidos = crearBoton("Ver Pedidos");
+            btnVerPedidos.addActionListener(e -> controlador.verPedidos());
+            panelBlanco.add(btnVerPedidos);
+        }
+
+        if (rol == Rol.COCINERO || rol == Rol.ADMINISTRADOR) {
+            JButton btnCocina = crearBoton("Ver Cocina");
+            btnCocina.addActionListener(e -> controlador.verCocina());
+            panelBlanco.add(btnCocina);
+        }
+
+        if (rol != Rol.COCINERO) {
+            JButton btnDashboard = crearBoton("Dashboard");
+            btnDashboard.addActionListener(e -> controlador.mostrarDashboard());
+            panelBlanco.add(btnDashboard);
+        }
+
+        if (rol == Rol.ADMINISTRADOR) {
+            JButton btnConfiguracion = crearBoton("Configuración");
+            btnConfiguracion.addActionListener(e -> controlador.configurar());
+            panelBlanco.add(btnConfiguracion);
+        }
+
+        JButton btnCerrarSesion = crearBoton("Cerrar Sesión");
+        btnCerrarSesion.addActionListener(e -> controlador.cerrarSesion());
         panelBlanco.add(btnCerrarSesion);
 
         JPanel contenedorCentral = new JPanel(new BorderLayout());
         contenedorCentral.setBackground(CREMA);
-        contenedorCentral.setBorder(BorderFactory.createEmptyBorder(40, 200, 60, 200));
+
+        int margenLateral = 200;
+        int margenVertical = 40;
+
+        if (rol == Rol.COCINERO) {
+            margenVertical = 150;
+        }
+
+        contenedorCentral.setBorder(BorderFactory.createEmptyBorder(margenVertical, margenLateral, margenVertical, margenLateral));
         contenedorCentral.add(panelBlanco, BorderLayout.CENTER);
 
         JPanel panelPrincipal = new JPanel(new BorderLayout());
@@ -104,16 +143,6 @@ public class InicioFrame extends JFrame {
         panelPrincipal.add(contenedorCentral, BorderLayout.CENTER);
 
         add(panelPrincipal);
-
-        for (ActionListener al : btnCrearPedido.getActionListeners()) {
-            btnCrearPedido.removeActionListener(al);
-        }
-
-        btnCrearPedido.addActionListener(e -> controlador.crearPedido());
-        btnVerPedidos.addActionListener(e -> controlador.verPedidos());
-        btnDashboard.addActionListener(e -> controlador.mostrarDashboard());
-        btnConfiguracion.addActionListener(e -> controlador.configurar());
-        btnCerrarSesion.addActionListener(e -> controlador.cerrarSesion());
     }
 
     private JButton crearBoton(String texto) {
@@ -124,15 +153,18 @@ public class InicioFrame extends JFrame {
         btn.setFocusPainted(false);
         btn.setBorder(BorderFactory.createEmptyBorder(10, 0, 10, 0));
         btn.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
-        btn.setPreferredSize(new Dimension(200, 45));
 
-        return btn;
-    }
+        btn.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseEntered(MouseEvent e) {
+                btn.setBackground(NARANJA.darker());
+            }
 
-    public static void main(String[] args) {
-        SwingUtilities.invokeLater(() -> {
-            InicioFrame frame = new InicioFrame();
-            frame.setVisible(true);
+            @Override
+            public void mouseExited(MouseEvent e) {
+                btn.setBackground(NARANJA);
+            }
         });
+        return btn;
     }
 }

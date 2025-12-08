@@ -6,7 +6,7 @@
         <artifactId>DS_CU_TomarPedido</artifactId>
         <version>1.0-SNAPSHOT</version>
     </parent>
-    <artifactId>presentacion-equipo02</artifactId>
+    <artifactId>util</artifactId>
     <packaging>jar</packaging>
     <dependencies>
         <dependency>
@@ -14,19 +14,9 @@
             <artifactId>negocios-persistencia</artifactId>
             <version>${project.version}</version>
         </dependency>
-        <dependency>
-            <groupId>${project.groupId}</groupId>
-            <artifactId>negocios-fachada</artifactId>
-            <version>${project.version}</version>
-        </dependency>
-        <dependency>
-            <groupId>${project.groupId}</groupId>
-            <artifactId>util</artifactId>
-            <version>${project.version}</version>
-        </dependency>
     </dependencies>
     <properties>
         <maven.compiler.release>21</maven.compiler.release>
-        <exec.mainClass>com.itson.presentacion.PresentacionEquipo02</exec.mainClass>
+        <exec.mainClass>com.itson.util.Util</exec.mainClass>
     </properties>
 </project>

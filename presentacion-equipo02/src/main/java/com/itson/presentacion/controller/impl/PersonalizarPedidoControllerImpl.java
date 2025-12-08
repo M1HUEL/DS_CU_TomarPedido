@@ -7,9 +7,11 @@ import com.itson.persistencia.dominio.*;
 import com.itson.presentacion.controller.PersonalizarPedidoController;
 import com.itson.presentacion.frame.ConfirmacionPedidoFrame;
 import com.itson.presentacion.frame.SeleccionarPedidoFrame;
+import com.itson.util.sesion.Sesion;
 import java.util.ArrayList;
 import java.util.List;
 import javax.swing.JFrame;
+import javax.swing.JOptionPane;
 import javax.swing.SwingUtilities;
 
 public class PersonalizarPedidoControllerImpl implements PersonalizarPedidoController {
@@ -78,6 +80,18 @@ public class PersonalizarPedidoControllerImpl implements PersonalizarPedidoContr
 
     @Override
     public void procesarPedido(Producto productoBase, List<Ingrediente> ingredientes, List<Extra> extras, List<Complemento> complementos, String comentario) {
+        Usuario usuario = Sesion.getInstancia().getUsuarioLogueado();
+
+        if (usuario == null) {
+            JOptionPane.showMessageDialog(frame, "Error de sesión: Usuario no identificado.", "Error", JOptionPane.ERROR_MESSAGE);
+            return;
+        }
+
+        if (usuario.getRol() != Rol.CAJERO && usuario.getRol() != Rol.ADMINISTRADOR) {
+            JOptionPane.showMessageDialog(frame, "No tienes permisos para procesar pedidos.", "Acceso Denegado", JOptionPane.WARNING_MESSAGE);
+            return;
+        }
+
         Producto productoFinal = new Producto();
         productoFinal.setNombre(productoBase.getNombre() + " (Personalizado)");
         productoFinal.setIngredientes(ingredientes);
@@ -97,6 +111,7 @@ public class PersonalizarPedidoControllerImpl implements PersonalizarPedidoContr
         pedido.setNombre("Orden de " + productoBase.getNombre());
         pedido.setComentario(comentario);
         pedido.setPrecio(total);
+        pedido.setEstado(EstadoPedido.PENDIENTE);
 
         List<Producto> listaProds = new ArrayList<>();
         listaProds.add(productoFinal);

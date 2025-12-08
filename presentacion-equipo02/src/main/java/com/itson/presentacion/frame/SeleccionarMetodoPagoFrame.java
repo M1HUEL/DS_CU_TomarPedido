@@ -1,8 +1,11 @@
 package com.itson.presentacion.frame;
 
 import com.itson.persistencia.dominio.Pedido;
+import com.itson.persistencia.dominio.Rol;
+import com.itson.persistencia.dominio.Usuario;
 import com.itson.presentacion.controller.SeleccionarMetodoPagoController;
 import com.itson.presentacion.controller.impl.SeleccionarMetodoPagoControllerImpl;
+import com.itson.util.sesion.Sesion;
 import com.itson.presentacion.util.Colores;
 import com.itson.presentacion.util.Fuentes;
 import java.awt.BorderLayout;
@@ -17,6 +20,7 @@ import javax.swing.BorderFactory;
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.SwingConstants;
 import javax.swing.border.Border;
@@ -34,6 +38,24 @@ public class SeleccionarMetodoPagoFrame extends JFrame {
 
     public SeleccionarMetodoPagoFrame(Pedido pedido) {
         this.pedido = pedido;
+
+        Usuario usuario = Sesion.getInstancia().getUsuarioLogueado();
+
+        if (usuario == null) {
+            JOptionPane.showMessageDialog(null, "Acceso Denegado: No hay sesión activa.", "Seguridad", JOptionPane.ERROR_MESSAGE);
+            dispose();
+            return;
+        }
+
+        Rol rol = usuario.getRol();
+        if (rol != Rol.CAJERO && rol != Rol.ADMINISTRADOR) {
+            JOptionPane.showMessageDialog(null,
+                    "Acceso Denegado: El rol " + rol + " no tiene permiso para procesar pagos.",
+                    "Permisos Insuficientes", JOptionPane.WARNING_MESSAGE);
+            dispose();
+            new InicioFrame().setVisible(true);
+            return;
+        }
 
         setTitle("Seleccionar Método de Pago");
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -89,6 +111,8 @@ public class SeleccionarMetodoPagoFrame extends JFrame {
         panelPrincipal.add(contenedorCentral, BorderLayout.CENTER);
 
         add(panelPrincipal);
+
+        setVisible(true);
     }
 
     private void procesar(String metodo) {

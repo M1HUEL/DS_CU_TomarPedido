@@ -1,8 +1,11 @@
 package com.itson.presentacion.frame;
 
 import com.itson.persistencia.dominio.Producto;
+import com.itson.persistencia.dominio.Rol;
+import com.itson.persistencia.dominio.Usuario;
 import com.itson.presentacion.controller.SeleccionarPedidoController;
 import com.itson.presentacion.controller.impl.SeleccionarPedidoControllerImpl;
+import com.itson.util.sesion.Sesion;
 import com.itson.presentacion.util.Colores;
 import com.itson.presentacion.util.Fuentes;
 import java.awt.*;
@@ -22,6 +25,25 @@ public class SeleccionarPedidoFrame extends JFrame {
 
     public SeleccionarPedidoFrame() {
         super("Seleccionar Pedido");
+
+        Usuario usuario = Sesion.getInstancia().getUsuarioLogueado();
+
+        if (usuario == null) {
+            JOptionPane.showMessageDialog(null, "Acceso Denegado: No hay sesión activa.", "Seguridad", JOptionPane.ERROR_MESSAGE);
+            dispose();
+            return;
+        }
+
+        Rol rol = usuario.getRol();
+        if (rol != Rol.CAJERO && rol != Rol.ADMINISTRADOR) {
+            JOptionPane.showMessageDialog(null,
+                    "Acceso Denegado: El rol " + rol + " no tiene permiso para iniciar ventas.",
+                    "Permisos Insuficientes", JOptionPane.WARNING_MESSAGE);
+            dispose();
+            new InicioFrame().setVisible(true);
+            return;
+        }
+
         inicializarComponentes();
         cargarContenidoPanel();
     }
@@ -213,6 +235,19 @@ public class SeleccionarPedidoFrame extends JFrame {
         btnSeleccionar.setFocusPainted(false);
         btnSeleccionar.setBorder(BorderFactory.createEmptyBorder(10, 0, 10, 0));
         btnSeleccionar.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
+
+        btnSeleccionar.addMouseListener(new java.awt.event.MouseAdapter() {
+            @Override
+            public void mouseEntered(java.awt.event.MouseEvent evt) {
+                btnSeleccionar.setBackground(new Color(230, 81, 0));
+            }
+
+            @Override
+            public void mouseExited(java.awt.event.MouseEvent evt) {
+                btnSeleccionar.setBackground(NARANJA);
+            }
+        });
+
         btnSeleccionar.addActionListener(e -> controlador.seleccionarProducto(producto));
 
         tarjeta.add(lblImagen, BorderLayout.NORTH);

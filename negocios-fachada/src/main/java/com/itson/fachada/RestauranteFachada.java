@@ -1,6 +1,7 @@
 package com.itson.fachada;
 
 import com.itson.fachada.exception.RestauranteFachadaException;
+import com.itson.persistencia.dominio.EstadoPedido;
 import com.itson.persistencia.dominio.Insumo;
 import com.itson.persistencia.dominio.Pago;
 import com.itson.persistencia.dominio.Pedido;
@@ -51,4 +52,8 @@ public interface RestauranteFachada {
     void guardarPago(Pago pago) throws RestauranteFachadaException;
 
     void realizarVentaCompleta(Pedido pedido, Pago pago) throws RestauranteFachadaException;
+
+    void actualizarEstadoPedido(String id, EstadoPedido nuevoEstado) throws RestauranteFachadaException;
+
+    List<Pedido> obtenerPedidosCocina() throws RestauranteFachadaException;
 }

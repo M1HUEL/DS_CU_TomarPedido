@@ -8,6 +8,8 @@ public interface PedidoDAO {
 
     List<Pedido> consultarTodos() throws PersistenciaException;
 
+    List<Pedido> consultarTodosPorEstado(List<String> estados) throws PersistenciaException;
+
     Pedido consultarPorId(String productoId) throws PersistenciaException;
 
     Pedido consultarPorNombre(String nombre) throws PersistenciaException;

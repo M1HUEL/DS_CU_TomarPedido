@@ -110,11 +110,9 @@ public class IniciarSesionFrame extends JFrame {
         panelBoton.setBackground(BLANCO);
 
         JButton btnIniciarSesion = crearBoton("Iniciar Sesión");
-
         btnIniciarSesion.addActionListener(e -> {
             String nombre = txtNombre.getText();
             String contrasena = new String(txtContrasena.getPassword());
-
             controlador.iniciarSesion(nombre, contrasena);
         });
         panelBoton.add(btnIniciarSesion);
@@ -141,7 +139,6 @@ public class IniciarSesionFrame extends JFrame {
         btn.setBorder(BorderFactory.createEmptyBorder(10, 0, 10, 0));
         btn.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
         btn.setPreferredSize(new Dimension(240, 45));
-
         return btn;
     }
 

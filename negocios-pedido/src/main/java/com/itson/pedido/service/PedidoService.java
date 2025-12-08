@@ -8,7 +8,10 @@ public interface PedidoService {
 
     List<Pedido> obtenerPedidos() throws PedidoException;
 
-    Pedido obtenerPedidoPorId(String usuarioId) throws PedidoException;
+    // NUEVO: Método para cocina
+    List<Pedido> obtenerPedidosPorEstado(List<String> estados) throws PedidoException;
+
+    Pedido obtenerPedidoPorId(String id) throws PedidoException;
 
     Pedido obtenerPedidoPorNombre(String nombre) throws PedidoException;
 

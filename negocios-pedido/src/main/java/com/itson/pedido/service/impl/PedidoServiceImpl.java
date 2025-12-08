@@ -1,15 +1,15 @@
 package com.itson.pedido.service.impl;
 
 import com.itson.inventario.exception.InventarioException;
+import com.itson.inventario.service.InventarioService;
 import com.itson.inventario.service.impl.InventarioServiceImpl;
 import com.itson.pedido.exception.PedidoException;
+import com.itson.pedido.service.PedidoService;
 import com.itson.persistencia.dao.PedidoDAO;
 import com.itson.persistencia.dao.impl.PedidoDAOImpl;
 import com.itson.persistencia.dominio.*;
 import com.itson.persistencia.exception.PersistenciaException;
 import java.util.List;
-import com.itson.pedido.service.PedidoService;
-import com.itson.inventario.service.InventarioService;
 
 public class PedidoServiceImpl implements PedidoService {
 
@@ -27,6 +27,17 @@ public class PedidoServiceImpl implements PedidoService {
             return pedidoDAO.consultarTodos();
         } catch (PersistenciaException e) {
             throw new PedidoException("Error al obtener la lista de pedidos.", e);
+        }
+    }
+
+    // NUEVA IMPLEMENTACIÓN
+    @Override
+    public List<Pedido> obtenerPedidosPorEstado(List<String> estados) throws PedidoException {
+        try {
+            // Asumiendo que agregaste 'consultarPorEstado' en PedidoDAO como vimos antes
+            return pedidoDAO.consultarTodosPorEstado(estados);
+        } catch (PersistenciaException e) {
+            throw new PedidoException("Error al filtrar pedidos por estado.", e);
         }
     }
 
@@ -58,8 +69,10 @@ public class PedidoServiceImpl implements PedidoService {
         }
 
         try {
+            // Guardamos el pedido
             pedidoDAO.agregar(pedido);
 
+            // Descontamos inventario (Tu lógica existente)
             if (pedido.getProductos() != null) {
                 for (Producto prod : pedido.getProductos()) {
                     descontarLista(prod.getIngredientes());
@@ -69,9 +82,10 @@ public class PedidoServiceImpl implements PedidoService {
             }
 
         } catch (PersistenciaException e) {
-            throw new PedidoException("Error al guardar el pedido en la base de datos.", e);
+            throw new PedidoException("Error al guardar el pedido en BD.", e);
         } catch (InventarioException e) {
-            throw new PedidoException("El pedido se guardó, pero hubo un error de inventario: " + e.getMessage(), e);
+            // Opcional: Podrías hacer rollback del pedido aquí si falla el inventario
+            throw new PedidoException("Error de inventario al procesar pedido: " + e.getMessage(), e);
         }
     }
 
@@ -93,6 +107,7 @@ public class PedidoServiceImpl implements PedidoService {
         }
     }
 
+    // Tu método privado para descontar stock (se mantiene igual)
     private void descontarLista(List<?> lista) throws InventarioException {
         if (lista == null) {
             return;
@@ -102,21 +117,15 @@ public class PedidoServiceImpl implements PedidoService {
             String insumoId = null;
             Double cantidad = 0.0;
 
-            switch (item) {
-                case Ingrediente i -> {
-                    insumoId = i.getInsumoId();
-                    cantidad = i.getCantidadNecesaria();
-                }
-                case Complemento c -> {
-                    insumoId = c.getInsumoId();
-                    cantidad = c.getCantidadNecesaria();
-                }
-                case Extra e -> {
-                    insumoId = e.getInsumoId();
-                    cantidad = e.getCantidadNecesaria();
-                }
-                default -> {
-                }
+            if (item instanceof Ingrediente) {
+                insumoId = ((Ingrediente) item).getInsumoId();
+                cantidad = ((Ingrediente) item).getCantidadNecesaria();
+            } else if (item instanceof Complemento) {
+                insumoId = ((Complemento) item).getInsumoId();
+                cantidad = ((Complemento) item).getCantidadNecesaria();
+            } else if (item instanceof Extra) {
+                insumoId = ((Extra) item).getInsumoId();
+                cantidad = ((Extra) item).getCantidadNecesaria();
             }
 
             if (insumoId != null && cantidad > 0) {

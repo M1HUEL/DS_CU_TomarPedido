@@ -13,6 +13,7 @@ import com.itson.negocios.usuario.service.impl.UsuarioServiceImpl;
 import com.itson.pedido.exception.PedidoException;
 import com.itson.pedido.service.PedidoService;
 import com.itson.pedido.service.impl.PedidoServiceImpl;
+import com.itson.persistencia.dominio.EstadoPedido;
 import com.itson.persistencia.dominio.Insumo;
 import com.itson.persistencia.dominio.Pago;
 import com.itson.persistencia.dominio.Pedido;
@@ -21,6 +22,7 @@ import com.itson.persistencia.dominio.Usuario;
 import com.itson.producto.exception.ProductoException;
 import com.itson.producto.service.ProductoService;
 import com.itson.producto.service.impl.ProductoServiceImpl;
+import java.util.Arrays;
 import java.util.List;
 
 public class RestauranteFachadaImpl implements RestauranteFachada {
@@ -244,6 +246,34 @@ public class RestauranteFachadaImpl implements RestauranteFachada {
             inventarioServicio.reabastecerStock(insumoId, cantidad);
         } catch (InventarioException e) {
             throw new RestauranteFachadaException("Error al reabastecer stock", e);
+        }
+    }
+
+    @Override
+    public List<Pedido> obtenerPedidosCocina() throws RestauranteFachadaException {
+        try {
+            // Filtramos solo los estados activos para el cocinero
+            List<String> estados = Arrays.asList(
+                    EstadoPedido.PENDIENTE.name(),
+                    EstadoPedido.EN_PREPARACION.name(),
+                    EstadoPedido.LISTO.name()
+            );
+            return pedidoServicio.obtenerPedidosPorEstado(estados);
+        } catch (PedidoException e) {
+            throw new RestauranteFachadaException("Error al cargar pedidos de cocina", e);
+        }
+    }
+
+    @Override
+    public void actualizarEstadoPedido(String id, EstadoPedido nuevoEstado) throws RestauranteFachadaException {
+        try {
+            Pedido p = pedidoServicio.obtenerPedidoPorId(id);
+            if (p != null) {
+                p.setEstado(nuevoEstado);
+                pedidoServicio.actualizarPedido(id, p);
+            }
+        } catch (PedidoException e) {
+            throw new RestauranteFachadaException("No se pudo cambiar el estado del pedido", e);
         }
     }
 }

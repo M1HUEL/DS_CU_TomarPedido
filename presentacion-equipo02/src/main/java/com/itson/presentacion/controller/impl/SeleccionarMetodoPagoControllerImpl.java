@@ -26,16 +26,12 @@ public class SeleccionarMetodoPagoControllerImpl implements SeleccionarMetodoPag
     @Override
     public void procesarPago(Pedido pedido, String metodoPagoTexto) {
         try {
-            System.out.println("--- INICIANDO TRANSACCIÓN ---");
-
             Pago nuevoPago = new Pago();
             nuevoPago.setMonto(pedido.getPrecio());
             nuevoPago.setMetodoPago(convertirMetodo(metodoPagoTexto));
             nuevoPago.setEstado(EstadoPago.APROBADO);
 
             restauranteFachada.realizarVentaCompleta(pedido, nuevoPago);
-
-            System.out.println("Venta completada. Pedido ID: " + pedido.getId());
 
             if (frame != null) {
                 frame.dispose();

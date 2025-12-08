@@ -2,7 +2,11 @@ package com.itson.presentacion.frame;
 
 import com.itson.persistencia.dominio.Pedido;
 import com.itson.persistencia.dominio.Producto;
+import com.itson.persistencia.dominio.Rol;
+import com.itson.persistencia.dominio.Usuario;
+import com.itson.presentacion.controller.ConfirmacionPedidoController;
 import com.itson.presentacion.controller.impl.ConfirmacionPedidoControllerImpl;
+import com.itson.util.sesion.Sesion;
 import com.itson.presentacion.util.Colores;
 import com.itson.presentacion.util.Fuentes;
 import java.awt.BorderLayout;
@@ -28,7 +32,6 @@ import javax.swing.JTextArea;
 import javax.swing.ScrollPaneConstants;
 import javax.swing.SwingConstants;
 import javax.swing.border.Border;
-import com.itson.presentacion.controller.ConfirmacionPedidoController;
 
 public class ConfirmacionPedidoFrame extends JFrame {
 
@@ -38,11 +41,24 @@ public class ConfirmacionPedidoFrame extends JFrame {
     private final Color GRIS = Colores.GRIS;
     private final Color GRIS_CLARO = Colores.GRIS_CLARO;
 
-    private Pedido pedido;
+    private final Pedido pedido;
     private final ConfirmacionPedidoController controlador = new ConfirmacionPedidoControllerImpl();
 
     public ConfirmacionPedidoFrame(Pedido pedido) {
         this.pedido = pedido;
+
+        Usuario usuario = Sesion.getInstancia().getUsuarioLogueado();
+        if (usuario == null) {
+            dispose();
+            return;
+        }
+
+        Rol rol = usuario.getRol();
+        if (rol != Rol.CAJERO && rol != Rol.ADMINISTRADOR) {
+            dispose();
+            new InicioFrame().setVisible(true);
+            return;
+        }
 
         setTitle("Confirmación Pedido");
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -97,10 +113,8 @@ public class ConfirmacionPedidoFrame extends JFrame {
         JPanel contenidoVertical = new JPanel();
         contenidoVertical.setLayout(new BoxLayout(contenidoVertical, BoxLayout.Y_AXIS));
         contenidoVertical.setBackground(CREMA);
-
         contenidoVertical.add(tarjetaResumen);
         contenidoVertical.add(Box.createVerticalStrut(30));
-
         panelBotones.setAlignmentX(JPanel.CENTER_ALIGNMENT);
         contenidoVertical.add(panelBotones);
         contenidoVertical.add(Box.createVerticalStrut(50));
@@ -282,6 +296,17 @@ public class ConfirmacionPedidoFrame extends JFrame {
         btn.setBorder(BorderFactory.createEmptyBorder(10, 0, 10, 0));
         btn.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
         btn.setPreferredSize(new Dimension(240, 45));
+
+        btn.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseEntered(java.awt.event.MouseEvent evt) {
+                btn.setBackground(NARANJA.darker());
+            }
+
+            public void mouseExited(java.awt.event.MouseEvent evt) {
+                btn.setBackground(NARANJA);
+            }
+        });
+
         btn.addActionListener(e);
         return btn;
     }

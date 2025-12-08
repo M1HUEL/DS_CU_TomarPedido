@@ -60,7 +60,6 @@ public class InsumoDAOImpl implements InsumoDAO {
         try {
             Document doc = InsumoMapper.toDocument(insumo);
             coleccion.insertOne(doc);
-
             ObjectId id = doc.getObjectId("_id");
             if (id != null) {
                 insumo.setId(id.toHexString());
@@ -92,7 +91,6 @@ public class InsumoDAOImpl implements InsumoDAO {
     @Override
     public void aumentarStock(String id, Double cantidad) throws PersistenciaException {
         try {
-            // $inc incrementa el valor numérico existente
             coleccion.updateOne(Filters.eq("_id", new ObjectId(id)), Updates.inc("stockActual", cantidad));
         } catch (Exception e) {
             throw new PersistenciaException("Error aumentando stock", e);
@@ -102,22 +100,14 @@ public class InsumoDAOImpl implements InsumoDAO {
     @Override
     public boolean descontarStock(String id, Double cantidad) throws PersistenciaException {
         try {
-            // Filtro de seguridad: Coincidir ID Y que el stock sea mayor o igual (gte) a lo requerido
-            // Esto evita que el inventario quede en números negativos
             UpdateResult resultado = coleccion.updateOne(
                     Filters.and(
                             Filters.eq("_id", new ObjectId(id)),
                             Filters.gte("stockActual", cantidad)
                     ),
-                    Updates.inc("stockActual", -cantidad) // Restamos usando negativo
+                    Updates.inc("stockActual", -cantidad)
             );
-
-            // Si se modificó al menos 1 documento, significa que había stock y se descontó
-            if (resultado.getModifiedCount() > 0) {
-                return true;
-            } else {
-                return false; // No había suficiente stock
-            }
+            return resultado.getModifiedCount() > 0;
         } catch (Exception e) {
             throw new PersistenciaException("Error descontando stock", e);
         }

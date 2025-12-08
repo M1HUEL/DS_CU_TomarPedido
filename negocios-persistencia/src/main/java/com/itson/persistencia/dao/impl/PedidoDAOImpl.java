@@ -34,6 +34,19 @@ public class PedidoDAOImpl implements PedidoDAO {
     }
 
     @Override
+    public List<Pedido> consultarTodosPorEstado(List<String> estados) throws PersistenciaException {
+        try {
+            List<Pedido> pedidos = new ArrayList<>();
+            for (Document doc : coleccion.find(Filters.in("estado", estados))) {
+                pedidos.add(PedidoMapper.fromDocument(doc));
+            }
+            return pedidos;
+        } catch (Exception e) {
+            throw new PersistenciaException("Error consultando pedidos por estado", e);
+        }
+    }
+
+    @Override
     public Pedido consultarPorId(String pedidoId) throws PersistenciaException {
         try {
             Document doc = coleccion.find(Filters.eq("_id", new ObjectId(pedidoId))).first();
@@ -58,12 +71,10 @@ public class PedidoDAOImpl implements PedidoDAO {
         try {
             Document doc = PedidoMapper.toDocument(pedido);
             coleccion.insertOne(doc);
-
             ObjectId id = doc.getObjectId("_id");
             if (id != null) {
                 pedido.setId(id.toHexString());
             }
-
         } catch (Exception e) {
             throw new PersistenciaException("Error agregando pedido", e);
         }

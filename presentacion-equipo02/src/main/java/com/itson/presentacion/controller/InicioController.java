@@ -6,6 +6,8 @@ public interface InicioController {
 
     void verPedidos();
 
+    void verCocina(); // NUEVO
+
     void mostrarDashboard();
 
     void configurar();

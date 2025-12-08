@@ -9,23 +9,26 @@ public class Pedido {
     private List<Producto> productos;
     private String comentario;
     private double precio;
+    private EstadoPedido estado;
 
     public Pedido() {
     }
 
-    public Pedido(String nombre, List<Producto> productos, String comentario, double precio) {
+    public Pedido(String nombre, List<Producto> productos, String comentario, double precio, EstadoPedido estado) {
         this.nombre = nombre;
         this.productos = productos;
         this.comentario = comentario;
         this.precio = precio;
+        this.estado = estado;
     }
 
-    public Pedido(String id, String nombre, List<Producto> productos, String comentario, double precio) {
+    public Pedido(String id, String nombre, List<Producto> productos, String comentario, double precio, EstadoPedido estado) {
         this.id = id;
         this.nombre = nombre;
         this.productos = productos;
         this.comentario = comentario;
         this.precio = precio;
+        this.estado = estado;
     }
 
     public String getId() {
@@ -68,9 +71,17 @@ public class Pedido {
         this.precio = precio;
     }
 
+    public EstadoPedido getEstado() {
+        return estado;
+    }
+
+    public void setEstado(EstadoPedido estado) {
+        this.estado = estado;
+    }
+
     @Override
     public String toString() {
-        return "Pedido{" + "id=" + id + ", nombre=" + nombre + ", productos=" + productos + ", comentario=" + comentario + ", precio=" + precio + '}';
+        return "Pedido{" + "id=" + id + ", nombre=" + nombre + ", productos=" + productos + ", comentario=" + comentario + ", precio=" + precio + ", estado=" + estado + '}';
     }
 
 }

@@ -35,6 +35,14 @@ public class Test {
             // AGREGADO: Guardar en la BD
             registrarUsuarioSeguro(usuarioService, cajero);
             
+            Usuario cocinero = new Usuario();
+            cocinero.setNombre("Beto el Chef");
+            cocinero.setContrasena("cocina123"); // Contraseña para login
+            cocinero.setSexo(Sexo.MASCULINO);
+            cocinero.setRol(Rol.COCINERO); // <--- IMPORTANTE: Asignar Rol Cocinero
+
+            registrarUsuarioSeguro(usuarioService, cocinero);
+            
             System.out.println(">> Cajero en turno: " + cajero.getNombre());
 
             // =================================================================
@@ -215,6 +223,7 @@ public class Test {
             // Precio base + precio extra
             pedido2.setPrecio(p3.getPrecio() + 20.0);
             pedido2.setProductos(Arrays.asList(p3));
+            pedido2.setEstado(EstadoPedido.PENDIENTE);
             
             System.out.println("\n>> Procesando Pedido 2 (BBQ Burger con Extra Tocino)...");
             pedidoService.agregarPedido(pedido2);

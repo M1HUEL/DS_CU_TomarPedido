@@ -3,10 +3,13 @@ package com.itson.presentacion.frame;
 import com.itson.persistencia.dominio.*;
 import com.itson.presentacion.controller.PersonalizarPedidoController;
 import com.itson.presentacion.controller.impl.PersonalizarPedidoControllerImpl;
+import com.itson.util.sesion.Sesion;
 import com.itson.presentacion.util.Colores;
 import com.itson.presentacion.util.Fuentes;
 import java.awt.*;
 import java.awt.event.ActionListener;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -32,6 +35,24 @@ public class PersonalizarPedidoFrame extends JFrame {
 
     public PersonalizarPedidoFrame(Producto producto) {
         this.producto = producto;
+
+        Usuario usuario = Sesion.getInstancia().getUsuarioLogueado();
+
+        if (usuario == null) {
+            JOptionPane.showMessageDialog(null, "Acceso Denegado: No hay sesión activa.", "Seguridad", JOptionPane.ERROR_MESSAGE);
+            dispose();
+            return;
+        }
+
+        Rol rol = usuario.getRol();
+        if (rol != Rol.CAJERO && rol != Rol.ADMINISTRADOR) {
+            JOptionPane.showMessageDialog(null,
+                    "Acceso Denegado: El rol " + rol + " no tiene permiso para crear pedidos.",
+                    "Permisos Insuficientes", JOptionPane.WARNING_MESSAGE);
+            dispose();
+            new InicioFrame().setVisible(true);
+            return;
+        }
 
         inicializarVentana();
         inicializarComponentes();
@@ -246,6 +267,19 @@ public class PersonalizarPedidoFrame extends JFrame {
         btn.setFocusPainted(false);
         btn.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
         btn.setBorder(BorderFactory.createEmptyBorder(10, 50, 10, 50));
+
+        btn.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseEntered(MouseEvent evt) {
+                btn.setBackground(NARANJA.darker());
+            }
+
+            @Override
+            public void mouseExited(MouseEvent evt) {
+                btn.setBackground(NARANJA);
+            }
+        });
+
         btn.addActionListener(e);
         return btn;
     }

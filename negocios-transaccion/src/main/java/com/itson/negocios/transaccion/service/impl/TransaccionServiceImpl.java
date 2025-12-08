@@ -13,7 +13,6 @@ public class TransaccionServiceImpl implements TransaccionService {
     private final PagoDAO pagoDAO;
 
     public TransaccionServiceImpl() {
-        // Inicializamos el DAO
         this.pagoDAO = new PagoDAOImpl();
     }
 
@@ -46,7 +45,6 @@ public class TransaccionServiceImpl implements TransaccionService {
 
     @Override
     public void agregarPago(Pago pago) throws TransaccionException {
-        // Validación de negocio básica
         if (pago == null) {
             throw new TransaccionException("El objeto Pago no puede ser nulo.");
         }
