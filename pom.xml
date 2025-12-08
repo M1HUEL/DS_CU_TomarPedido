@@ -9,13 +9,13 @@
         <module>dto-negocios</module>
         <module>negocios-pedido</module>
         <module>negocios-inventario</module>
-        <module>negocios-persistencia</module>
         <module>presentacion-equipo02</module>
         <module>negocios-usuario</module>
         <module>negocios-producto</module>
         <module>negocios-fachada</module>
         <module>negocios-transaccion</module>
         <module>util</module>
+        <module>persistencia</module>
     </modules>
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
