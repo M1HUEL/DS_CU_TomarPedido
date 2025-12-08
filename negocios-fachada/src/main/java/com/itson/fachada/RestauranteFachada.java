@@ -2,12 +2,15 @@ package com.itson.fachada;
 
 import com.itson.fachada.exception.RestauranteFachadaException;
 import com.itson.persistencia.dominio.Insumo;
+import com.itson.persistencia.dominio.Pago;
 import com.itson.persistencia.dominio.Pedido;
 import com.itson.persistencia.dominio.Producto;
 import com.itson.persistencia.dominio.Usuario;
 import java.util.List;
 
 public interface RestauranteFachada {
+
+    Usuario login(String nombre, String password) throws RestauranteFachadaException;
 
     Usuario obtenerUsuarioPorId(String id) throws RestauranteFachadaException;
 
@@ -44,4 +47,8 @@ public interface RestauranteFachada {
     void registrarInsumo(Insumo insumo) throws RestauranteFachadaException;
 
     void reabastecerInsumo(String insumoId, Double cantidad) throws RestauranteFachadaException;
+
+    void guardarPago(Pago pago) throws RestauranteFachadaException;
+
+    void realizarVentaCompleta(Pedido pedido, Pago pago) throws RestauranteFachadaException;
 }
