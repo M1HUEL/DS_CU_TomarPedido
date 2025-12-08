@@ -14,6 +14,7 @@
         <module>negocios-usuario</module>
         <module>negocios-producto</module>
         <module>negocios-fachada</module>
+        <module>negocios-transaccion</module>
     </modules>
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
