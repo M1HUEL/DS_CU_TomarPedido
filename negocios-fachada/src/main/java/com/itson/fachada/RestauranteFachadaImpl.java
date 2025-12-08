@@ -4,6 +4,9 @@ import com.itson.fachada.exception.RestauranteFachadaException;
 import com.itson.inventario.exception.InventarioException;
 import com.itson.inventario.service.InventarioService;
 import com.itson.inventario.service.impl.InventarioServiceImpl;
+import com.itson.negocios.transaccion.exception.TransaccionException;
+import com.itson.negocios.transaccion.service.TransaccionService;
+import com.itson.negocios.transaccion.service.impl.TransaccionServiceImpl;
 import com.itson.negocios.usuario.exception.UsuarioException;
 import com.itson.negocios.usuario.service.UsuarioService;
 import com.itson.negocios.usuario.service.impl.UsuarioServiceImpl;
@@ -11,6 +14,7 @@ import com.itson.pedido.exception.PedidoException;
 import com.itson.pedido.service.PedidoService;
 import com.itson.pedido.service.impl.PedidoServiceImpl;
 import com.itson.persistencia.dominio.Insumo;
+import com.itson.persistencia.dominio.Pago;
 import com.itson.persistencia.dominio.Pedido;
 import com.itson.persistencia.dominio.Producto;
 import com.itson.persistencia.dominio.Usuario;
@@ -25,12 +29,105 @@ public class RestauranteFachadaImpl implements RestauranteFachada {
     private final ProductoService productoServicio;
     private final PedidoService pedidoServicio;
     private final InventarioService inventarioServicio;
+    private final TransaccionService transaccionServicio;
 
     public RestauranteFachadaImpl() {
         this.usuarioServicio = new UsuarioServiceImpl();
         this.productoServicio = new ProductoServiceImpl();
         this.pedidoServicio = new PedidoServiceImpl();
         this.inventarioServicio = new InventarioServiceImpl();
+        this.transaccionServicio = new TransaccionServiceImpl();
+    }
+
+    @Override
+    public void crearPedido(Pedido pedido) throws RestauranteFachadaException {
+        try {
+            pedidoServicio.agregarPedido(pedido);
+        } catch (PedidoException e) {
+            throw new RestauranteFachadaException("Error al crear el pedido: " + e.getMessage(), e);
+        }
+    }
+
+    @Override
+    public Pedido obtenerPedidoPorId(String id) throws RestauranteFachadaException {
+        try {
+            return pedidoServicio.obtenerPedidoPorId(id);
+        } catch (PedidoException e) {
+            throw new RestauranteFachadaException("Error obteniendo pedido por id", e);
+        }
+    }
+
+    @Override
+    public List<Pedido> obtenerPedidos() throws RestauranteFachadaException {
+        try {
+            return pedidoServicio.obtenerPedidos();
+        } catch (PedidoException e) {
+            throw new RestauranteFachadaException("Error obteniendo pedidos", e);
+        }
+    }
+
+    @Override
+    public void actualizarPedido(String id, Pedido pedido) throws RestauranteFachadaException {
+        try {
+            pedidoServicio.actualizarPedido(id, pedido);
+        } catch (PedidoException e) {
+            throw new RestauranteFachadaException("Error actualizando pedido", e);
+        }
+    }
+
+    @Override
+    public void eliminarPedido(String id) throws RestauranteFachadaException {
+        try {
+            pedidoServicio.eliminarPedido(id);
+        } catch (PedidoException e) {
+            throw new RestauranteFachadaException("Error eliminando pedido", e);
+        }
+    }
+
+    @Override
+    public void guardarPago(Pago pago) throws RestauranteFachadaException {
+        try {
+            transaccionServicio.agregarPago(pago);
+        } catch (TransaccionException e) {
+            throw new RestauranteFachadaException("Error al registrar el pago", e);
+        }
+    }
+
+    @Override
+    public void realizarVentaCompleta(Pedido pedido, Pago pago) throws RestauranteFachadaException {
+        try {
+            if (pago.getMonto() < pedido.getPrecio()) {
+                throw new RestauranteFachadaException("El monto del pago es menor al total del pedido.");
+            }
+
+            pedidoServicio.agregarPedido(pedido);
+
+            if (pedido.getId() == null) {
+                throw new RestauranteFachadaException("Error crítico: El pedido no generó ID.");
+            }
+
+            pago.setPedidoId(pedido.getId());
+            transaccionServicio.agregarPago(pago);
+
+        } catch (PedidoException | TransaccionException e) {
+            if (pedido.getId() != null) {
+                try {
+                    pedidoServicio.eliminarPedido(pedido.getId());
+                } catch (PedidoException ex) {
+                    System.err.println("Error grave: Rollback fallido.");
+                }
+            }
+            throw new RestauranteFachadaException("Error en la venta completa: " + e.getMessage(), e);
+        }
+    }
+
+    @Override
+    public Usuario login(String nombre, String password) throws RestauranteFachadaException {
+        try {
+            return usuarioServicio.login(nombre, password);
+        } catch (UsuarioException e) {
+            throw new RestauranteFachadaException(e.getMessage(), e);
+        }
     }
 
     @Override
@@ -120,51 +217,6 @@ public class RestauranteFachadaImpl implements RestauranteFachada {
             productoServicio.eliminarProducto(id);
         } catch (ProductoException e) {
             throw new RestauranteFachadaException("Error eliminando producto", e);
-        }
-    }
-
-    @Override
-    public Pedido obtenerPedidoPorId(String id) throws RestauranteFachadaException {
-        try {
-            return pedidoServicio.obtenerPedidoPorId(id);
-        } catch (PedidoException e) {
-            throw new RestauranteFachadaException("Error obteniendo pedido por id", e);
-        }
-    }
-
-    @Override
-    public List<Pedido> obtenerPedidos() throws RestauranteFachadaException {
-        try {
-            return pedidoServicio.obtenerPedidos();
-        } catch (PedidoException e) {
-            throw new RestauranteFachadaException("Error obteniendo pedidos", e);
-        }
-    }
-
-    @Override
-    public void crearPedido(Pedido pedido) throws RestauranteFachadaException {
-        try {
-            pedidoServicio.agregarPedido(pedido);
-        } catch (PedidoException e) {
-            throw new RestauranteFachadaException("Error al procesar el pedido: " + e.getMessage(), e);
-        }
-    }
-
-    @Override
-    public void actualizarPedido(String id, Pedido pedido) throws RestauranteFachadaException {
-        try {
-            pedidoServicio.actualizarPedido(id, pedido);
-        } catch (PedidoException e) {
-            throw new RestauranteFachadaException("Error actualizando pedido", e);
-        }
-    }
-
-    @Override
-    public void eliminarPedido(String id) throws RestauranteFachadaException {
-        try {
-            pedidoServicio.eliminarPedido(id);
-        } catch (PedidoException e) {
-            throw new RestauranteFachadaException("Error eliminando pedido", e);
         }
     }
 
