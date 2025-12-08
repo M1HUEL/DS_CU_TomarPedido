@@ -2,6 +2,8 @@ package com.itson.fachada;
 
 import com.itson.inventario.service.InventarioService;
 import com.itson.inventario.service.impl.InventarioServiceImpl;
+import com.itson.negocios.usuario.service.UsuarioService;
+import com.itson.negocios.usuario.service.impl.UsuarioServiceImpl;
 import com.itson.pedido.service.PedidoService;
 import com.itson.pedido.service.impl.PedidoServiceImpl;
 import com.itson.persistencia.dominio.*;
@@ -10,7 +12,7 @@ import com.itson.producto.service.impl.ProductoServiceImpl;
 import java.util.Arrays;
 
 public class Test {
-
+    
     public static void main(String[] args) {
         System.out.println("=== INICIANDO SISTEMA DE RESTAURANTE ===");
 
@@ -18,14 +20,21 @@ public class Test {
         InventarioService inventarioService = new InventarioServiceImpl();
         ProductoService productoService = new ProductoServiceImpl();
         PedidoService pedidoService = new PedidoServiceImpl();
-
+        UsuarioService usuarioService = new UsuarioServiceImpl();
+        
         try {
             // =================================================================
             // PASO 1: SIMULACIÓN DE CAJERO
             // =================================================================
             Usuario cajero = new Usuario();
             cajero.setNombre("Juan Pérez");
+            cajero.setContrasena("1234"); // AGREGADO: La validación requiere contraseña
+            cajero.setSexo(Sexo.MASCULINO);
             cajero.setRol(Rol.CAJERO);
+
+            // AGREGADO: Guardar en la BD
+            registrarUsuarioSeguro(usuarioService, cajero);
+            
             System.out.println(">> Cajero en turno: " + cajero.getNombre());
 
             // =================================================================
@@ -183,7 +192,7 @@ public class Test {
             // PASO 4: REGISTRAR PEDIDOS (PRUEBA DE DESCUENTO)
             // =================================================================
             System.out.println("\n--- 3. Cajero registrando Pedidos ---");
-
+            
             imprimirStock("ANTES DE VENDER", inventarioService);
 
             // --- PEDIDO 1: Cheeseburger Deluxe (con todo) ---
@@ -191,7 +200,7 @@ public class Test {
             pedido1.setNombre("Cliente Mesa 1");
             pedido1.setPrecio(p2.getPrecio());
             pedido1.setProductos(Arrays.asList(p2));
-
+            
             System.out.println("\n>> Procesando Pedido 1 (Cheeseburger Deluxe)...");
             pedidoService.agregarPedido(pedido1);
             System.out.println("   ¡Pedido 1 registrado!");
@@ -206,7 +215,7 @@ public class Test {
             // Precio base + precio extra
             pedido2.setPrecio(p3.getPrecio() + 20.0);
             pedido2.setProductos(Arrays.asList(p3));
-
+            
             System.out.println("\n>> Procesando Pedido 2 (BBQ Burger con Extra Tocino)...");
             pedidoService.agregarPedido(pedido2);
             System.out.println("   ¡Pedido 2 registrado!");
@@ -216,7 +225,7 @@ public class Test {
             // =================================================================
             System.out.println("\n--- 4. Auditoría de Inventario ---");
             imprimirStock("DESPUÉS DE VENDER", inventarioService);
-
+            
         } catch (Exception e) {
             e.printStackTrace();
             System.err.println("Ocurrió un error inesperado: " + e.getMessage());
@@ -235,19 +244,19 @@ public class Test {
         i.setStockMinimo(5.0);
         return i;
     }
-
+    
     private static Ingrediente crearIngrediente(String nombre, String insumoId, Double cantidad) {
         return new Ingrediente(nombre, "Componente base", 0.0, insumoId, cantidad);
     }
-
+    
     private static Complemento crearComplemento(String nombre, String desc, Double precio, String insumoId, Double cantidad) {
         return new Complemento(nombre, desc, precio, insumoId, cantidad);
     }
-
+    
     private static Extra crearExtra(String nombre, String desc, Double precio, String insumoId, Double cantidad) {
         return new Extra(nombre, desc, precio, insumoId, cantidad);
     }
-
+    
     private static void registrarInsumoSeguro(InventarioService s, Insumo i) {
         try {
             Insumo existe = s.obtenerInsumoPorCodigo(i.getCodigo());
@@ -262,7 +271,7 @@ public class Test {
             System.err.println("Error insumo: " + e.getMessage());
         }
     }
-
+    
     private static void registrarProductoSeguro(ProductoService s, Producto p) {
         try {
             Producto existe = s.obtenerProductoPorNombre(p.getNombre());
@@ -277,7 +286,7 @@ public class Test {
             System.err.println("Error producto: " + e.getMessage());
         }
     }
-
+    
     private static void imprimirStock(String momento, InventarioService s) {
         try {
             System.out.println("\n>>> ESTADO DEL STOCK (" + momento + ") <<<");
@@ -289,6 +298,21 @@ public class Test {
             System.out.println("--------------------------------------------------");
         } catch (Exception e) {
             e.printStackTrace();
+        }
+    }
+    
+    private static void registrarUsuarioSeguro(UsuarioService s, Usuario u) {
+        try {
+            Usuario existe = s.obtenerUsuarioPorNombre(u.getNombre());
+            if (existe != null) {
+                u.setId(existe.getId());
+                System.out.println("Usuario Existente: " + u.getNombre());
+            } else {
+                s.agregarUsuario(u);
+                System.out.println("Usuario Registrado: " + u.getNombre());
+            }
+        } catch (Exception e) {
+            System.err.println("Error usuario: " + e.getMessage());
         }
     }
 }
