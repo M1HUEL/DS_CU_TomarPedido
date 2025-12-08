@@ -141,8 +141,4 @@ public class IniciarSesionFrame extends JFrame {
         btn.setPreferredSize(new Dimension(240, 45));
         return btn;
     }
-
-    public static void main(String[] args) {
-        SwingUtilities.invokeLater(() -> new IniciarSesionFrame().setVisible(true));
-    }
 }

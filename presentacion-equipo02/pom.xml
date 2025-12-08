@@ -27,6 +27,6 @@
     </dependencies>
     <properties>
         <maven.compiler.release>21</maven.compiler.release>
-        <exec.mainClass>com.itson.presentacion.PresentacionEquipo02</exec.mainClass>
+        <exec.mainClass>com.itson.presentacion.SistemaRestaurante</exec.mainClass>
     </properties>
 </project>
