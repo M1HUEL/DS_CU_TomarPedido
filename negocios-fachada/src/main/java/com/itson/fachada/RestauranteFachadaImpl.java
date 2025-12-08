@@ -69,6 +69,15 @@ public class RestauranteFachadaImpl implements RestauranteFachada {
     }
 
     @Override
+    public List<Pedido> obtenerPedidosCompletados() throws RestauranteFachadaException {
+        try {
+            return pedidoServicio.obtenerPedidosCompletados();
+        } catch (PedidoException e) {
+            throw new RestauranteFachadaException("Error en historial", e);
+        }
+    }
+
+    @Override
     public void actualizarPedido(String id, Pedido pedido) throws RestauranteFachadaException {
         try {
             pedidoServicio.actualizarPedido(id, pedido);
@@ -232,6 +241,15 @@ public class RestauranteFachadaImpl implements RestauranteFachada {
     }
 
     @Override
+    public List<Insumo> obtenerAlertasStock() throws RestauranteFachadaException {
+        try {
+            return inventarioServicio.obtenerInsumosConStockBajo();
+        } catch (InventarioException e) {
+            throw new RestauranteFachadaException("Error obteniendo alertas", e);
+        }
+    }
+
+    @Override
     public void registrarInsumo(Insumo insumo) throws RestauranteFachadaException {
         try {
             inventarioServicio.registrarInsumo(insumo);
@@ -252,7 +270,6 @@ public class RestauranteFachadaImpl implements RestauranteFachada {
     @Override
     public List<Pedido> obtenerPedidosCocina() throws RestauranteFachadaException {
         try {
-            // Filtramos solo los estados activos para el cocinero
             List<String> estados = Arrays.asList(
                     EstadoPedido.PENDIENTE.name(),
                     EstadoPedido.EN_PREPARACION.name(),
@@ -274,6 +291,28 @@ public class RestauranteFachadaImpl implements RestauranteFachada {
             }
         } catch (PedidoException e) {
             throw new RestauranteFachadaException("No se pudo cambiar el estado del pedido", e);
+        }
+    }
+
+    @Override
+    public void actualizarInsumo(Insumo insumo) throws RestauranteFachadaException {
+        try {
+            inventarioServicio.actualizarInsumo(insumo);
+        } catch (InventarioException e) {
+            throw new RestauranteFachadaException("Error al actualizar el insumo: " + e.getMessage(), e);
+        }
+    }
+
+    @Override
+    public void eliminarInsumo(Insumo insumo) throws RestauranteFachadaException {
+        try {
+            if (insumo.getId() != null) {
+                inventarioServicio.eliminarInsumo(insumo.getId());
+            } else {
+                throw new RestauranteFachadaException("No se puede eliminar un insumo sin ID.");
+            }
+        } catch (RestauranteFachadaException | InventarioException e) {
+            throw new RestauranteFachadaException("Error al eliminar el insumo: " + e.getMessage(), e);
         }
     }
 }

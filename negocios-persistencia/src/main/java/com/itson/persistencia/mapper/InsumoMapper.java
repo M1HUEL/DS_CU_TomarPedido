@@ -20,7 +20,6 @@ public class InsumoMapper {
         insumo.setCodigo(doc.getString("codigo"));
         insumo.setUnidadMedida(doc.getString("unidadMedida"));
 
-        // Manejo explícito de números para evitar NullPointerException
         Double stockActual = doc.getDouble("stockActual");
         if (stockActual != null) {
             insumo.setStockActual(stockActual);

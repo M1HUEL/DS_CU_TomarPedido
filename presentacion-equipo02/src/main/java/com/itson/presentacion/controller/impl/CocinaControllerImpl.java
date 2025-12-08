@@ -62,8 +62,8 @@ public class CocinaControllerImpl implements CocinaController {
             fachada.actualizarEstadoPedido(pedido.getId(), siguienteEstado);
             pedido.setEstado(siguienteEstado);
 
-            if (frame instanceof CocinaFrame) {
-                ((CocinaFrame) frame).cargarPedidos();
+            if (frame instanceof CocinaFrame cocinaFrame) {
+                cocinaFrame.cargarPedidos();
             }
 
         } catch (RestauranteFachadaException e) {

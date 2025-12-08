@@ -30,14 +30,23 @@ public class PedidoServiceImpl implements PedidoService {
         }
     }
 
-    // NUEVA IMPLEMENTACIÓN
     @Override
     public List<Pedido> obtenerPedidosPorEstado(List<String> estados) throws PedidoException {
         try {
-            // Asumiendo que agregaste 'consultarPorEstado' en PedidoDAO como vimos antes
             return pedidoDAO.consultarTodosPorEstado(estados);
         } catch (PersistenciaException e) {
             throw new PedidoException("Error al filtrar pedidos por estado.", e);
+        }
+    }
+
+    @Override
+    public List<Pedido> obtenerPedidosCompletados() throws PedidoException {
+        try {
+            return pedidoDAO.consultarTodosPorEstado(
+                    java.util.Arrays.asList(EstadoPedido.ENTREGADO.name())
+            );
+        } catch (PersistenciaException e) {
+            throw new PedidoException("Error al obtener historial", e);
         }
     }
 
@@ -69,10 +78,8 @@ public class PedidoServiceImpl implements PedidoService {
         }
 
         try {
-            // Guardamos el pedido
             pedidoDAO.agregar(pedido);
 
-            // Descontamos inventario (Tu lógica existente)
             if (pedido.getProductos() != null) {
                 for (Producto prod : pedido.getProductos()) {
                     descontarLista(prod.getIngredientes());
@@ -84,7 +91,6 @@ public class PedidoServiceImpl implements PedidoService {
         } catch (PersistenciaException e) {
             throw new PedidoException("Error al guardar el pedido en BD.", e);
         } catch (InventarioException e) {
-            // Opcional: Podrías hacer rollback del pedido aquí si falla el inventario
             throw new PedidoException("Error de inventario al procesar pedido: " + e.getMessage(), e);
         }
     }
@@ -107,7 +113,6 @@ public class PedidoServiceImpl implements PedidoService {
         }
     }
 
-    // Tu método privado para descontar stock (se mantiene igual)
     private void descontarLista(List<?> lista) throws InventarioException {
         if (lista == null) {
             return;
@@ -117,15 +122,21 @@ public class PedidoServiceImpl implements PedidoService {
             String insumoId = null;
             Double cantidad = 0.0;
 
-            if (item instanceof Ingrediente) {
-                insumoId = ((Ingrediente) item).getInsumoId();
-                cantidad = ((Ingrediente) item).getCantidadNecesaria();
-            } else if (item instanceof Complemento) {
-                insumoId = ((Complemento) item).getInsumoId();
-                cantidad = ((Complemento) item).getCantidadNecesaria();
-            } else if (item instanceof Extra) {
-                insumoId = ((Extra) item).getInsumoId();
-                cantidad = ((Extra) item).getCantidadNecesaria();
+            switch (item) {
+                case Ingrediente ingrediente -> {
+                    insumoId = ingrediente.getInsumoId();
+                    cantidad = ingrediente.getCantidadNecesaria();
+                }
+                case Complemento complemento -> {
+                    insumoId = complemento.getInsumoId();
+                    cantidad = complemento.getCantidadNecesaria();
+                }
+                case Extra extra -> {
+                    insumoId = extra.getInsumoId();
+                    cantidad = extra.getCantidadNecesaria();
+                }
+                default -> {
+                }
             }
 
             if (insumoId != null && cantidad > 0) {

@@ -6,9 +6,13 @@ public interface InicioController {
 
     void verPedidos();
 
-    void verCocina(); // NUEVO
+    void verCocina();
+
+    void verHistorialVentas();
 
     void mostrarDashboard();
+
+    void verInventario();
 
     void configurar();
 

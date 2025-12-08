@@ -82,7 +82,7 @@ public class InicioFrame extends JFrame {
         headerContenido.add(titulosHeader, BorderLayout.CENTER);
         header.add(headerContenido, BorderLayout.CENTER);
 
-        JPanel panelBlanco = new JPanel(new GridLayout(0, 1, 0, 15));
+        JPanel panelBlanco = new JPanel(new GridLayout(0, 2, 20, 20));
         panelBlanco.setBackground(BLANCO);
 
         Border bordePanelBlanco = BorderFactory.createCompoundBorder(
@@ -98,7 +98,7 @@ public class InicioFrame extends JFrame {
             btnCrearPedido.addActionListener(e -> controlador.crearPedido());
             panelBlanco.add(btnCrearPedido);
 
-            JButton btnVerPedidos = crearBoton("Ver Pedidos");
+            JButton btnVerPedidos = crearBoton("Ver Pedidos (En Curso)");
             btnVerPedidos.addActionListener(e -> controlador.verPedidos());
             panelBlanco.add(btnVerPedidos);
         }
@@ -107,6 +107,10 @@ public class InicioFrame extends JFrame {
             JButton btnCocina = crearBoton("Ver Cocina");
             btnCocina.addActionListener(e -> controlador.verCocina());
             panelBlanco.add(btnCocina);
+
+            JButton btnInventario = crearBoton("Ver Inventario");
+            btnInventario.addActionListener(e -> controlador.verInventario());
+            panelBlanco.add(btnInventario);
         }
 
         if (rol != Rol.COCINERO) {
@@ -116,6 +120,17 @@ public class InicioFrame extends JFrame {
         }
 
         if (rol == Rol.ADMINISTRADOR) {
+            JButton btnHistorial = crearBoton("Ver Pedidos Finalizados");
+            btnHistorial.addActionListener(e -> controlador.verHistorialVentas());
+            panelBlanco.add(btnHistorial);
+
+            JButton btnGestionMenu = crearBoton("Gestión del Menú");
+            btnGestionMenu.addActionListener(e -> {
+                new GestionMenuFrame().setVisible(true);
+                dispose();
+            });
+            panelBlanco.add(btnGestionMenu);
+
             JButton btnConfiguracion = crearBoton("Configuración");
             btnConfiguracion.addActionListener(e -> controlador.configurar());
             panelBlanco.add(btnConfiguracion);
@@ -151,7 +166,7 @@ public class InicioFrame extends JFrame {
         btn.setForeground(BLANCO);
         btn.setFont(Fuentes.getPoppinsRegular(14f));
         btn.setFocusPainted(false);
-        btn.setBorder(BorderFactory.createEmptyBorder(10, 0, 10, 0));
+        btn.setBorder(BorderFactory.createEmptyBorder(15, 0, 15, 0));
         btn.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
 
         btn.addMouseListener(new MouseAdapter() {

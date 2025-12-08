@@ -1,78 +1,45 @@
 package com.itson.presentacion.frame;
 
-import com.itson.persistencia.dominio.Complemento;
-import com.itson.persistencia.dominio.EstadoPedido;
-import com.itson.persistencia.dominio.Extra;
-import com.itson.persistencia.dominio.Ingrediente;
-import com.itson.persistencia.dominio.Pedido;
-import com.itson.persistencia.dominio.Producto;
-import com.itson.persistencia.dominio.Rol;
-import com.itson.persistencia.dominio.Usuario;
-import com.itson.presentacion.controller.CocinaController;
-import com.itson.presentacion.controller.impl.CocinaControllerImpl;
+import com.itson.persistencia.dominio.*;
+import com.itson.presentacion.controller.HistorialPedidosController;
+import com.itson.presentacion.controller.impl.HistorialPedidosControllerImpl;
 import com.itson.util.sesion.Sesion;
 import com.itson.presentacion.util.Colores;
 import com.itson.presentacion.util.Fuentes;
-import java.awt.BorderLayout;
-import java.awt.Color;
-import java.awt.Cursor;
-import java.awt.Dimension;
-import java.awt.FlowLayout;
-import java.awt.Font;
+import java.awt.*;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.util.List;
-import javax.swing.BorderFactory;
-import javax.swing.Box;
-import javax.swing.BoxLayout;
-import javax.swing.JButton;
-import javax.swing.JFrame;
-import javax.swing.JLabel;
-import javax.swing.JOptionPane;
-import javax.swing.JPanel;
-import javax.swing.JScrollPane;
-import javax.swing.JSeparator;
-import javax.swing.JTextArea;
-import javax.swing.ScrollPaneConstants;
-import javax.swing.SwingConstants;
+import javax.swing.*;
 import javax.swing.border.Border;
 import javax.swing.border.EmptyBorder;
 import javax.swing.border.MatteBorder;
 
-public class CocinaFrame extends JFrame {
+public class HistorialPedidosFrame extends JFrame {
 
     private final Color NARANJA = Colores.NARANJA;
     private final Color CREMA = Colores.CREMA;
     private final Color BLANCO = Colores.BLANCO;
     private final Color GRIS_OSCURO = Color.DARK_GRAY;
-    private final Color GRIS_CLARO = new Color(245, 245, 245);
-
     private final Color COLOR_PENDIENTE = new Color(255, 82, 82);
     private final Color COLOR_PREPARACION = new Color(255, 179, 0);
     private final Color COLOR_LISTO = new Color(76, 175, 80);
 
     private JPanel panelContenedorTarjetas;
-    private final CocinaController controlador = new CocinaControllerImpl(this);
+    private final HistorialPedidosController controlador;
     private final Usuario usuarioLogueado;
 
-    public CocinaFrame() {
+    public HistorialPedidosFrame() {
         this.usuarioLogueado = Sesion.getInstancia().getUsuarioLogueado();
-
         if (this.usuarioLogueado == null) {
             JOptionPane.showMessageDialog(null, "Acceso Denegado.", "Seguridad", JOptionPane.ERROR_MESSAGE);
             dispose();
             throw new IllegalStateException("No user logged in");
         }
 
-        Rol rol = this.usuarioLogueado.getRol();
-        if (rol != Rol.COCINERO && rol != Rol.ADMINISTRADOR && rol != Rol.CAJERO) {
-            JOptionPane.showMessageDialog(null, "Acceso Denegado.", "Permisos Insuficientes", JOptionPane.WARNING_MESSAGE);
-            dispose();
-            new InicioFrame().setVisible(true);
-            return;
-        }
+        this.controlador = new HistorialPedidosControllerImpl(this);
 
-        setTitle("Monitor de Cocina - Usuario: " + usuarioLogueado.getNombre());
+        setTitle("Monitor de Pedidos en Curso");
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setSize(1440, 720);
         setLocationRelativeTo(null);
@@ -88,14 +55,14 @@ public class CocinaFrame extends JFrame {
         header.setPreferredSize(new Dimension(1440, 100));
         header.setBorder(BorderFactory.createEmptyBorder(0, 40, 0, 40));
 
-        JLabel lblTitulo = new JLabel("Pedidos en Curso", SwingConstants.LEFT);
+        JLabel lblTitulo = new JLabel("Monitor de Pedidos", SwingConstants.LEFT);
         lblTitulo.setFont(Fuentes.getPoppinsBold(28f));
         lblTitulo.setForeground(BLANCO);
 
         JButton btnActualizar = crearBotonHeader("Actualizar");
         btnActualizar.addActionListener(e -> cargarPedidos());
 
-        JButton btnSalir = crearBotonHeader("Volver / Salir");
+        JButton btnSalir = crearBotonHeader("Volver");
         btnSalir.addActionListener(e -> controlador.regresarInicio());
 
         JPanel panelBotonesHeader = new JPanel(new FlowLayout(FlowLayout.RIGHT, 15, 30));
@@ -121,17 +88,17 @@ public class CocinaFrame extends JFrame {
 
     public void cargarPedidos() {
         panelContenedorTarjetas.removeAll();
-        List<Pedido> pedidos = controlador.obtenerPedidosPendientes();
+        List<Pedido> pedidos = controlador.obtenerPedidosEnCurso();
 
         if (pedidos.isEmpty()) {
-            JLabel lblVacio = new JLabel("No hay pedidos pendientes.", SwingConstants.CENTER);
+            JLabel lblVacio = new JLabel("No hay pedidos en curso.", SwingConstants.CENTER);
             lblVacio.setFont(Fuentes.getPoppinsBold(24f));
             lblVacio.setForeground(GRIS_OSCURO);
             lblVacio.setPreferredSize(new Dimension(1300, 100));
             panelContenedorTarjetas.add(lblVacio);
         } else {
             for (Pedido p : pedidos) {
-                panelContenedorTarjetas.add(crearTarjetaPedido(p));
+                panelContenedorTarjetas.add(crearTarjetaSoloLectura(p));
             }
         }
 
@@ -139,10 +106,10 @@ public class CocinaFrame extends JFrame {
         panelContenedorTarjetas.repaint();
     }
 
-    private JPanel crearTarjetaPedido(Pedido p) {
+    private JPanel crearTarjetaSoloLectura(Pedido p) {
         JPanel tarjeta = new JPanel();
         tarjeta.setLayout(new BorderLayout());
-        tarjeta.setPreferredSize(new Dimension(340, 500));
+        tarjeta.setPreferredSize(new Dimension(320, 450));
         tarjeta.setBackground(BLANCO);
 
         Border sombra = new MatteBorder(1, 1, 4, 4, new Color(210, 210, 210));
@@ -199,7 +166,6 @@ public class CocinaFrame extends JFrame {
                         panelDetalles.add(lblIng);
                     }
                 }
-
                 if (prod.getExtras() != null) {
                     for (Extra ext : prod.getExtras()) {
                         JLabel lblExt = new JLabel("+ " + ext.getNombre());
@@ -208,7 +174,6 @@ public class CocinaFrame extends JFrame {
                         panelDetalles.add(lblExt);
                     }
                 }
-
                 if (prod.getComplementos() != null) {
                     for (Complemento comp : prod.getComplementos()) {
                         JLabel lblComp = new JLabel("~ " + comp.getNombre());
@@ -217,7 +182,6 @@ public class CocinaFrame extends JFrame {
                         panelDetalles.add(lblComp);
                     }
                 }
-
                 panelProductos.add(panelDetalles);
                 panelProductos.add(Box.createVerticalStrut(5));
             }
@@ -244,13 +208,12 @@ public class CocinaFrame extends JFrame {
         scrollProd.setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
         scrollProd.getViewport().setBackground(BLANCO);
 
-        JButton btnAccion = new JButton();
-        btnAccion.setFont(Fuentes.getPoppinsBold(14f));
-        btnAccion.setForeground(Color.WHITE);
-        btnAccion.setFocusPainted(false);
-        btnAccion.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
-        btnAccion.setPreferredSize(new Dimension(0, 50));
-        btnAccion.setBorder(BorderFactory.createEmptyBorder());
+        JLabel lblEstado = new JLabel();
+        lblEstado.setFont(Fuentes.getPoppinsBold(14f));
+        lblEstado.setForeground(Color.WHITE);
+        lblEstado.setHorizontalAlignment(SwingConstants.CENTER);
+        lblEstado.setOpaque(true);
+        lblEstado.setPreferredSize(new Dimension(0, 45));
 
         EstadoPedido estado = p.getEstado();
         if (estado == null) {
@@ -259,36 +222,27 @@ public class CocinaFrame extends JFrame {
 
         switch (estado) {
             case PENDIENTE -> {
-                btnAccion.setText("COMENZAR ORDEN");
-                btnAccion.setBackground(COLOR_PENDIENTE);
+                lblEstado.setText("EN ESPERA");
+                lblEstado.setBackground(COLOR_PENDIENTE);
             }
             case EN_PREPARACION -> {
-                btnAccion.setText("MARCAR LISTO");
-                btnAccion.setBackground(COLOR_PREPARACION);
-                btnAccion.setForeground(Color.DARK_GRAY);
+                lblEstado.setText("PREPARANDO...");
+                lblEstado.setBackground(COLOR_PREPARACION);
+                lblEstado.setForeground(Color.DARK_GRAY);
             }
             case LISTO -> {
-                btnAccion.setText("ENTREGAR");
-                btnAccion.setBackground(COLOR_LISTO);
+                lblEstado.setText("¡LISTO PARA RECOGER!");
+                lblEstado.setBackground(COLOR_LISTO);
             }
             default -> {
-                btnAccion.setText("COMPLETADO");
-                btnAccion.setBackground(Color.GRAY);
+                lblEstado.setText("FINALIZADO");
+                lblEstado.setBackground(Color.GRAY);
             }
-        }
-
-        if (usuarioLogueado.getRol() == Rol.CAJERO) {
-            btnAccion.setText("VISTA SOLO LECTURA");
-            btnAccion.setBackground(new Color(230, 230, 230));
-            btnAccion.setForeground(Color.GRAY);
-            btnAccion.setEnabled(false);
-        } else {
-            btnAccion.addActionListener(e -> controlador.avanzarEstado(p));
         }
 
         tarjeta.add(panelInfo, BorderLayout.NORTH);
         tarjeta.add(scrollProd, BorderLayout.CENTER);
-        tarjeta.add(btnAccion, BorderLayout.SOUTH);
+        tarjeta.add(lblEstado, BorderLayout.SOUTH);
 
         return tarjeta;
     }
@@ -314,7 +268,6 @@ public class CocinaFrame extends JFrame {
                 btn.setBackground(BLANCO);
             }
         });
-
         return btn;
     }
 }

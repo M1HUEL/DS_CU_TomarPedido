@@ -298,10 +298,12 @@ public class ConfirmacionPedidoFrame extends JFrame {
         btn.setPreferredSize(new Dimension(240, 45));
 
         btn.addMouseListener(new java.awt.event.MouseAdapter() {
+            @Override
             public void mouseEntered(java.awt.event.MouseEvent evt) {
                 btn.setBackground(NARANJA.darker());
             }
 
+            @Override
             public void mouseExited(java.awt.event.MouseEvent evt) {
                 btn.setBackground(NARANJA);
             }

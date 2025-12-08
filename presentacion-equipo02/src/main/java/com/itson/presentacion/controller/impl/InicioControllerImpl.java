@@ -2,8 +2,11 @@ package com.itson.presentacion.controller.impl;
 
 import com.itson.presentacion.controller.InicioController;
 import com.itson.presentacion.frame.CocinaFrame;
+import com.itson.presentacion.frame.HistorialPedidosCompletadosFrame;
+import com.itson.presentacion.frame.HistorialPedidosFrame;
 import com.itson.presentacion.frame.IniciarSesionFrame;
 import com.itson.presentacion.frame.SeleccionarPedidoFrame;
+import com.itson.presentacion.frame.StockFrame;
 import javax.swing.JFrame;
 import javax.swing.JOptionPane;
 
@@ -23,7 +26,20 @@ public class InicioControllerImpl implements InicioController {
 
     @Override
     public void verPedidos() {
-        JOptionPane.showMessageDialog(frame, "Historial de ventas en construcción");
+        new HistorialPedidosFrame().setVisible(true);
+        frame.dispose();
+    }
+
+    @Override
+    public void verHistorialVentas() {
+        new HistorialPedidosCompletadosFrame().setVisible(true);
+        frame.dispose();
+    }
+
+    @Override
+    public void verInventario() {
+        new StockFrame().setVisible(true);
+        frame.dispose();
     }
 
     @Override

@@ -8,6 +8,8 @@ public interface InventarioService {
 
     List<Insumo> obtenerTodosLosInsumos() throws InventarioException;
 
+    List<Insumo> obtenerInsumosConStockBajo() throws InventarioException;
+
     Insumo obtenerInsumoPorId(String id) throws InventarioException;
 
     Insumo obtenerInsumoPorCodigo(String codigo) throws InventarioException;

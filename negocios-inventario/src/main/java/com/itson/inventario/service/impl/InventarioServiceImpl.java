@@ -7,6 +7,7 @@ import com.itson.persistencia.dominio.Insumo;
 import com.itson.persistencia.exception.PersistenciaException;
 import java.util.List;
 import com.itson.inventario.service.InventarioService;
+import java.util.ArrayList;
 
 public class InventarioServiceImpl implements InventarioService {
 
@@ -22,6 +23,23 @@ public class InventarioServiceImpl implements InventarioService {
             return insumoDAO.consultarTodos();
         } catch (PersistenciaException e) {
             throw new InventarioException("Error al obtener el listado de insumos.", e);
+        }
+    }
+
+    @Override
+    public List<Insumo> obtenerInsumosConStockBajo() throws InventarioException {
+        try {
+            List<Insumo> todos = insumoDAO.consultarTodos();
+            List<Insumo> bajos = new ArrayList<>();
+
+            for (Insumo i : todos) {
+                if (i.getStockActual() <= i.getStockMinimo()) {
+                    bajos.add(i);
+                }
+            }
+            return bajos;
+        } catch (PersistenciaException e) {
+            throw new InventarioException("Error al calcular alertas de stock.", e);
         }
     }
 
@@ -113,12 +131,10 @@ public class InventarioServiceImpl implements InventarioService {
 
             if (!exito) {
                 Insumo insumo = insumoDAO.consultarPorId(idInsumo);
-
                 String nombreInsumo = "Desconocido";
                 if (insumo != null) {
                     nombreInsumo = insumo.getNombre();
                 }
-
                 throw new InventarioException("Stock insuficiente para el insumo: " + nombreInsumo);
             }
 

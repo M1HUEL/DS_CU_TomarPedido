@@ -27,14 +27,11 @@ public class ProductoMapper {
             p.setPrecio(0.0);
         }
 
-        // --- INGREDIENTES ---
         List<Document> ingDocs = (List<Document>) doc.get("ingredientes");
         if (ingDocs != null) {
             List<Ingrediente> ingredientes = new ArrayList<>();
             for (Document d : ingDocs) {
                 Ingrediente i = new Ingrediente();
-
-                // ID sin ternaria
                 if (d.getObjectId("_id") != null) {
                     i.setId(d.getObjectId("_id").toHexString());
                 } else {
@@ -44,7 +41,6 @@ public class ProductoMapper {
                 i.setNombre(d.getString("nombre"));
                 i.setDescripcion(d.getString("descripcion"));
 
-                // Precio sin ternaria
                 Double precioIng = d.getDouble("precio");
                 if (precioIng != null) {
                     i.setPrecio(precioIng);
@@ -52,7 +48,6 @@ public class ProductoMapper {
                     i.setPrecio(0.0);
                 }
 
-                // NUEVOS ATRIBUTOS DE INVENTARIO
                 i.setInsumoId(d.getString("insumoId"));
 
                 Double cant = d.getDouble("cantidadNecesaria");
@@ -67,13 +62,11 @@ public class ProductoMapper {
             p.setIngredientes(ingredientes);
         }
 
-        // --- COMPLEMENTOS ---
         List<Document> compDocs = (List<Document>) doc.get("complementos");
         if (compDocs != null) {
             List<Complemento> complementos = new ArrayList<>();
             for (Document d : compDocs) {
                 Complemento c = new Complemento();
-
                 if (d.getObjectId("_id") != null) {
                     c.setId(d.getObjectId("_id").toHexString());
                 } else {
@@ -90,7 +83,6 @@ public class ProductoMapper {
                     c.setPrecio(0.0);
                 }
 
-                // NUEVOS ATRIBUTOS DE INVENTARIO
                 c.setInsumoId(d.getString("insumoId"));
 
                 Double cant = d.getDouble("cantidadNecesaria");
@@ -105,13 +97,11 @@ public class ProductoMapper {
             p.setComplementos(complementos);
         }
 
-        // --- EXTRAS ---
         List<Document> extraDocs = (List<Document>) doc.get("extras");
         if (extraDocs != null) {
             List<Extra> extras = new ArrayList<>();
             for (Document d : extraDocs) {
                 Extra e = new Extra();
-
                 if (d.getObjectId("_id") != null) {
                     e.setId(d.getObjectId("_id").toHexString());
                 } else {
@@ -128,7 +118,6 @@ public class ProductoMapper {
                     e.setPrecio(0.0);
                 }
 
-                // NUEVOS ATRIBUTOS DE INVENTARIO
                 e.setInsumoId(d.getString("insumoId"));
 
                 Double cant = d.getDouble("cantidadNecesaria");
@@ -155,7 +144,6 @@ public class ProductoMapper {
         doc.append("nombre", p.getNombre());
         doc.append("precio", p.getPrecio());
 
-        // --- INGREDIENTES ---
         if (p.getIngredientes() != null) {
             List<Document> listaDocs = new ArrayList<>();
             for (Ingrediente i : p.getIngredientes()) {
@@ -163,7 +151,6 @@ public class ProductoMapper {
                 d.append("nombre", i.getNombre());
                 d.append("descripcion", i.getDescripcion());
                 d.append("precio", i.getPrecio());
-                // Nuevos campos
                 d.append("insumoId", i.getInsumoId());
                 d.append("cantidadNecesaria", i.getCantidadNecesaria());
 
@@ -172,7 +159,6 @@ public class ProductoMapper {
             doc.append("ingredientes", listaDocs);
         }
 
-        // --- COMPLEMENTOS ---
         if (p.getComplementos() != null) {
             List<Document> listaDocs = new ArrayList<>();
             for (Complemento c : p.getComplementos()) {
@@ -180,7 +166,6 @@ public class ProductoMapper {
                 d.append("nombre", c.getNombre());
                 d.append("descripcion", c.getDescripcion());
                 d.append("precio", c.getPrecio());
-                // Nuevos campos
                 d.append("insumoId", c.getInsumoId());
                 d.append("cantidadNecesaria", c.getCantidadNecesaria());
 
@@ -189,7 +174,6 @@ public class ProductoMapper {
             doc.append("complementos", listaDocs);
         }
 
-        // --- EXTRAS ---
         if (p.getExtras() != null) {
             List<Document> listaDocs = new ArrayList<>();
             for (Extra e : p.getExtras()) {
@@ -197,7 +181,6 @@ public class ProductoMapper {
                 d.append("nombre", e.getNombre());
                 d.append("descripcion", e.getDescripcion());
                 d.append("precio", e.getPrecio());
-                // Nuevos campos
                 d.append("insumoId", e.getInsumoId());
                 d.append("cantidadNecesaria", e.getCantidadNecesaria());
 

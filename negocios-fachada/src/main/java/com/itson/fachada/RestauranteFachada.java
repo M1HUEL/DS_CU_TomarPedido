@@ -37,6 +37,8 @@ public interface RestauranteFachada {
 
     List<Pedido> obtenerPedidos() throws RestauranteFachadaException;
 
+    List<Pedido> obtenerPedidosCompletados() throws RestauranteFachadaException;
+
     void crearPedido(Pedido pedido) throws RestauranteFachadaException;
 
     void actualizarPedido(String id, Pedido pedido) throws RestauranteFachadaException;
@@ -45,9 +47,15 @@ public interface RestauranteFachada {
 
     List<Insumo> obtenerInsumos() throws RestauranteFachadaException;
 
+    List<Insumo> obtenerAlertasStock() throws RestauranteFachadaException;
+
     void registrarInsumo(Insumo insumo) throws RestauranteFachadaException;
 
     void reabastecerInsumo(String insumoId, Double cantidad) throws RestauranteFachadaException;
+
+    void actualizarInsumo(Insumo insumo) throws RestauranteFachadaException;
+
+    void eliminarInsumo(Insumo insumo) throws RestauranteFachadaException;
 
     void guardarPago(Pago pago) throws RestauranteFachadaException;
 

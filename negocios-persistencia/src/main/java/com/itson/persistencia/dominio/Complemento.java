@@ -15,7 +15,6 @@ public class Complemento {
     public Complemento(String nombre, String descripcion) {
         this.nombre = nombre;
         this.descripcion = descripcion;
-        this.precio = precio;
     }
 
     public Complemento(String nombre, String descripcion, double precio, String insumoId, Double cantidadNecesaria) {

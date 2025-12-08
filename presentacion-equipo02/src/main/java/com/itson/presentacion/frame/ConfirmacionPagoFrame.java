@@ -45,7 +45,7 @@ public class ConfirmacionPagoFrame extends JFrame {
 
     private final Pedido pedido;
     private final Pago pago;
-    private final ConfirmacionPagoController controlador = new ConfirmacionPagoControllerImpl(this);
+    private final ConfirmacionPagoControllerImpl controlador = new ConfirmacionPagoControllerImpl(this);
 
     public ConfirmacionPagoFrame(Pedido pedido, Pago pago) {
         this.pedido = pedido;
@@ -96,17 +96,31 @@ public class ConfirmacionPagoFrame extends JFrame {
         JPanel tarjetaExito = crearTarjetaExito();
         tarjetaExito.setAlignmentX(Component.CENTER_ALIGNMENT);
 
+        JButton btnTicket = crearBoton("Descargar Ticket (PDF)", e -> {
+            ((ConfirmacionPagoControllerImpl) controlador).generarReciboPDF(pedido, pago);
+        });
+        btnTicket.setBackground(BLANCO);
+        btnTicket.setForeground(NARANJA);
+        btnTicket.setPreferredSize(new Dimension(260, 50));
+
         JButton btnInicio = crearBoton("Volver al Inicio", e -> controlador.terminarProceso());
-        btnInicio.setAlignmentX(Component.CENTER_ALIGNMENT);
-        btnInicio.setPreferredSize(new Dimension(300, 50));
-        btnInicio.setMaximumSize(new Dimension(300, 50));
+        btnInicio.setPreferredSize(new Dimension(260, 50));
+
+        JPanel panelBotones = new JPanel(new FlowLayout(FlowLayout.CENTER, 20, 0));
+        panelBotones.setBackground(CREMA);
+        panelBotones.setMaximumSize(new Dimension(1000, 60));
+        panelBotones.setAlignmentX(Component.CENTER_ALIGNMENT);
+
+        panelBotones.add(btnTicket);
+        panelBotones.add(btnInicio);
 
         JPanel contenidoVertical = new JPanel();
         contenidoVertical.setLayout(new BoxLayout(contenidoVertical, BoxLayout.Y_AXIS));
         contenidoVertical.setBackground(CREMA);
+
         contenidoVertical.add(tarjetaExito);
         contenidoVertical.add(Box.createVerticalStrut(40));
-        contenidoVertical.add(btnInicio);
+        contenidoVertical.add(panelBotones);
         contenidoVertical.add(Box.createVerticalStrut(60));
 
         JPanel contenedorCentral = new JPanel(new FlowLayout(FlowLayout.CENTER, 0, 20));
@@ -248,11 +262,15 @@ public class ConfirmacionPagoFrame extends JFrame {
 
         btn.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseEntered(java.awt.event.MouseEvent evt) {
-                btn.setBackground(new Color(230, 81, 0));
+                if (btn.getBackground().equals(NARANJA)) {
+                    btn.setBackground(new Color(230, 81, 0));
+                }
             }
 
             public void mouseExited(java.awt.event.MouseEvent evt) {
-                btn.setBackground(NARANJA);
+                if (btn.getForeground().equals(BLANCO)) {
+                    btn.setBackground(NARANJA);
+                }
             }
         });
 
