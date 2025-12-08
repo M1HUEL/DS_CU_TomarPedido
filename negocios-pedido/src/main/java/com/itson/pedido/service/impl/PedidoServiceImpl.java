@@ -18,7 +18,6 @@ public class PedidoServiceImpl implements PedidoService {
 
     public PedidoServiceImpl() {
         this.pedidoDAO = new PedidoDAOImpl();
-        // Inicializamos el servicio de inventario para poder descontar stock
         this.inventarioServicio = new InventarioServiceImpl();
     }
 
@@ -51,7 +50,6 @@ public class PedidoServiceImpl implements PedidoService {
 
     @Override
     public void agregarPedido(Pedido pedido) throws PedidoException {
-        // 1. Validaciones básicas de negocio
         if (pedido == null) {
             throw new PedidoException("No se puede registrar un pedido nulo.");
         }
@@ -60,21 +58,12 @@ public class PedidoServiceImpl implements PedidoService {
         }
 
         try {
-            // 2. Guardar el pedido en la base de datos (Persistencia)
             pedidoDAO.agregar(pedido);
 
-            // 3. Lógica de Inventario (Descontar stock)
-            // Recorremos los productos para descontar sus componentes
             if (pedido.getProductos() != null) {
                 for (Producto prod : pedido.getProductos()) {
-
-                    // A. Descontar Ingredientes
                     descontarLista(prod.getIngredientes());
-
-                    // B. Descontar Complementos
                     descontarLista(prod.getComplementos());
-
-                    // C. Descontar Extras
                     descontarLista(prod.getExtras());
                 }
             }
@@ -82,7 +71,6 @@ public class PedidoServiceImpl implements PedidoService {
         } catch (PersistenciaException e) {
             throw new PedidoException("Error al guardar el pedido en la base de datos.", e);
         } catch (InventarioException e) {
-            // Si falla el inventario (stock insuficiente), avisamos en la excepción del pedido
             throw new PedidoException("El pedido se guardó, pero hubo un error de inventario: " + e.getMessage(), e);
         }
     }
@@ -105,7 +93,6 @@ public class PedidoServiceImpl implements PedidoService {
         }
     }
 
-    // --- Método Auxiliar Privado para reutilizar lógica de descuento ---
     private void descontarLista(List<?> lista) throws InventarioException {
         if (lista == null) {
             return;
@@ -132,9 +119,7 @@ public class PedidoServiceImpl implements PedidoService {
                 }
             }
 
-            // Llamada al servicio de inventario si hay datos válidos
             if (insumoId != null && cantidad > 0) {
-                // Si esto falla, lanzará InventarioException hacia arriba
                 inventarioServicio.consumirStock(insumoId, cantidad);
             }
         }
