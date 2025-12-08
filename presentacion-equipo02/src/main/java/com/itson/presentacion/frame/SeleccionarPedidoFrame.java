@@ -17,26 +17,21 @@ public class SeleccionarPedidoFrame extends JFrame {
     private final Color CREMA = Colores.CREMA;
     private final Color BLANCO = Colores.BLANCO;
 
-    private SeleccionarPedidoController controlador;
+    private final SeleccionarPedidoController controlador = new SeleccionarPedidoControllerImpl(this);
     private JPanel panelTarjetas;
 
     public SeleccionarPedidoFrame() {
         super("Seleccionar Pedido");
-
-        // Inicializar el controlador pasándole esta vista
-        this.controlador = new SeleccionarPedidoControllerImpl(this);
-
         inicializarComponentes();
         cargarContenidoPanel();
     }
 
     private void inicializarComponentes() {
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        setSize(1624, 864);
+        setSize(1440, 720);
         setLocationRelativeTo(null);
         setResizable(false);
 
-        // --- HEADER ---
         JPanel header = new JPanel(new BorderLayout());
         header.setBackground(NARANJA);
         header.setPreferredSize(new Dimension(1440, 160));
@@ -46,7 +41,7 @@ public class SeleccionarPedidoFrame extends JFrame {
         headerContenido.setBorder(BorderFactory.createEmptyBorder(40, 100, 40, 100));
 
         JLabel lblTitulo = new JLabel("Selecciona tu producto", SwingConstants.LEFT);
-        lblTitulo.setFont(Fuentes.getPoppinsBold(28f));
+        lblTitulo.setFont(Fuentes.getPoppinsBold(24f));
         lblTitulo.setForeground(BLANCO);
 
         JLabel lblSubtitulo = new JLabel("Elige los productos disponibles y personaliza tu pedido", SwingConstants.LEFT);
@@ -57,7 +52,6 @@ public class SeleccionarPedidoFrame extends JFrame {
         headerContenido.add(lblSubtitulo);
         header.add(headerContenido, BorderLayout.CENTER);
 
-        // --- BODY ---
         panelTarjetas = new JPanel();
         panelTarjetas.setBackground(CREMA);
         panelTarjetas.setBorder(BorderFactory.createEmptyBorder(40, 100, 60, 100));
@@ -80,7 +74,6 @@ public class SeleccionarPedidoFrame extends JFrame {
     private void cargarContenidoPanel() {
         panelTarjetas.removeAll();
 
-        // Llamada al controlador para obtener datos
         List<Producto> productos = controlador.obtenerProductos();
 
         if (productos.isEmpty()) {
@@ -134,8 +127,6 @@ public class SeleccionarPedidoFrame extends JFrame {
         btnCancelar.setFont(Fuentes.getPoppinsBold(13f));
         btnCancelar.setFocusPainted(false);
         btnCancelar.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
-
-        // DELEGACIÓN AL CONTROLADOR
         btnCancelar.addActionListener(e -> controlador.cancelarSeleccion());
 
         JButton btnRecargar = new JButton("Retry");
@@ -217,16 +208,12 @@ public class SeleccionarPedidoFrame extends JFrame {
 
         JButton btnSeleccionar = new JButton("Seleccionar");
         btnSeleccionar.setBackground(NARANJA);
-        btnSeleccionar.setForeground(Color.WHITE);
-        btnSeleccionar.setFont(Fuentes.getPoppinsBold(14f));
+        btnSeleccionar.setForeground(BLANCO);
+        btnSeleccionar.setFont(Fuentes.getPoppinsRegular(14f));
         btnSeleccionar.setFocusPainted(false);
-        btnSeleccionar.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
         btnSeleccionar.setBorder(BorderFactory.createEmptyBorder(10, 0, 10, 0));
-
-        // DELEGACIÓN AL CONTROLADOR
-        btnSeleccionar.addActionListener(e -> {
-            controlador.seleccionarProducto(producto);
-        });
+        btnSeleccionar.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
+        btnSeleccionar.addActionListener(e -> controlador.seleccionarProducto(producto));
 
         tarjeta.add(lblImagen, BorderLayout.NORTH);
         tarjeta.add(infoPanel, BorderLayout.CENTER);

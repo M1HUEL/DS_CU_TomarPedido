@@ -19,18 +19,14 @@ public class UsuarioValidator {
     }
 
     public void validarActualizacion(String id, Usuario usuario) throws UsuarioException {
-        if (id == null || id.trim().isEmpty()) {
-            throw new UsuarioException("El ID es obligatorio para actualizar.");
-        }
-        validarCamposObligatorios(usuario);
+        validarTextoObligatorio(id, "El ID es obligatorio para actualizar.");
         validarExistencia(id);
+        validarCamposObligatorios(usuario);
         validarNombreUnico(usuario.getNombre(), id);
     }
 
     public void validarEliminacion(String id) throws UsuarioException {
-        if (id == null || id.trim().isEmpty()) {
-            throw new UsuarioException("El ID es obligatorio.");
-        }
+        validarTextoObligatorio(id, "El ID es obligatorio.");
         validarExistencia(id);
     }
 
@@ -38,12 +34,10 @@ public class UsuarioValidator {
         if (usuario == null) {
             throw new UsuarioException("No se enviaron datos del usuario.");
         }
-        if (usuario.getNombre() == null || usuario.getNombre().trim().isEmpty()) {
-            throw new UsuarioException("El nombre de usuario es obligatorio.");
-        }
-        if (usuario.getContrasena() == null || usuario.getContrasena().trim().isEmpty()) {
-            throw new UsuarioException("La contraseña es obligatoria.");
-        }
+
+        validarTextoObligatorio(usuario.getNombre(), "El nombre de usuario es obligatorio.");
+        validarTextoObligatorio(usuario.getContrasena(), "La contraseña es obligatoria.");
+
         if (usuario.getRol() == null) {
             throw new UsuarioException("Debe asignar un rol al usuario.");
         }
@@ -52,12 +46,17 @@ public class UsuarioValidator {
     private void validarNombreUnico(String nombre, String idExcluir) throws UsuarioException {
         try {
             Usuario existente = usuarioDAO.consultarPorNombre(nombre);
-            if (existente != null) {
-                if (idExcluir != null && existente.getId().equals(idExcluir)) {
-                    return;
-                }
-                throw new UsuarioException("El nombre de usuario '" + nombre + "' ya está ocupado.");
+
+            if (existente == null) {
+                return;
             }
+
+            if (idExcluir != null && existente.getId().equals(idExcluir)) {
+                return;
+            }
+
+            throw new UsuarioException("El nombre de usuario '" + nombre + "' ya está ocupado.");
+
         } catch (PersistenciaException ex) {
             throw new UsuarioException("Error al validar la unicidad del nombre.", ex);
         }
@@ -70,6 +69,12 @@ public class UsuarioValidator {
             }
         } catch (PersistenciaException ex) {
             throw new UsuarioException("Error al verificar la existencia del usuario.", ex);
+        }
+    }
+
+    private void validarTextoObligatorio(String valor, String mensaje) throws UsuarioException {
+        if (valor == null || valor.trim().isEmpty()) {
+            throw new UsuarioException(mensaje);
         }
     }
 }

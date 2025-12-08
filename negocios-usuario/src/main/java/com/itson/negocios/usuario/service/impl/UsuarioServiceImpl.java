@@ -75,4 +75,31 @@ public class UsuarioServiceImpl implements UsuarioService {
             throw new UsuarioException("Error al eliminar el usuario.", ex);
         }
     }
+
+    @Override
+    public Usuario login(String nombre, String password) throws UsuarioException {
+        if (nombre == null || nombre.trim().isEmpty()) {
+            throw new UsuarioException("El nombre de usuario es requerido.");
+        }
+        if (password == null || password.trim().isEmpty()) {
+            throw new UsuarioException("La contraseña es requerida.");
+        }
+
+        try {
+            Usuario usuario = usuarioDAO.consultarPorNombre(nombre);
+
+            if (usuario == null) {
+                throw new UsuarioException("Credenciales incorrectas.");
+            }
+
+            if (!usuario.getContrasena().equals(password)) {
+                throw new UsuarioException("Credenciales incorrectas.");
+            }
+
+            return usuario;
+
+        } catch (PersistenciaException ex) {
+            throw new UsuarioException("Error al intentar iniciar sesión.", ex);
+        }
+    }
 }

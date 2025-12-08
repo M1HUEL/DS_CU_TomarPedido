@@ -36,24 +36,20 @@ public class ConfirmacionPedidoFrame extends JFrame {
     private final Color CREMA = Colores.CREMA;
     private final Color BLANCO = Colores.BLANCO;
     private final Color GRIS = Colores.GRIS;
-    private final Color GRIS_CLARO = new Color(248, 248, 248);
+    private final Color GRIS_CLARO = Colores.GRIS_CLARO;
 
     private Pedido pedido;
-    // Add the Controller
-    private ConfirmacionPedidoController controlador;
+    private final ConfirmacionPedidoController controlador = new ConfirmacionPedidoControllerImpl();
 
     public ConfirmacionPedidoFrame(Pedido pedido) {
         this.pedido = pedido;
-        // Initialize Controller
-        this.controlador = new ConfirmacionPedidoControllerImpl();
 
-        setTitle("Confirmación de Pedido");
-        setSize(1624, 864);
+        setTitle("Confirmación Pedido");
+        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        setSize(1440, 720);
         setLocationRelativeTo(null);
         setResizable(false);
-        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
-        // --- HEADER ---
         JPanel header = new JPanel(new BorderLayout());
         header.setBackground(NARANJA);
         header.setPreferredSize(new Dimension(1680, 130));
@@ -63,11 +59,11 @@ public class ConfirmacionPedidoFrame extends JFrame {
         headerContenido.setBorder(BorderFactory.createEmptyBorder(30, 80, 30, 80));
 
         JLabel lblTitulo = new JLabel("Confirmación de Pedido", SwingConstants.LEFT);
-        lblTitulo.setFont(Fuentes.getPoppinsBold(32f));
+        lblTitulo.setFont(Fuentes.getPoppinsBold(24f));
         lblTitulo.setForeground(BLANCO);
 
         JLabel lblSubtitulo = new JLabel("Revisa tu selección antes de proceder al pago", SwingConstants.LEFT);
-        lblSubtitulo.setFont(Fuentes.getPoppinsRegular(20f));
+        lblSubtitulo.setFont(Fuentes.getPoppinsRegular(16f));
         lblSubtitulo.setForeground(new Color(255, 255, 255, 200));
 
         JPanel titulosHeader = new JPanel();
@@ -80,11 +76,38 @@ public class ConfirmacionPedidoFrame extends JFrame {
         headerContenido.add(titulosHeader, BorderLayout.CENTER);
         header.add(headerContenido, BorderLayout.CENTER);
 
-        // --- TARJETA DE RESUMEN ---
+        JButton btnAceptar = crearBoton("Confirmar y Pagar", e -> {
+            controlador.guardarPedido(this.pedido);
+            dispose();
+        });
+
+        JButton btnCancelar = crearBoton("Volver / Cancelar", e -> {
+            dispose();
+            new SeleccionarPedidoFrame().setVisible(true);
+        });
+
+        JPanel panelBotones = new JPanel(new FlowLayout(FlowLayout.CENTER, 40, 0));
+        panelBotones.setBackground(CREMA);
+        panelBotones.add(btnAceptar);
+        panelBotones.add(btnCancelar);
+
         JPanel tarjetaResumen = crearTarjetaResumen();
+        tarjetaResumen.setAlignmentX(JPanel.CENTER_ALIGNMENT);
+
+        JPanel contenidoVertical = new JPanel();
+        contenidoVertical.setLayout(new BoxLayout(contenidoVertical, BoxLayout.Y_AXIS));
+        contenidoVertical.setBackground(CREMA);
+
+        contenidoVertical.add(tarjetaResumen);
+        contenidoVertical.add(Box.createVerticalStrut(30));
+
+        panelBotones.setAlignmentX(JPanel.CENTER_ALIGNMENT);
+        contenidoVertical.add(panelBotones);
+        contenidoVertical.add(Box.createVerticalStrut(50));
+
         JPanel contenedorCentral = new JPanel(new FlowLayout(FlowLayout.CENTER, 0, 50));
         contenedorCentral.setBackground(CREMA);
-        contenedorCentral.add(tarjetaResumen);
+        contenedorCentral.add(contenidoVertical);
 
         JScrollPane scrollPrincipal = new JScrollPane(contenedorCentral);
         scrollPrincipal.setBorder(null);
@@ -93,51 +116,28 @@ public class ConfirmacionPedidoFrame extends JFrame {
         scrollPrincipal.getViewport().setBackground(CREMA);
         scrollPrincipal.setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
 
-        // --- BOTONES ---
-        JPanel panelBotones = new JPanel(new FlowLayout(FlowLayout.CENTER, 50, 30));
-        panelBotones.setBackground(CREMA);
-        panelBotones.setBorder(BorderFactory.createEmptyBorder(0, 0, 30, 0));
-
-        // ACTION: Save to Database
-        JButton btnAceptar = crearBoton("Confirmar y Pagar", e -> {
-            // This calls the controller, saves to DB, and restarts the app
-            controlador.guardarPedido(this.pedido);
-            dispose(); // Close this window
-        });
-
-        // ACTION: Go back to start
-        JButton btnCancelar = crearBoton("Volver / Cancelar", e -> {
-            dispose();
-            new SeleccionarPedidoFrame().setVisible(true);
-        });
-
-        panelBotones.add(btnAceptar);
-        panelBotones.add(btnCancelar);
-
         add(header, BorderLayout.NORTH);
         add(scrollPrincipal, BorderLayout.CENTER);
-        add(panelBotones, BorderLayout.SOUTH);
 
         setVisible(true);
     }
 
     private JPanel crearTarjetaResumen() {
-        JPanel tarjeta = new JPanel(new BorderLayout(50, 0));
+        JPanel tarjeta = new JPanel(new BorderLayout(30, 0));
         tarjeta.setBackground(BLANCO);
-        tarjeta.setPreferredSize(new Dimension(1400, 600));
+        tarjeta.setPreferredSize(new Dimension(1000, 480));
 
         Border bordeTarjeta = BorderFactory.createCompoundBorder(
                 BorderFactory.createLineBorder(new Color(220, 220, 220), 1),
-                BorderFactory.createEmptyBorder(50, 50, 50, 50)
+                BorderFactory.createEmptyBorder(30, 30, 30, 30)
         );
         tarjeta.setBorder(bordeTarjeta);
 
-        // --- IMAGEN ---
         JLabel lblImagen = new JLabel();
         lblImagen.setHorizontalAlignment(SwingConstants.CENTER);
         lblImagen.setVerticalAlignment(SwingConstants.CENTER);
 
-        ImageIcon icono = cargarIcono("/images/burger.png", 450, 450);
+        ImageIcon icono = cargarIcono("/images/burger.png", 280, 280);
         if (icono != null) {
             lblImagen.setIcon(icono);
         }
@@ -145,23 +145,22 @@ public class ConfirmacionPedidoFrame extends JFrame {
         JPanel panelImagen = new JPanel(new BorderLayout());
         panelImagen.setBackground(BLANCO);
         panelImagen.add(lblImagen, BorderLayout.CENTER);
-        panelImagen.setPreferredSize(new Dimension(500, 0));
+        panelImagen.setPreferredSize(new Dimension(320, 0));
 
-        // --- DETALLES ---
-        JPanel panelDerecho = new JPanel(new BorderLayout(0, 20));
+        JPanel panelDerecho = new JPanel(new BorderLayout(0, 15));
         panelDerecho.setBackground(BLANCO);
 
         JPanel panelHeaderDerecho = new JPanel(new BorderLayout());
         panelHeaderDerecho.setBackground(BLANCO);
 
-        // Handle case where Order Name might be null
         String nombrePedido = pedido.getNombre() != null ? pedido.getNombre().toUpperCase() : "PEDIDO PERSONALIZADO";
+
         JLabel lblNombre = new JLabel(nombrePedido);
-        lblNombre.setFont(Fuentes.getPoppinsBold(28f));
+        lblNombre.setFont(Fuentes.getPoppinsBold(22f));
         lblNombre.setForeground(Color.BLACK);
 
         JLabel lblDetalle = new JLabel("Resumen de consumo");
-        lblDetalle.setFont(Fuentes.getPoppinsRegular(16f));
+        lblDetalle.setFont(Fuentes.getPoppinsRegular(14f));
         lblDetalle.setForeground(GRIS);
 
         JPanel encabezadoTexto = new JPanel();
@@ -176,7 +175,6 @@ public class ConfirmacionPedidoFrame extends JFrame {
 
         panelDerecho.add(panelHeaderDerecho, BorderLayout.NORTH);
 
-        // LISTA
         JPanel listaProductosPanel = new JPanel();
         listaProductosPanel.setLayout(new BoxLayout(listaProductosPanel, BoxLayout.Y_AXIS));
         listaProductosPanel.setBackground(BLANCO);
@@ -186,14 +184,14 @@ public class ConfirmacionPedidoFrame extends JFrame {
             for (Producto p : productos) {
                 JPanel itemPanel = new JPanel(new BorderLayout());
                 itemPanel.setBackground(BLANCO);
-                itemPanel.setBorder(BorderFactory.createEmptyBorder(0, 10, 15, 10));
+                itemPanel.setBorder(BorderFactory.createEmptyBorder(0, 5, 10, 5));
 
                 JLabel lblProd = new JLabel(p.getNombre());
-                lblProd.setFont(Fuentes.getPoppinsRegular(18f));
+                lblProd.setFont(Fuentes.getPoppinsRegular(15f));
                 lblProd.setForeground(Color.DARK_GRAY);
 
                 JLabel lblPrecioProd = new JLabel("$" + String.format("%.2f", p.getPrecio()));
-                lblPrecioProd.setFont(Fuentes.getPoppinsBold(18f));
+                lblPrecioProd.setFont(Fuentes.getPoppinsBold(15f));
                 lblPrecioProd.setForeground(Color.BLACK);
 
                 itemPanel.add(lblProd, BorderLayout.WEST);
@@ -210,7 +208,6 @@ public class ConfirmacionPedidoFrame extends JFrame {
 
         panelDerecho.add(scrollLista, BorderLayout.CENTER);
 
-        // FOOTER
         JPanel panelFooter = new JPanel();
         panelFooter.setLayout(new BoxLayout(panelFooter, BoxLayout.Y_AXIS));
         panelFooter.setBackground(BLANCO);
@@ -220,17 +217,17 @@ public class ConfirmacionPedidoFrame extends JFrame {
 
         JPanel panelComentarioBox = new JPanel(new BorderLayout());
         panelComentarioBox.setBackground(GRIS_CLARO);
-        panelComentarioBox.setBorder(BorderFactory.createEmptyBorder(15, 20, 15, 20));
+        panelComentarioBox.setBorder(BorderFactory.createEmptyBorder(10, 15, 10, 15));
 
         JLabel lblNotaTitulo = new JLabel("Instrucciones especiales:");
-        lblNotaTitulo.setFont(Fuentes.getPoppinsBold(14f));
+        lblNotaTitulo.setFont(Fuentes.getPoppinsBold(13f));
         lblNotaTitulo.setForeground(GRIS);
 
         String textoNota = (pedido.getComentario() != null && !pedido.getComentario().isEmpty())
                 ? pedido.getComentario() : "Ninguna instrucción adicional.";
 
         JTextArea areaNota = new JTextArea(textoNota);
-        areaNota.setFont(Fuentes.getPoppinsRegular(15f));
+        areaNota.setFont(Fuentes.getPoppinsRegular(13f));
         areaNota.setForeground(Color.DARK_GRAY);
         areaNota.setBackground(GRIS_CLARO);
         areaNota.setLineWrap(true);
@@ -241,21 +238,21 @@ public class ConfirmacionPedidoFrame extends JFrame {
         JScrollPane scrollNota = new JScrollPane(areaNota);
         scrollNota.setBorder(null);
         scrollNota.setBackground(GRIS_CLARO);
-        scrollNota.setPreferredSize(new Dimension(100, 70));
+        scrollNota.setPreferredSize(new Dimension(100, 55));
 
         panelComentarioBox.add(lblNotaTitulo, BorderLayout.NORTH);
         panelComentarioBox.add(scrollNota, BorderLayout.CENTER);
 
         JPanel panelTotal = new JPanel(new BorderLayout());
         panelTotal.setBackground(BLANCO);
-        panelTotal.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
+        panelTotal.setBorder(BorderFactory.createEmptyBorder(10, 5, 5, 5));
 
         JLabel lblTotalLabel = new JLabel("Total a Pagar");
-        lblTotalLabel.setFont(Fuentes.getPoppinsRegular(22f));
+        lblTotalLabel.setFont(Fuentes.getPoppinsRegular(18f));
         lblTotalLabel.setForeground(GRIS);
 
         JLabel lblTotalValue = new JLabel("$" + String.format("%.2f", pedido.getPrecio()));
-        lblTotalValue.setFont(Fuentes.getPoppinsBold(42f));
+        lblTotalValue.setFont(Fuentes.getPoppinsBold(32f));
         lblTotalValue.setForeground(NARANJA);
 
         panelTotal.add(lblTotalLabel, BorderLayout.WEST);
@@ -263,9 +260,9 @@ public class ConfirmacionPedidoFrame extends JFrame {
 
         panelFooter.add(Box.createVerticalStrut(10));
         panelFooter.add(separadorFooter);
-        panelFooter.add(Box.createVerticalStrut(20));
+        panelFooter.add(Box.createVerticalStrut(15));
         panelFooter.add(panelComentarioBox);
-        panelFooter.add(Box.createVerticalStrut(25));
+        panelFooter.add(Box.createVerticalStrut(15));
         panelFooter.add(panelTotal);
 
         panelDerecho.add(panelFooter, BorderLayout.SOUTH);
@@ -276,15 +273,16 @@ public class ConfirmacionPedidoFrame extends JFrame {
         return tarjeta;
     }
 
-    private JButton crearBoton(String texto, ActionListener listener) {
+    private JButton crearBoton(String texto, ActionListener e) {
         JButton btn = new JButton(texto);
         btn.setBackground(NARANJA);
         btn.setForeground(BLANCO);
-        btn.setFont(Fuentes.getPoppinsSemiBold(18f));
+        btn.setFont(Fuentes.getPoppinsRegular(14f));
         btn.setFocusPainted(false);
-        btn.setCursor(new Cursor(Cursor.HAND_CURSOR));
-        btn.setBorder(BorderFactory.createEmptyBorder(18, 50, 18, 50));
-        btn.addActionListener(listener);
+        btn.setBorder(BorderFactory.createEmptyBorder(10, 0, 10, 0));
+        btn.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
+        btn.setPreferredSize(new Dimension(240, 45));
+        btn.addActionListener(e);
         return btn;
     }
 

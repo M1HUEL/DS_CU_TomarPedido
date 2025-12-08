@@ -6,6 +6,7 @@ import com.itson.fachada.exception.RestauranteFachadaException;
 import com.itson.persistencia.dominio.*;
 import com.itson.presentacion.controller.PersonalizarPedidoController;
 import com.itson.presentacion.frame.ConfirmacionPedidoFrame;
+import com.itson.presentacion.frame.SeleccionarPedidoFrame;
 import java.util.ArrayList;
 import java.util.List;
 import javax.swing.JFrame;
@@ -26,11 +27,7 @@ public class PersonalizarPedidoControllerImpl implements PersonalizarPedidoContr
         List<Ingrediente> lista = new ArrayList<>();
         try {
             for (Insumo i : fachada.obtenerInsumos()) {
-                // Filtro simple: Si es pieza, rebanada o kilo, puede ser ingrediente extra
-                // Excluimos las bebidas o papas congeladas (que son Productos)
                 if (!i.getNombre().contains("Papas") && !i.getNombre().contains("Coca") && !i.getNombre().contains("Agua")) {
-                    // Creamos el ingrediente "base"
-                    // Precio 0.0 porque asumimos que es para poner/quitar de la burger
                     Ingrediente ing = new Ingrediente(i.getNombre(), "Opción Base", 0.0, i.getId(), 1.0);
                     lista.add(ing);
                 }
@@ -46,14 +43,11 @@ public class PersonalizarPedidoControllerImpl implements PersonalizarPedidoContr
         List<Extra> lista = new ArrayList<>();
         try {
             for (Insumo i : fachada.obtenerInsumos()) {
-                // Lógica de negocio: ¿Qué vendemos como EXTRA?
-                // Ejemplo: Tocino, Queso, Carne Extra
                 if (i.getCodigo().contains("TOCINO") || i.getCodigo().contains("QUESO") || i.getCodigo().contains("CARNE")) {
-                    double precio = 15.0; // Precio default
+                    double precio = 15.0;
                     if (i.getNombre().contains("Carne")) {
                         precio = 35.0;
                     }
-
                     Extra extra = new Extra("Extra " + i.getNombre(), "Porción Adicional", precio, i.getId(), 1.0);
                     lista.add(extra);
                 }
@@ -69,13 +63,10 @@ public class PersonalizarPedidoControllerImpl implements PersonalizarPedidoContr
         List<Complemento> lista = new ArrayList<>();
         try {
             for (Insumo i : fachada.obtenerInsumos()) {
-                // Lógica: ¿Qué son COMPLEMENTOS? (Salsas, Aderezos)
                 if (i.getNombre().contains("Salsa") || i.getNombre().contains("Ketchup")
                         || i.getNombre().contains("Mayonesa") || i.getNombre().contains("Pepinillos")) {
-
-                    // A veces los complementos son gratis, a veces no. Ponemos precio bajo.
                     double precio = 5.0;
-                    Complemento comp = new Complemento("Aderezo " + i.getNombre(), "Al lado", precio, i.getId(), 0.050); // 50ml/gr
+                    Complemento comp = new Complemento("Aderezo " + i.getNombre(), "Al lado", precio, i.getId(), 0.050);
                     lista.add(comp);
                 }
             }
@@ -87,15 +78,12 @@ public class PersonalizarPedidoControllerImpl implements PersonalizarPedidoContr
 
     @Override
     public void procesarPedido(Producto productoBase, List<Ingrediente> ingredientes, List<Extra> extras, List<Complemento> complementos, String comentario) {
-
-        // 1. Clonar y Personalizar
         Producto productoFinal = new Producto();
         productoFinal.setNombre(productoBase.getNombre() + " (Personalizado)");
         productoFinal.setIngredientes(ingredientes);
         productoFinal.setExtras(extras);
         productoFinal.setComplementos(complementos);
 
-        // 2. Calcular Precio
         double total = productoBase.getPrecio();
         for (Extra e : extras) {
             total += e.getPrecio();
@@ -105,7 +93,6 @@ public class PersonalizarPedidoControllerImpl implements PersonalizarPedidoContr
         }
         productoFinal.setPrecio(total);
 
-        // 3. Crear Pedido
         Pedido pedido = new Pedido();
         pedido.setNombre("Orden de " + productoBase.getNombre());
         pedido.setComentario(comentario);
@@ -115,7 +102,6 @@ public class PersonalizarPedidoControllerImpl implements PersonalizarPedidoContr
         listaProds.add(productoFinal);
         pedido.setProductos(listaProds);
 
-        // 4. Navegar
         if (frame != null) {
             frame.dispose();
         }
@@ -130,6 +116,6 @@ public class PersonalizarPedidoControllerImpl implements PersonalizarPedidoContr
         if (frame != null) {
             frame.dispose();
         }
-        // Opcional: Volver al menú anterior
+        new SeleccionarPedidoFrame().setVisible(true);
     }
 }

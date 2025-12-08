@@ -8,17 +8,12 @@ import java.util.List;
 
 public interface PersonalizarPedidoController {
 
-    // --- Carga de Datos ---
     List<Ingrediente> obtenerIngredientesDisponibles();
 
     List<Extra> obtenerExtrasDisponibles();
 
     List<Complemento> obtenerComplementosDisponibles();
 
-    // --- Acción Principal ---
-    /**
-     * Procesa la personalización y avanza a la confirmación.
-     */
     void procesarPedido(Producto productoBase, List<Ingrediente> ingredientes, List<Extra> extras, List<Complemento> complementos, String comentario);
 
     void cancelar();

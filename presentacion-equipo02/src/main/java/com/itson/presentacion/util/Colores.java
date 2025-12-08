@@ -8,5 +8,7 @@ public class Colores {
     public static final Color CREMA = new Color(255, 245, 230);
     public static final Color BLANCO = Color.white;
     public static final Color GRIS = new Color(200, 200, 200);
+    public static final Color GRIS_CLARO = new Color(248, 248, 248);
+    public static final Color VERDE = new Color(76, 175, 80);
 
 }

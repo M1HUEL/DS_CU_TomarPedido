@@ -17,4 +17,6 @@ public interface UsuarioService {
     void actualizarUsuario(String id, Usuario usuario) throws UsuarioException;
 
     void eliminarUsuario(String id) throws UsuarioException;
+
+    Usuario login(String nombre, String password) throws UsuarioException;
 }

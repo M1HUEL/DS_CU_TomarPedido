@@ -1,5 +1,7 @@
 package com.itson.presentacion.frame;
 
+import com.itson.presentacion.controller.IniciarSesionController;
+import com.itson.presentacion.controller.impl.IniciarSesionControllerImpl;
 import com.itson.presentacion.util.Colores;
 import com.itson.presentacion.util.Fuentes;
 import java.awt.BorderLayout;
@@ -12,7 +14,6 @@ import javax.swing.BorderFactory;
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
-import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JPasswordField;
 import javax.swing.JTextField;
@@ -30,14 +31,15 @@ public class IniciarSesionFrame extends JFrame {
     private JTextField txtNombre;
     private JPasswordField txtContrasena;
 
+    private final IniciarSesionController controlador = new IniciarSesionControllerImpl(this);
+
     public IniciarSesionFrame() {
         super("Iniciar Sesión");
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        setSize(1624, 864);
+        setSize(1440, 720);
         setLocationRelativeTo(null);
         setResizable(false);
 
-        // --- HEADER ---
         JPanel header = new JPanel(new BorderLayout());
         header.setBackground(NARANJA);
         header.setPreferredSize(new Dimension(1440, 160));
@@ -47,7 +49,7 @@ public class IniciarSesionFrame extends JFrame {
         headerContenido.setBorder(BorderFactory.createEmptyBorder(40, 100, 40, 100));
 
         JLabel lblTitulo = new JLabel("Iniciar Sesión", SwingConstants.LEFT);
-        lblTitulo.setFont(Fuentes.getPoppinsBold(28f));
+        lblTitulo.setFont(Fuentes.getPoppinsBold(24f));
         lblTitulo.setForeground(BLANCO);
 
         JLabel lblSubtitulo = new JLabel("Introduce tus credenciales para continuar", SwingConstants.LEFT);
@@ -58,19 +60,16 @@ public class IniciarSesionFrame extends JFrame {
         headerContenido.add(lblSubtitulo);
         header.add(headerContenido, BorderLayout.CENTER);
 
-        // --- PANEL TARJETA BLANCA (Login) ---
         JPanel panelBlanco = new JPanel();
-        panelBlanco.setLayout(new GridLayout(4, 1, 0, 20)); // 4 filas, espaciado de 20
+        panelBlanco.setLayout(new GridLayout(4, 1, 0, 20));
         panelBlanco.setBackground(BLANCO);
 
-        // Borde compuesto: Línea gris + Padding interno grande
         Border bordePanelBlanco = BorderFactory.createCompoundBorder(
                 BorderFactory.createLineBorder(GRIS, 1),
-                BorderFactory.createEmptyBorder(60, 120, 60, 120)
+                BorderFactory.createEmptyBorder(38, 38, 38, 38)
         );
         panelBlanco.setBorder(bordePanelBlanco);
 
-        // 1. Campo Nombre
         JPanel panelCampoNombre = new JPanel(new BorderLayout(0, 5));
         panelCampoNombre.setBackground(BLANCO);
 
@@ -82,14 +81,13 @@ public class IniciarSesionFrame extends JFrame {
         txtNombre.setBackground(CREMA);
         txtNombre.setBorder(BorderFactory.createCompoundBorder(
                 BorderFactory.createLineBorder(GRIS, 1),
-                BorderFactory.createEmptyBorder(5, 10, 5, 10) // Padding dentro del input
+                BorderFactory.createEmptyBorder(5, 10, 5, 10)
         ));
 
         panelCampoNombre.add(lblNombre, BorderLayout.NORTH);
         panelCampoNombre.add(txtNombre, BorderLayout.CENTER);
         panelBlanco.add(panelCampoNombre);
 
-        // 2. Campo Contraseña
         JPanel panelCampoContrasena = new JPanel(new BorderLayout(0, 5));
         panelCampoContrasena.setBackground(BLANCO);
 
@@ -108,42 +106,43 @@ public class IniciarSesionFrame extends JFrame {
         panelCampoContrasena.add(txtContrasena, BorderLayout.CENTER);
         panelBlanco.add(panelCampoContrasena);
 
-        // 3. Botón Iniciar Sesión
         JPanel panelBoton = new JPanel(new FlowLayout(FlowLayout.CENTER));
         panelBoton.setBackground(BLANCO);
 
-        JButton btnIniciarSesion = new JButton("Iniciar Sesión");
-        btnIniciarSesion.setBackground(NARANJA);
-        btnIniciarSesion.setForeground(BLANCO);
-        btnIniciarSesion.setFont(Fuentes.getPoppinsSemiBold(14f));
-        btnIniciarSesion.setFocusPainted(false);
-        btnIniciarSesion.setBorder(BorderFactory.createEmptyBorder(10, 0, 10, 0));
-        btnIniciarSesion.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
-        btnIniciarSesion.setPreferredSize(new Dimension(200, 45));
+        JButton btnIniciarSesion = crearBoton("Iniciar Sesión");
 
-        // Acción del botón
         btnIniciarSesion.addActionListener(e -> {
             String nombre = txtNombre.getText();
             String contrasena = new String(txtContrasena.getPassword());
-            JOptionPane.showMessageDialog(this, "Intentando acceder...\nUsuario: " + nombre);
-        });
 
+            controlador.iniciarSesion(nombre, contrasena);
+        });
         panelBoton.add(btnIniciarSesion);
         panelBlanco.add(panelBoton);
 
-        // --- CONTENEDOR CENTRAL ---
         JPanel contenedorCentral = new JPanel(new BorderLayout());
         contenedorCentral.setBackground(CREMA);
-        // Margen externo para centrar la tarjeta blanca
-        contenedorCentral.setBorder(BorderFactory.createEmptyBorder(60, 350, 100, 350));
+        contenedorCentral.setBorder(BorderFactory.createEmptyBorder(40, 200, 60, 200));
         contenedorCentral.add(panelBlanco, BorderLayout.CENTER);
 
-        // --- ARMADO FINAL ---
         JPanel panelPrincipal = new JPanel(new BorderLayout());
         panelPrincipal.add(header, BorderLayout.NORTH);
         panelPrincipal.add(contenedorCentral, BorderLayout.CENTER);
 
         add(panelPrincipal);
+    }
+
+    private JButton crearBoton(String texto) {
+        JButton btn = new JButton(texto);
+        btn.setBackground(NARANJA);
+        btn.setForeground(BLANCO);
+        btn.setFont(Fuentes.getPoppinsRegular(14f));
+        btn.setFocusPainted(false);
+        btn.setBorder(BorderFactory.createEmptyBorder(10, 0, 10, 0));
+        btn.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
+        btn.setPreferredSize(new Dimension(240, 45));
+
+        return btn;
     }
 
     public static void main(String[] args) {

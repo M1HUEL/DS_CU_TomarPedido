@@ -7,10 +7,8 @@ import javax.swing.JOptionPane;
 
 public class InicioControllerImpl implements InicioController {
 
-    // Atributo global para manipular la ventana
     private final JFrame frame;
 
-    // Inyectamos el frame en el constructor
     public InicioControllerImpl(JFrame frame) {
         this.frame = frame;
     }
@@ -18,7 +16,6 @@ public class InicioControllerImpl implements InicioController {
     @Override
     public void crearPedido() {
         new SeleccionarPedidoFrame().setVisible(true);
-        // Cerramos la ventana usando el atributo global
         frame.dispose();
     }
 

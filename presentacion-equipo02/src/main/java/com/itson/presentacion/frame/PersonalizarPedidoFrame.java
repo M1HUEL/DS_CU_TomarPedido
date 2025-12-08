@@ -6,7 +6,7 @@ import com.itson.presentacion.controller.impl.PersonalizarPedidoControllerImpl;
 import com.itson.presentacion.util.Colores;
 import com.itson.presentacion.util.Fuentes;
 import java.awt.*;
-import java.net.URL;
+import java.awt.event.ActionListener;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -20,12 +20,10 @@ public class PersonalizarPedidoFrame extends JFrame {
     private final Color CREMA = Colores.CREMA;
     private final Color BLANCO = Colores.BLANCO;
     private final Color GRIS = Colores.GRIS;
-    private final Color GRIS_SUAVE = new Color(220, 220, 220);
 
-    private final Producto productoBase;
-    private final PersonalizarPedidoController controlador;
+    private final Producto producto;
+    private final PersonalizarPedidoController controlador = new PersonalizarPedidoControllerImpl(this);
 
-    // Mapas para rastrear checkboxes
     private final Map<Ingrediente, JCheckBox> checkIngredientes = new HashMap<>();
     private final Map<Extra, JCheckBox> checkExtras = new HashMap<>();
     private final Map<Complemento, JCheckBox> checkComplementos = new HashMap<>();
@@ -33,15 +31,14 @@ public class PersonalizarPedidoFrame extends JFrame {
     private JTextArea areaComentario;
 
     public PersonalizarPedidoFrame(Producto producto) {
-        this.productoBase = producto;
-        this.controlador = new PersonalizarPedidoControllerImpl(this);
+        this.producto = producto;
 
         inicializarVentana();
         inicializarComponentes();
     }
 
     private void inicializarVentana() {
-        setTitle("Personalizar: " + productoBase.getNombre());
+        setTitle("Personalizar: " + producto.getNombre());
         setSize(1624, 864);
         setLocationRelativeTo(null);
         setResizable(false);
@@ -49,25 +46,22 @@ public class PersonalizarPedidoFrame extends JFrame {
     }
 
     private void inicializarComponentes() {
-        // --- HEADER ---
         JPanel header = new JPanel(new BorderLayout());
         header.setBackground(NARANJA);
         header.setPreferredSize(new Dimension(1440, 140));
 
-        JLabel lblTitulo = new JLabel("Personalizar " + productoBase.getNombre(), SwingConstants.LEFT);
+        JLabel lblTitulo = new JLabel("Personalizar " + producto.getNombre(), SwingConstants.LEFT);
         lblTitulo.setFont(Fuentes.getPoppinsBold(28f));
         lblTitulo.setForeground(BLANCO);
         lblTitulo.setBorder(new EmptyBorder(30, 100, 30, 100));
         header.add(lblTitulo, BorderLayout.CENTER);
 
-        // --- CONTENT ---
         JPanel panelContenido = new JPanel();
         panelContenido.setLayout(new BoxLayout(panelContenido, BoxLayout.Y_AXIS));
         panelContenido.setBackground(CREMA);
         panelContenido.setBorder(BorderFactory.createEmptyBorder(20, 100, 20, 100));
 
-        // 1. INGREDIENTES
-        List<Ingrediente> ings = productoBase.getIngredientes() != null ? productoBase.getIngredientes() : new ArrayList<>();
+        List<Ingrediente> ings = producto.getIngredientes() != null ? producto.getIngredientes() : new ArrayList<>();
         ings.addAll(controlador.obtenerIngredientesDisponibles());
 
         if (!ings.isEmpty()) {
@@ -75,8 +69,7 @@ public class PersonalizarPedidoFrame extends JFrame {
             panelContenido.add(Box.createVerticalStrut(15));
         }
 
-        // 2. EXTRAS
-        List<Extra> extras = productoBase.getExtras() != null ? productoBase.getExtras() : new ArrayList<>();
+        List<Extra> extras = producto.getExtras() != null ? producto.getExtras() : new ArrayList<>();
         extras.addAll(controlador.obtenerExtrasDisponibles());
 
         if (!extras.isEmpty()) {
@@ -84,8 +77,7 @@ public class PersonalizarPedidoFrame extends JFrame {
             panelContenido.add(Box.createVerticalStrut(15));
         }
 
-        // 3. COMPLEMENTOS
-        List<Complemento> complementos = productoBase.getComplementos() != null ? productoBase.getComplementos() : new ArrayList<>();
+        List<Complemento> complementos = producto.getComplementos() != null ? producto.getComplementos() : new ArrayList<>();
         complementos.addAll(controlador.obtenerComplementosDisponibles());
 
         if (!complementos.isEmpty()) {
@@ -93,7 +85,6 @@ public class PersonalizarPedidoFrame extends JFrame {
             panelContenido.add(Box.createVerticalStrut(15));
         }
 
-        // 4. COMENTARIOS
         panelContenido.add(crearSeccionComentarios("Instrucciones Especiales"));
 
         JScrollPane scrollPane = new JScrollPane(panelContenido);
@@ -101,7 +92,6 @@ public class PersonalizarPedidoFrame extends JFrame {
         scrollPane.getVerticalScrollBar().setUnitIncrement(20);
         scrollPane.setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
 
-        // --- BUTTONS ---
         JPanel panelBotones = new JPanel(new FlowLayout(FlowLayout.CENTER, 40, 15));
         panelBotones.setBackground(CREMA);
 
@@ -117,7 +107,6 @@ public class PersonalizarPedidoFrame extends JFrame {
     }
 
     private void accionConfirmar() {
-        // Recolectar datos de la vista
         List<Ingrediente> selIngredientes = new ArrayList<>();
         for (Map.Entry<Ingrediente, JCheckBox> entry : checkIngredientes.entrySet()) {
             if (entry.getValue().isSelected()) {
@@ -139,10 +128,9 @@ public class PersonalizarPedidoFrame extends JFrame {
             }
         }
 
-        controlador.procesarPedido(productoBase, selIngredientes, selExtras, selComplementos, areaComentario.getText());
+        controlador.procesarPedido(producto, selIngredientes, selExtras, selComplementos, areaComentario.getText());
     }
 
-    // --- MÉTODOS DE CREACIÓN DE UI ---
     private JPanel crearSeccionIngredientes(String titulo, List<Ingrediente> lista) {
         JPanel contenedor = crearContenedorSeccion(titulo);
         JPanel grid = (JPanel) contenedor.getComponent(1);
@@ -190,7 +178,6 @@ public class PersonalizarPedidoFrame extends JFrame {
         lblTitulo.setForeground(BLANCO);
         panelTitulo.add(lblTitulo);
 
-        // CAMBIO 1: GridLayout de 3 columnas en lugar de 2
         JPanel grid = new JPanel(new GridLayout(0, 3, 15, 8));
         grid.setBackground(CREMA);
         grid.setBorder(BorderFactory.createEmptyBorder(10, 0, 0, 0));
@@ -201,22 +188,19 @@ public class PersonalizarPedidoFrame extends JFrame {
     }
 
     private JPanel crearTarjetaOpcion(JCheckBox checkBox) {
-        // CAMBIO 2: Sin icono, diseño más simple
-        JPanel card = new JPanel(new BorderLayout(5, 0)); // Padding reducido
+        JPanel card = new JPanel(new BorderLayout(5, 0));
         card.setBackground(BLANCO);
         card.setBorder(BorderFactory.createCompoundBorder(
-                BorderFactory.createLineBorder(GRIS_SUAVE, 1),
-                BorderFactory.createEmptyBorder(8, 10, 8, 10) // Más espacio interno vertical
+                BorderFactory.createLineBorder(GRIS, 1),
+                BorderFactory.createEmptyBorder(8, 10, 8, 10)
         ));
 
-        // Ya no agregamos el lblImagen (icono hamburguesa)
         card.add(checkBox, BorderLayout.CENTER);
         return card;
     }
 
     private JCheckBox crearCheckBox(String nombre, double precio, boolean selected) {
         String precioStr = precio > 0 ? String.format(" (+$%.2f)", precio) : "";
-        // Quitamos etiquetas HTML complejas si queremos simpleza, pero el gris ayuda al precio
         JCheckBox check = new JCheckBox("<html>" + nombre + " <font color='#888888'>" + precioStr + "</font></html>");
         check.setFont(Fuentes.getPoppinsRegular(14f));
         check.setBackground(BLANCO);
@@ -254,15 +238,15 @@ public class PersonalizarPedidoFrame extends JFrame {
         return contenedor;
     }
 
-    private JButton crearBoton(String texto, java.awt.event.ActionListener listener) {
+    private JButton crearBoton(String texto, ActionListener e) {
         JButton btn = new JButton(texto);
         btn.setBackground(NARANJA);
         btn.setForeground(BLANCO);
-        btn.setFont(Fuentes.getPoppinsSemiBold(14f));
+        btn.setFont(Fuentes.getPoppinsRegular(14f));
         btn.setFocusPainted(false);
         btn.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
         btn.setBorder(BorderFactory.createEmptyBorder(10, 50, 10, 50));
-        btn.addActionListener(listener);
+        btn.addActionListener(e);
         return btn;
     }
 }
